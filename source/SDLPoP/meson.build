@@ -3,7 +3,6 @@
 SDLPoPSrc = [
   'core/data.c',
   'core/lighting.c',
-  'core/main.c',
   'core/menu.c',
   'core/midi.c',
   'core/opl3.c',
@@ -24,7 +23,7 @@ SDLPoPSrc = [
   'core/stb_vorbis.c',
 ]
 
-# quickNES Core Configuration
+# SDLPoP Core Configuration
 
  SDLPoPDependency = declare_dependency(
   compile_args        : [  ],

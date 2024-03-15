@@ -5,10 +5,10 @@ option('buildPlayer',
   yield: true
 )
 
-option('buildQuickNES',
+option('buildSDLPoP',
   type : 'boolean',
   value : true,
-  description : 'Build quickNES core',
+  description : 'Build SDLPoP core',
   yield: true
 )
 
@@ -18,11 +18,3 @@ option('buildTests',
   description : 'Build tests',
   yield: true
 )
-
-option('onlyOpenSource',
-  type : 'boolean',
-  value : false,
-  description : 'Test using only open source games (for cloud CI)',
-  yield: true
-)
-

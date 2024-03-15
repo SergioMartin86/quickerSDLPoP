@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
   // Getting differential compression configuration
   const auto& differentialCompressionJs = jaffarCommon::json::getObject(scriptJson, "Differential Compression");
   const auto differentialCompressionEnabled = jaffarCommon::json::getBoolean(differentialCompressionJs, "Enabled");
-  const auto differentialCompressionMaxDifferences = jaffarCommon::json::getBoolean(differentialCompressionJs, "Max Differences"); 
+  const auto differentialCompressionMaxDifferences = jaffarCommon::json::getNumber<size_t>(differentialCompressionJs, "Max Differences"); 
   const auto differentialCompressionUseZlib = jaffarCommon::json::getBoolean(differentialCompressionJs, "Use Zlib"); 
 
   // Creating emulator instance
@@ -195,7 +195,7 @@ int main(int argc, char *argv[])
   double elapsedTimeSeconds = (double)dt * 1.0e-9;
 
   // Calculating final state hash
-  auto result = jaffarCommon::hash::calculateMetroHash(e.getLowMem(), e.getLowMemSize());
+  auto result = jaffarCommon::hash::calculateMetroHash(currentState, stateSize);
 
   // Creating hash string
   char hashStringBuffer[256];

@@ -5,17 +5,13 @@
 #include "jaffarCommon/file.hpp"
 #include "jaffarCommon/logger.hpp"
 #include "jaffarCommon/string.hpp"
-#include "nesInstance.hpp"
+#include "sdlpopInstance.hpp"
 #include "playbackInstance.hpp"
 
 int main(int argc, char *argv[])
 {
   // Parsing command line arguments
   argparse::ArgumentParser program("player", "1.0");
-
-  program.add_argument("romFile")
-    .help("Path to the rom file to run.")
-    .required();
 
   program.add_argument("sequenceFile")
     .help("Path to the input sequence file (.sol) to reproduce.")
@@ -34,14 +30,6 @@ int main(int argc, char *argv[])
     .help("Do not render game window.")
     .default_value(false)
     .implicit_value(true);
-
-  program.add_argument("--controller1")
-    .help("Specifies the controller 1 type.")
-    .default_value(std::string("Joypad"));
-
-  program.add_argument("--controller2")
-    .help("Specifies the controller 2 type.")
-    .default_value(std::string("None"));
 
   // Try to parse arguments
   try
@@ -86,7 +74,6 @@ int main(int argc, char *argv[])
   jaffarCommon::logger::initializeTerminal();
 
   // Printing provided parameters
-  printw("[] Rom File Path:      '%s'\n", romFilePath.c_str());
   printw("[] Sequence File Path: '%s'\n", sequenceFilePath.c_str());
   printw("[] Sequence Length:    %lu\n", sequence.size());
   printw("[] State File Path:    '%s'\n", stateFilePath.empty() ? "<Boot Start>" : stateFilePath.c_str());
@@ -95,16 +82,7 @@ int main(int argc, char *argv[])
   jaffarCommon::logger::refreshTerminal();
 
   // Creating emulator instance
-  NESInstance e;
-
-  // Setting controller types
-  e.setController1Type(controller1Type);
-  e.setController2Type(controller2Type);
-  
-  // Loading ROM File
-  std::string romFileData;
-  if (jaffarCommon::file::loadStringFromFile(romFileData, romFilePath) == false) JAFFAR_THROW_LOGIC("Could not rom file: %s\n", romFilePath.c_str());
-  e.loadROM((uint8_t*)romFileData.data(), romFileData.size());
+  SDLPoPInstance e;
 
   // If an initial state is provided, load it now
   if (stateFilePath != "")

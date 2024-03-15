@@ -27,9 +27,11 @@ class SDLPoPInstanceBase
   virtual void serializeState(jaffarCommon::serializer::Base& serializer) const = 0;
   virtual void deserializeState(jaffarCommon::deserializer::Base& deserializer) = 0;
 
+  virtual std::string getCoreName() const = 0;
+
   protected:
 
-  virtual void advanceStateImpl(const Controller::port_t controller1, const Controller::port_t controller2) = 0;
+  virtual void advanceStateImpl(const Controller::input_t input) = 0;
 
   // Storage for the light state size
   size_t _stateSize;

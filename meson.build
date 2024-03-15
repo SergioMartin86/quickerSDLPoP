@@ -24,7 +24,7 @@ jaffarCommonDependency = jaffarCommonSubproject.get_variable('jaffarCommonDepend
     executable('player',
       'source/player.cpp',
       cpp_args            : [ commonCompileArgs, '-DNCURSES' ],
-      dependencies        : [ jaffarCommonDependency, quickerSDLPoPDependency, toolDependency, dependency('sdl2'), dependency('SDL2_image')],
+      dependencies        : [ jaffarCommonDependency, quickerSDLPoPDependency, toolDependency],
       link_args           : [ '-lncurses' ]
     )
   endif
@@ -42,13 +42,13 @@ jaffarCommonDependency = jaffarCommonSubproject.get_variable('jaffarCommonDepend
   if get_option('buildSDLPoP') == true
   SDLPoPTester = executable('SDLPoPTester',
     'source/tester.cpp',
-    cpp_args            : [ commonCompileArgs, '-w', '-DDISABLE_AUTO_FILE', '-D__LIBRETRO__', '-DNDEBUG', '-DBLARGG_NONPORTABLE'  ],
+    cpp_args            : [ commonCompileArgs ],
     dependencies        : [ jaffarCommonDependency, SDLPoPDependency, toolDependency ]
   )
   endif
 
   # Building tests
-  if get_option('buildQuickNES') == true
+  if get_option('buildSDLPoP') == true
     #subdir('tests')
   endif
   

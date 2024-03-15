@@ -3,41 +3,28 @@
 #include "core/miniPoP.hpp"
 #include "../sdlpopInstanceBase.hpp"
 
-class QuickerSDLPoP final : public QuickerSDLPoPBase
+class SDLPoPInstance final : public SDLPoPInstanceBase
 {
   public:
 
-  void serializeState(jaffarCommon::serializer::Base& serializer) const override { _nes.serializeState(serializer); }
-  void deserializeState(jaffarCommon::deserializer::Base& deserializer) override { _nes.deserializeState(deserializer); }
+  __INLINE__ void serializeState(jaffarCommon::serializer::Base& serializer) const override {  }
+  __INLINE__ void deserializeState(jaffarCommon::deserializer::Base& deserializer) override {  }
 
   std::string getCoreName() const override { return "QuickerSDLPoP"; }
   
-  void doSoftReset() override { _nes.reset(false); }
-  void doHardReset() override { _nes.reset(true); }
-  
-  void *getInternalEmulatorPointer() override { return &_nes; }
-  
-  inline size_t getFullStateSize() const override
+  __INLINE__ size_t getFullStateSize() const override
   {
-    jaffarCommon::serializer::Contiguous serializer;
-    serializeState(serializer);
-    return serializer.getOutputSize();
+    return 0;
   }
 
-  inline size_t getDifferentialStateSize() const override
+  __INLINE__ size_t getDifferentialStateSize() const override
   {
-    jaffarCommon::serializer::Differential serializer;
-    serializeState(serializer);
-    return serializer.getOutputSize();
+    return 0;
   }
 
   protected:
 
-  void enableStateBlockImpl(const std::string& block) override { _nes.enableStateBlock(block); };
-  void disableStateBlockImpl(const std::string& block) override { _nes.disableStateBlock(block); };
-  void advanceStateImpl(const Controller::port_t controller1, const Controller::port_t controller2) override
+  __INLINE__ void advanceStateImpl(const Controller::input_t input) override
   {
-    if (_doRendering == true) _nes.emulate_frame(controller1, controller2);
-    if (_doRendering == false) _nes.emulate_skip_frame(controller1, controller2);
   }
 };

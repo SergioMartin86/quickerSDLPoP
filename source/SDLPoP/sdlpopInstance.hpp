@@ -19,13 +19,14 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
   {
   }
 
-  inline size_t getDifferentialStateSize() const override { return getFullStateSize(); }
+  __INLINE__ size_t getFullStateSize() const { return 0; }
+  __INLINE__ size_t getDifferentialStateSize() const override { return getFullStateSize(); }
 
   std::string getCoreName() const override { return "SDLPoP"; }
 
   protected:
 
-  void advanceStateImpl(const Controller::port_t controller1, const Controller::port_t controller2) override
+  __INLINE__ void advanceStateImpl(const Controller::input_t input) override
   {
   }
 };
