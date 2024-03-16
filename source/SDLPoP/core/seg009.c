@@ -542,7 +542,7 @@ chtab_type* __pascal load_sprites_from_file(int resource,int palette_bits, int q
 	chtab_type* chtab = NULL;
 	dat_shpl_type* shpl = (dat_shpl_type*) load_from_opendats_alloc(resource, "pal", NULL, NULL);
 	if (shpl == NULL) {
-		printf("Can't load sprites from resource %d.\n", resource);
+		// printf("Can't load sprites from resource %d.\n", resource);
 		if (quit_on_error) {
 			char error_message[256];
 			// Unfortunately we don't know at this point which data file is missing. So we use the name of the last opened DAT file.

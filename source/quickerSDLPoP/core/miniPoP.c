@@ -687,11 +687,11 @@ dat_type *__pascal open_dat(const char *filename, int drive)
     pointer->handle = fp;
     pointer->dat_table = dat_table;
   }
+
 out:
   // stub
   return pointer;
 failed:
-  perror(filename);
   if (fp)
     fclose(fp);
   if (dat_table)
@@ -1182,6 +1182,7 @@ void  load_lev_spr(int level)
       close_dat(dathandle);
     }
   }
+  
   gameState.curr_guard_color = 0;
   load_chtab_from_file(id_chtab_7_environmentwall, 360, filename, 1 << 6);
 }

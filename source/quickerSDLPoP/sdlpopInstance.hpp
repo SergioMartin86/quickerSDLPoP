@@ -12,7 +12,6 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
 
     __INLINE__ void initialize() override
     {
-      // If not found, looking for the SDLPOP_ROOT env variable
       found_exe_dir = false;
       if (std::filesystem::exists(_sdlPopRootPath.c_str()))
       {
@@ -45,7 +44,7 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
       doorlink1_ad = /*&*/ gameState.level.doorlinks1;
       doorlink2_ad = /*&*/ gameState.level.doorlinks2;
       guard_palettes = (byte *)load_from_opendats_alloc(10, "bin", NULL, NULL);
-
+      
       // Level color variations (1.3)
       level_var_palettes = reinterpret_cast<byte *>(load_from_opendats_alloc(20, "bin", NULL, NULL));
 
@@ -54,7 +53,6 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
 
       // PRINCE.DAT: flame, sword on floor, potion
       chtab_addrs[id_chtab_1_flameswordpotion] = load_sprites_from_file(150, 1 << 3, 1);
-
       close_dat(dathandle);
 
       // start_game
@@ -165,47 +163,54 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
       return 0;
     }
 
+    __INLINE__ void printInfo() const override
+    {
+       printf("Kid Room: %u\n", gameState.Kid.room);
+       printf("Kid X: %u\n", gameState.Kid.x);
+       printf("Kid y: %u\n", gameState.Kid.y);
+    }
+
   protected:
 
-    __INLINE__ void advanceStateImpl(const Controller::input_t input) override
+  __INLINE__ void advanceStateImpl(const Controller::input_t input) override
+  {
+    key_states[SDL_SCANCODE_UP] = input.up;
+    key_states[SDL_SCANCODE_DOWN] = input.down;
+    key_states[SDL_SCANCODE_LEFT] = input.left;
+    key_states[SDL_SCANCODE_RIGHT] = input.right;
+    key_states[SDL_SCANCODE_RSHIFT] = input.shift;
+    is_restart_level = input.restart;
+
+    if (is_restart_level == 0 || (is_restart_level == 1 && gameState.current_level == 3))
     {
-      key_states[SDL_SCANCODE_UP] = input.up;
-      key_states[SDL_SCANCODE_DOWN] = input.down;
-      key_states[SDL_SCANCODE_LEFT] = input.left;
-      key_states[SDL_SCANCODE_RIGHT] = input.right;
-      key_states[SDL_SCANCODE_RSHIFT] = input.shift;
-      is_restart_level = input.restart;
-
-      if (is_restart_level == 0 || (is_restart_level == 1 && gameState.current_level == 3))
-      {
-        guardhp_delta = 0;
-        hitp_delta = 0;
-        timers();
-        play_frame();
-      }
-
-      if (gameState.current_level == 1 && gameState.next_level == 2) gameState.next_level = 15;
-      if (gameState.current_level == 15 && gameState.next_level == 16) gameState.next_level = 2;
-      if (gameState.current_level != 15 && gameState.next_level != 15) gameState.rem_tick--;
-
-      if (gameState.rem_tick == 0)
-      {
-        gameState.rem_tick = 720;
-        gameState.rem_min--;
-      }
-
-      if (is_restart_level == 1)
-      {
-        startLevel(gameState.current_level);
-        draw_level_first();
-        is_restart_level = 0;
-      }
-
-      // if we're on lvl 4, check mirror
-      if (gameState.current_level == 4)
-      {
-        if (gameState.jumped_through_mirror == -1) gameState.Guard.x = 245;
-        check_mirror();
-      }
+      guardhp_delta = 0;
+      hitp_delta = 0;
+      timers();
+      play_frame();
     }
+
+    if (gameState.current_level == 1 && gameState.next_level == 2) gameState.next_level = 15;
+    if (gameState.current_level == 15 && gameState.next_level == 16) gameState.next_level = 2;
+    if (gameState.current_level != 15 && gameState.next_level != 15) gameState.rem_tick--;
+
+    if (gameState.rem_tick == 0)
+    {
+      gameState.rem_tick = 720;
+      gameState.rem_min--;
+    }
+
+    if (is_restart_level == 1)
+    {
+      startLevel(gameState.current_level);
+      draw_level_first();
+      is_restart_level = 0;
+    }
+
+    // if we're on lvl 4, check mirror
+    if (gameState.current_level == 4)
+    {
+      if (gameState.jumped_through_mirror == -1) gameState.Guard.x = 245;
+      check_mirror();
+    }
+  }
 };

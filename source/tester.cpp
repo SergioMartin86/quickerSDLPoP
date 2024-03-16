@@ -225,6 +225,9 @@ int main(int argc, char *argv[])
   {
   printf("[] Differential State Max Size Detected:   %lu\n", differentialStateMaxSizeDetected);    
   }
+  printf("[] Game Info: \n");
+  e.printInfo();
+  
   // If saving hash, do it now
   if (hashOutputFile != "") jaffarCommon::file::saveStringToFile(std::string(hashStringBuffer), hashOutputFile.c_str());
 

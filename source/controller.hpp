@@ -42,6 +42,9 @@ public:
     // Parsing console inputs
     isValid &= parseConsoleInput(_input.restart, ss);
 
+    // Mid separator
+    if (ss.get() != '|') isValid = false;
+
     // Parsing controller 1 inputs
     isValid &= parseGameInput(_input, ss);
 
@@ -65,16 +68,6 @@ public:
     // Currently read character
     char c;
 
-    // Up
-    c = ss.get();
-    if (c != '.' && c != 'U') return false;
-    if (c == 'U') input.up = true;
-
-    // Down
-    c = ss.get();
-    if (c != '.' && c != 'D') return false;
-    if (c == 'D') input.down = true;
-
     // Left
     c = ss.get();
     if (c != '.' && c != 'L') return false;
@@ -84,6 +77,16 @@ public:
     c = ss.get();
     if (c != '.' && c != 'R') return false;
     if (c == 'R') input.right = true;
+
+    // Up
+    c = ss.get();
+    if (c != '.' && c != 'U') return false;
+    if (c == 'U') input.up = true;
+
+    // Down
+    c = ss.get();
+    if (c != '.' && c != 'D') return false;
+    if (c == 'D') input.down = true;
 
     // Shift
     c = ss.get();

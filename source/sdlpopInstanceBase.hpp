@@ -1,9 +1,10 @@
 #pragma once
 
-#include "jaffarCommon/serializers/base.hpp"
-#include "jaffarCommon/deserializers/base.hpp"
-#include "jaffarCommon/logger.hpp"
+#include <jaffarCommon/serializers/base.hpp>
+#include <jaffarCommon/deserializers/base.hpp>
+#include <jaffarCommon/logger.hpp>
 #include <jaffarCommon/json.hpp>
+#include <jaffarCommon/exceptions.hpp>
 #include "controller.hpp"
 
 class SDLPoPInstanceBase
@@ -22,6 +23,10 @@ class SDLPoPInstanceBase
 
   inline void advanceState(const std::string &input)
   {
+    bool isInputValid = _controller.parseInputString(input);
+    if (isInputValid == false) JAFFAR_THROW_LOGIC("Move provided cannot be parsed: '%s'\n", input.c_str());
+
+    advanceStateImpl(_controller.getParsedInput());
   }
 
   inline void enableRendering() { _doRendering = true; };
@@ -43,6 +48,7 @@ class SDLPoPInstanceBase
 
   protected:
 
+  virtual void printInfo() const = 0;
   virtual void advanceStateImpl(const Controller::input_t input) = 0;
 
   // Storage for the light state size
