@@ -68,6 +68,13 @@ int main(int argc, char *argv[])
   auto status = jaffarCommon::file::loadStringFromFile(inputSequence, sequenceFilePath.c_str());
   if (status == false) JAFFAR_THROW_LOGIC("[ERROR] Could not find or read from sequence file: %s\n", sequenceFilePath.c_str());
 
+  // RNG overriding configuration
+  auto overrideRNGEnabled = jaffarCommon::json::getBoolean(scriptJs, "Override RNG Enabled");
+  auto overrideRNGValue = jaffarCommon::json::getNumber<uint32_t>(scriptJs, "Override RNG Value");
+  auto overrideLooseTileSoundEnabled = jaffarCommon::json::getBoolean(scriptJs, "Override Loose Tile Sound Enabled");
+  auto overrideLooseTileSoundValue = jaffarCommon::json::getNumber<uint32_t>(scriptJs, "Override Loose Tile Sound Value");
+  auto initializeCopyProtection = jaffarCommon::json::getBoolean(scriptJs, "Initialize Copy Protection");
+
   // Building sequence information
   const auto sequence = jaffarCommon::string::split(inputSequence, ' ');
 
@@ -99,6 +106,13 @@ int main(int argc, char *argv[])
     jaffarCommon::deserializer::Contiguous deserializer(stateFileData.data());
     e.deserializeState(deserializer);
   }
+
+  // Check if RNG elements need overriding
+  if (overrideRNGEnabled) e.setRNGValue(overrideRNGValue);
+  if (overrideLooseTileSoundEnabled) e.setLooseTileSound(overrideLooseTileSoundValue);
+
+  // Check if copy protection needs initializing
+  if (initializeCopyProtection) e.initializeCopyProtection();
 
   // Creating playback instance
   auto p = PlaybackInstance(&e, sequence);
@@ -140,6 +154,9 @@ int main(int argc, char *argv[])
       jaffarCommon::logger::log("[] Current Step #: %lu / %lu\n", currentStep + 1, sequenceLength);
       jaffarCommon::logger::log("[] Input:          %s\n", input.c_str());
       jaffarCommon::logger::log("[] State Hash:     0x%lX%lX\n", hash.first, hash.second);
+     
+      // Printing internal infromation
+      e.printInfo();
 
       // Only print commands if not in reproduce mode
       if (isReproduce == false) jaffarCommon::logger::log("[] Commands: n: -1 m: +1 | h: -10 | j: +10 | y: -100 | u: +100 | k: -1000 | i: +1000 | s: quicksave | p: play | q: quit\n");

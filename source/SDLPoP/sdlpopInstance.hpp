@@ -1,7 +1,8 @@
 #pragma once
 
-#include "jaffarCommon/serializers/base.hpp"
-#include "jaffarCommon/deserializers/base.hpp"
+#include <jaffarCommon/serializers/base.hpp>
+#include <jaffarCommon/deserializers/base.hpp>
+#include <jaffarCommon/logger.hpp>
 #include "../sdlpopInstanceBase.hpp"
 #include <filesystem>
 #include "core/config.h"
@@ -60,7 +61,6 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
 
     // Game initialization
     prandom(1);
-
 
     // debug only: check that the sequence table deobfuscation did not mess things up
     load_global_options();
@@ -193,11 +193,11 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
   
   __INLINE__ void printInfo() const override
   {
-      printf("[]  + Kid Room: %u\n", Kid.room);
-      printf("[]  + Kid X: %u\n", Kid.x);
-      printf("[]  + Kid y: %u\n", Kid.y);
-      printf("[]  + Last Tile Loost Sound: %u\n", last_loose_sound);
-      printf("[]  + RNG: 0x%X\n", random_seed);
+      jaffarCommon::logger::log("[]  + Kid Room: %u\n", Kid.room);
+      jaffarCommon::logger::log("[]  + Kid X: %u\n", Kid.x);
+      jaffarCommon::logger::log("[]  + Kid y: %u\n", Kid.y);
+      jaffarCommon::logger::log("[]  + Last Tile Loost Sound: %u\n", last_loose_sound);
+      jaffarCommon::logger::log("[]  + RNG: 0x%X\n", random_seed);
   }
 
   char quick_control[9] = "........";

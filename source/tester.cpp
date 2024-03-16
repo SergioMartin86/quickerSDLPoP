@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
   
   // Check if RNG elements need overriding
   if (overrideRNGEnabled) e.setRNGValue(overrideRNGValue);
-  if (overrideLooseTileSoundEnabled) e.setRNGValue(overrideLooseTileSoundValue);
+  if (overrideLooseTileSoundEnabled) e.setLooseTileSound(overrideLooseTileSoundValue);
 
   // Check if copy protection needs initializing
   if (initializeCopyProtection) e.initializeCopyProtection();

@@ -3,7 +3,7 @@
 #include <filesystem>
 #include "core/miniPoP.hpp"
 #include "../sdlpopInstanceBase.hpp"
-
+#include <jaffarCommon/logger.hpp>
 
 class SDLPoPInstance final : public SDLPoPInstanceBase
 {
@@ -169,11 +169,11 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
 
     __INLINE__ void printInfo() const override
     {
-       printf("[]  + Kid Room: %u\n", gameState.Kid.room);
-       printf("[]  + Kid X: %u\n", gameState.Kid.x);
-       printf("[]  + Kid y: %u\n", gameState.Kid.y);
-       printf("[]  + Last Tile Loost Sound: %u\n", gameState.last_loose_sound);
-       printf("[]  + RNG: 0x%X\n", gameState.random_seed);
+       jaffarCommon::logger::log("[]  + Kid Room: %u\n", gameState.Kid.room);
+       jaffarCommon::logger::log("[]  + Kid X: %u\n", gameState.Kid.x);
+       jaffarCommon::logger::log("[]  + Kid y: %u\n", gameState.Kid.y);
+       jaffarCommon::logger::log("[]  + Last Tile Loost Sound: %u\n", gameState.last_loose_sound);
+       jaffarCommon::logger::log("[]  + RNG: 0x%X\n", gameState.random_seed);
     }
 
       enum ItemType

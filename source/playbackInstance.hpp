@@ -61,17 +61,10 @@ class PlaybackInstance
 // Checking the required step id does not exceed contents of the sequence
     if (stepId > _stepSequence.size()) JAFFAR_THROW_LOGIC("[Error] Attempting to render a step larger than the step sequence");
 
-    // If its the first step, then simply reset
-    if (stepId == 0);
-
-    // Else we load the previous frame
-    if (stepId > 0)
-    {
-      const auto stateData = getStateData(stepId - 1);
-      jaffarCommon::deserializer::Contiguous deserializer(stateData);
-      _emu->deserializeState(deserializer);
-      _emu->advanceState(getStateInput(stepId - 1));
-    }
+    const auto stateData = getStateData(stepId);
+    jaffarCommon::deserializer::Contiguous deserializer(stateData);
+    _emu->deserializeState(deserializer);
+    _emu->advanceState(getStateInput(stepId));
 
     _emu->updateRenderer();
   }
