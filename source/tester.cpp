@@ -81,6 +81,9 @@ int main(int argc, char *argv[])
   // Creating emulator instance
   SDLPoPInstance e(SDLPoPConfigJs);
 
+  // Disabling rendering
+  e.disableRendering();
+
   // Initializing emulator instance
   e.initialize();
 

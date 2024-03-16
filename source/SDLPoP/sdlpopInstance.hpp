@@ -15,6 +15,7 @@ extern char levels_file[POP_MAX_PATH];
 extern dat_type * dathandle;
 extern char exe_dir[POP_MAX_PATH];
 extern byte* level_var_palettes;
+extern bool enableSDL2Rendering;
 
 class SDLPoPInstance final : public SDLPoPInstanceBase
 {
@@ -27,6 +28,9 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
 
    __INLINE__ void initialize() override
    {
+    // Checking if rendering is enabled
+    enableSDL2Rendering = _doRendering;
+
     // Initializing game
     found_exe_dir = false;
     if (std::filesystem::exists(_sdlPopRootPath.c_str()))

@@ -104,7 +104,6 @@ extern byte curr_tile;
 // data:4328
 extern byte curr_modifier;
 
-
 // data:4CD8
 extern tile_and_mod leftroom_[3];
 // data:5950

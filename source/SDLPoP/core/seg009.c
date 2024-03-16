@@ -30,6 +30,8 @@ The authors of this program may be contacted at https://forum.princed.org
 #include "dirent.h"
 #endif
 
+bool enableSDL2Rendering = true;
+
 long int _cachedFilePointerTable[MAX_CACHED_FILES];
 char* _cachedFileBufferTable[MAX_CACHED_FILES];
 size_t _cachedFileBufferSizes[MAX_CACHED_FILES];
@@ -2447,6 +2449,7 @@ int __pascal far check_sound_playing() {
 }
 
 void apply_aspect_ratio() {
+if (enableSDL2Rendering == false) return;
 	// Allow us to use a consistent set of screen co-ordinates, even if the screen size changes
 	if (use_correct_aspect_ratio) {
 		SDL_RenderSetLogicalSize(renderer_, 320 * 5, 200 * 6); // 4:3
@@ -2457,6 +2460,7 @@ void apply_aspect_ratio() {
 }
 
 void window_resized() {
+if (enableSDL2Rendering == false) return;
 #if SDL_VERSION_ATLEAST(2,0,5) // SDL_RenderSetIntegerScale
 	if (use_integer_scaling) {
 		int window_width, window_height;
@@ -2485,6 +2489,7 @@ void init_overlay() {
 SDL_Surface* onscreen_surface_2x;
 
 void init_scaling() {
+if (enableSDL2Rendering == false) return;
 	// Don't crash in validate mode.
 	if (renderer_ == NULL) return;
 
@@ -2564,9 +2569,14 @@ void __pascal far set_gr_mode(byte grmode) {
 #ifdef USE_REPLAY
 	if (!is_validate_mode) // run without a window if validating a replay
 #endif
+
+if (enableSDL2Rendering == true)
+{
 	window_ = SDL_CreateWindow(WINDOW_TITLE,
 	                           SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
 	                           pop_window_width, pop_window_height, flags);
+
+
 	// Make absolutely sure that VSync will be off, to prevent timer issues.
 	SDL_SetHint(SDL_HINT_RENDER_VSYNC, "0");
 #ifdef USE_HW_ACCELERATION
@@ -2581,6 +2591,7 @@ void __pascal far set_gr_mode(byte grmode) {
 			is_renderer_targettexture_supported = true;
 		}
 	}
+		}
 	if (use_integer_scaling) {
 #if SDL_VERSION_ATLEAST(2,0,5) // SDL_RenderSetIntegerScale
 		SDL_RenderSetIntegerScale(renderer_, SDL_TRUE);
@@ -2593,7 +2604,7 @@ void __pascal far set_gr_mode(byte grmode) {
 	if (icon == NULL) {
 		sdlperror("set_gr_mode: Could not load icon");
 	} else {
-		SDL_SetWindowIcon(window_, icon);
+		if (enableSDL2Rendering == true) SDL_SetWindowIcon(window_, icon);
 	}
 
 	apply_aspect_ratio();
@@ -2626,6 +2637,7 @@ void __pascal far set_gr_mode(byte grmode) {
 #ifdef USE_TEXT
 	load_font();
 #endif
+
 }
 
 SDL_Surface* get_final_surface() {
@@ -2725,6 +2737,7 @@ void draw_overlay() {
 }
 
 void update_screen() {
+if (enableSDL2Rendering == false) return;
 	draw_overlay();
 	SDL_Surface* surface = get_final_surface();
 	init_scaling();
@@ -3352,6 +3365,7 @@ void __pascal start_timer(int timer_index, int length) {
 }
 
 void toggle_fullscreen() {
+	if (enableSDL2Rendering == false) return;
 	uint32_t flags = SDL_GetWindowFlags(window_);
 	if (flags & SDL_WINDOW_FULLSCREEN_DESKTOP) {
 		SDL_SetWindowFullscreen(window_, 0);
@@ -3683,6 +3697,8 @@ void idle() {
 }
 
 void __pascal do_simple_wait(int timer_index) {
+
+if (enableSDL2Rendering == false) return;
 #ifdef USE_REPLAY
 	if ((replaying && skipping_replay) || is_validate_mode) return;
 #endif
@@ -3695,6 +3711,7 @@ void __pascal do_simple_wait(int timer_index) {
 
 word word_1D63A = 1;
 int __pascal do_wait(int timer_index) {
+if (enableSDL2Rendering == false) return 0;
 #ifdef USE_REPLAY
 	if ((replaying && skipping_replay) || is_validate_mode) return 0;
 #endif
@@ -3713,6 +3730,7 @@ SDL_TimerID global_timer = NULL;
 #endif
 // seg009:78E9
 void __pascal far init_timer(int frequency) {
+if (enableSDL2Rendering == false) return;
 	perf_frequency = SDL_GetPerformanceFrequency();
 #ifndef USE_COMPAT_TIMER
 	fps = frequency;
@@ -4064,7 +4082,7 @@ int __pascal far fade_out_frame(palette_fade_type far *palette_buffer) {
 	SDL_UnlockSurface(onscreen_surface_);
 	SDL_UnlockSurface(offscreen_surface);
 
-	do_simple_wait(timer_1); // can interrupt fading of cutscene
+	if (enableSDL2Rendering == true) do_simple_wait(timer_1); // can interrupt fading of cutscene
 	return var_8;
 }
 
