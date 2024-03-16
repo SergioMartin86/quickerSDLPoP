@@ -1,7 +1,7 @@
 {
   "SDLPoP Configuration":
   {
-    "SDLPoP Root Path": "../data",
+    "SDLPoP Root Path": "../SDLPoPData",
     "Levels File Path": ""
   },
   "Override RNG Enabled": false,

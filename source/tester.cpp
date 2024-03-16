@@ -218,7 +218,7 @@ int main(int argc, char *argv[])
   sprintf(hashStringBuffer, "0x%lX%lX", result.first, result.second);
 
   // Printing time information
-  printf("[] Elapsed time:                           %3.3fs\n", (double)dt * 1.0e-9);
+  printf("[] Elapsed time:                           %3.3fs (%lu ns)\n", (double)dt * 1.0e-9, dt);
   printf("[] Performance:                            %.3f inputs / s\n", (double)sequenceLength / elapsedTimeSeconds);
   printf("[] Final State Hash:                       %s\n", hashStringBuffer);
   if (differentialCompressionEnabled == true)
