@@ -26,7 +26,7 @@ jobs:
     - name: Building project
       run: ninja -C build
     - name: Running tests
-      run: ninja test -C build
+      run: SDL_VIDEODRIVER=dummy ninja test -C build
     - uses: actions/upload-artifact@v4
       with:
         name: meson-logs
