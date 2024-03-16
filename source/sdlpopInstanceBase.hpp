@@ -4,6 +4,7 @@
 #include <jaffarCommon/deserializers/base.hpp>
 #include <jaffarCommon/logger.hpp>
 #include <jaffarCommon/json.hpp>
+#include <jaffarCommon/hash.hpp>
 #include <jaffarCommon/exceptions.hpp>
 #include "controller.hpp"
 
@@ -48,6 +49,7 @@ class SDLPoPInstanceBase
 
   protected:
 
+  virtual jaffarCommon::hash::hash_t getStateHash() const = 0;
   virtual void printInfo() const = 0;
   virtual void advanceStateImpl(const Controller::input_t input) = 0;
 

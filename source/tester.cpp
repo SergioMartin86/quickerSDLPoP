@@ -120,6 +120,9 @@ int main(int argc, char *argv[])
   // Getting emulation core name
   std::string emulationCoreName = e.getCoreName();
 
+  // Getting intiial state hash
+  auto initialHashString = jaffarCommon::hash::hashToString(e.getStateHash());
+
   // Printing test information
   printf("[] -----------------------------------------\n");
   printf("[] Running Script:                         '%s'\n", scriptFilePath.c_str());
@@ -128,6 +131,7 @@ int main(int argc, char *argv[])
   printf("[] Sequence File:                          '%s'\n", sequenceFilePath.c_str());
   printf("[] Sequence Length:                        %lu\n", sequenceLength);
   printf("[] State Size:                             %lu bytes\n", stateSize);
+  printf("[] Initial State Hash:                     %s\n", initialHashString.c_str());
   printf("[] Use Differential Compression:           %s\n", differentialCompressionEnabled ? "true" : "false");
   if (differentialCompressionEnabled == true) 
   { 
@@ -169,7 +173,10 @@ int main(int argc, char *argv[])
   auto t0 = std::chrono::high_resolution_clock::now();
   for (const std::string &input : sequence)
   {
-    if (doPreAdvance == true) e.advanceState(input);
+    if (doPreAdvance == true)
+    {
+      e.advanceState(input);
+    } 
     
     if (doDeserialize == true)
     {
@@ -210,26 +217,22 @@ int main(int argc, char *argv[])
   auto dt = std::chrono::duration_cast<std::chrono::nanoseconds>(tf - t0).count();
   double elapsedTimeSeconds = (double)dt * 1.0e-9;
 
-  // Calculating final state hash
-  auto result = jaffarCommon::hash::calculateMetroHash(currentState, stateSize);
-
   // Creating hash string
-  char hashStringBuffer[256];
-  sprintf(hashStringBuffer, "0x%lX%lX", result.first, result.second);
+  auto hashString = jaffarCommon::hash::hashToString(e.getStateHash());
 
   // Printing time information
   printf("[] Elapsed time:                           %3.3fs (%lu ns)\n", (double)dt * 1.0e-9, dt);
   printf("[] Performance:                            %.3f inputs / s\n", (double)sequenceLength / elapsedTimeSeconds);
-  printf("[] Final State Hash:                       %s\n", hashStringBuffer);
+  printf("[] Final State Hash:                       %s\n", hashString.c_str());
   if (differentialCompressionEnabled == true)
   {
   printf("[] Differential State Max Size Detected:   %lu\n", differentialStateMaxSizeDetected);    
   }
   printf("[] Game Info: \n");
   e.printInfo();
-  
+
   // If saving hash, do it now
-  if (hashOutputFile != "") jaffarCommon::file::saveStringToFile(std::string(hashStringBuffer), hashOutputFile.c_str());
+  if (hashOutputFile != "") jaffarCommon::file::saveStringToFile(hashString, hashOutputFile.c_str());
 
   // If reached this point, everything ran ok
   return 0;

@@ -1,14 +1,19 @@
 #pragma once
 
+#include <filesystem>
 #include "core/miniPoP.hpp"
 #include "../sdlpopInstanceBase.hpp"
-#include <filesystem>
+
 
 class SDLPoPInstance final : public SDLPoPInstanceBase
 {
   public:
 
-   SDLPoPInstance(const nlohmann::json& config) : SDLPoPInstanceBase(config)  {  }
+   SDLPoPInstance(const nlohmann::json& config) : SDLPoPInstanceBase(config)
+   {
+    // Initializing items map
+    _items = GenerateItemsMap();
+   }
 
     __INLINE__ void initialize() override
     {
@@ -146,7 +151,6 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
 
       next_room = gameState.drawn_room = gameState.Kid.room;
       load_room_links();
-      if (gameState.current_level != 3) gameState.curr_guard_color = 1;
     }
 
     std::string getCoreName() const override { return "QuickerSDLPoP"; }
@@ -165,10 +169,120 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
 
     __INLINE__ void printInfo() const override
     {
-       printf("Kid Room: %u\n", gameState.Kid.room);
-       printf("Kid X: %u\n", gameState.Kid.x);
-       printf("Kid y: %u\n", gameState.Kid.y);
+       printf("[]  + Kid Room: %u\n", gameState.Kid.room);
+       printf("[]  + Kid X: %u\n", gameState.Kid.x);
+       printf("[]  + Kid y: %u\n", gameState.Kid.y);
+       printf("[]  + Last Tile Loost Sound: %u\n", gameState.last_loose_sound);
+       printf("[]  + RNG: 0x%X\n", gameState.random_seed);
     }
+
+      enum ItemType
+  {
+    HASHABLE,
+    NON_HASHABLE,
+  };
+
+  struct Item
+  {
+    void *ptr;
+    size_t size;
+    ItemType type;
+  };
+
+  template <class T>
+  void AddItem(std::vector<Item> *dest, T &val, ItemType type)
+  {
+    dest->push_back({&val, sizeof(val), type});
+  }
+
+ std::vector<Item> GenerateItemsMap()
+ {
+   std::vector<Item> dest;
+   AddItem(&dest, gameState.quick_control,        HASHABLE);
+   AddItem(&dest, gameState.level,                NON_HASHABLE);
+   AddItem(&dest, gameState.checkpoint,           HASHABLE);
+   AddItem(&dest, gameState.upside_down,          HASHABLE);
+   AddItem(&dest, gameState.drawn_room,           HASHABLE);
+   AddItem(&dest, gameState.current_level,        HASHABLE);
+   AddItem(&dest, gameState.next_level,           HASHABLE);
+   AddItem(&dest, gameState.mobs_count,           HASHABLE);
+   AddItem(&dest, gameState.mobs,                 HASHABLE);
+   AddItem(&dest, gameState.trobs_count,          HASHABLE);
+   AddItem(&dest, gameState.trobs,                HASHABLE);
+   AddItem(&dest, gameState.leveldoor_open,       HASHABLE);
+   AddItem(&dest, gameState.Kid,                  HASHABLE);
+   AddItem(&dest, gameState.hitp_curr,            HASHABLE);
+   AddItem(&dest, gameState.hitp_max,             HASHABLE);
+   AddItem(&dest, gameState.hitp_beg_lev,         HASHABLE);
+   AddItem(&dest, gameState.grab_timer,           HASHABLE);
+   AddItem(&dest, gameState.holding_sword,        HASHABLE);
+   AddItem(&dest, gameState.united_with_shadow,   HASHABLE);
+   AddItem(&dest, gameState.have_sword,           HASHABLE);
+   AddItem(&dest, gameState.kid_sword_strike,     HASHABLE);
+   AddItem(&dest, gameState.pickup_obj_type,      HASHABLE);
+   AddItem(&dest, gameState.offguard,             HASHABLE);
+   AddItem(&dest, gameState.Guard,                HASHABLE);
+   AddItem(&dest, gameState.Char,                 NON_HASHABLE);
+   AddItem(&dest, gameState.Opp,                  NON_HASHABLE);
+   AddItem(&dest, gameState.guardhp_curr,         HASHABLE);
+   AddItem(&dest, gameState.guardhp_max,          HASHABLE);
+   AddItem(&dest, gameState.demo_index,           NON_HASHABLE);
+   AddItem(&dest, gameState.demo_time,            NON_HASHABLE);
+   AddItem(&dest, gameState.curr_guard_color,     NON_HASHABLE);
+   AddItem(&dest, gameState.guard_notice_timer,   HASHABLE);
+   AddItem(&dest, gameState.guard_skill,          HASHABLE);
+   AddItem(&dest, gameState.shadow_initialized,   HASHABLE);
+   AddItem(&dest, gameState.guard_refrac,         HASHABLE);
+   AddItem(&dest, gameState.justblocked,          HASHABLE);
+   AddItem(&dest, gameState.droppedout,           HASHABLE);
+   AddItem(&dest, gameState.curr_row_coll_room,   HASHABLE);
+   AddItem(&dest, gameState.curr_row_coll_flags,  HASHABLE);
+   AddItem(&dest, gameState.below_row_coll_room,  HASHABLE);
+   AddItem(&dest, gameState.below_row_coll_flags, HASHABLE);
+   AddItem(&dest, gameState.above_row_coll_room,  HASHABLE);
+   AddItem(&dest, gameState.above_row_coll_flags, HASHABLE);
+   AddItem(&dest, gameState.prev_collision_row,   HASHABLE);
+   AddItem(&dest, gameState.flash_color,          HASHABLE);
+   AddItem(&dest, gameState.flash_time,           HASHABLE);
+   AddItem(&dest, gameState.need_level1_music,    HASHABLE);
+   AddItem(&dest, gameState.is_screaming,         HASHABLE);
+   AddItem(&dest, gameState.is_feather_fall,      HASHABLE);
+   AddItem(&dest, gameState.last_loose_sound,     HASHABLE);
+   AddItem(&dest, gameState.random_seed,          HASHABLE);
+   AddItem(&dest, gameState.rem_min,              NON_HASHABLE);
+   AddItem(&dest, gameState.rem_tick,             NON_HASHABLE);
+   AddItem(&dest, gameState.control_x,            NON_HASHABLE);
+   AddItem(&dest, gameState.control_y,            NON_HASHABLE);
+   AddItem(&dest, gameState.control_shift,        NON_HASHABLE);
+   AddItem(&dest, gameState.control_forward,      NON_HASHABLE);
+   AddItem(&dest, gameState.control_backward,     NON_HASHABLE);
+   AddItem(&dest, gameState.control_up,           NON_HASHABLE);
+   AddItem(&dest, gameState.control_down,         NON_HASHABLE);
+   AddItem(&dest, gameState.control_shift2,       NON_HASHABLE);
+   AddItem(&dest, gameState.ctrl1_forward,        NON_HASHABLE);
+   AddItem(&dest, gameState.ctrl1_backward,       NON_HASHABLE);
+   AddItem(&dest, gameState.ctrl1_up,             NON_HASHABLE);
+   AddItem(&dest, gameState.ctrl1_down,           NON_HASHABLE);
+   AddItem(&dest, gameState.ctrl1_shift2,         NON_HASHABLE);
+   AddItem(&dest, gameState.exit_room_timer,      HASHABLE);
+   AddItem(&dest, gameState.replay_curr_tick,     HASHABLE);
+   AddItem(&dest, gameState.is_guard_notice,      HASHABLE);
+   AddItem(&dest, gameState.can_guard_see_kid,    HASHABLE);
+   return dest;
+ }
+
+  jaffarCommon::hash::hash_t getStateHash() const override
+  {
+    // for (size_t i = 0; i < _items.size(); i++)
+    //  if (_items[i].type == HASHABLE)
+    //   printf("Item %lu, Hash: %s\n", i, jaffarCommon::hash::hashToString(jaffarCommon::hash::calculateMetroHash(_items[i].ptr, _items[i].size)).c_str());
+
+    MetroHash128 hash;
+    for (const auto &item : _items) if (item.type == HASHABLE) hash.Update(item.ptr, item.size);
+    jaffarCommon::hash::hash_t result;
+    hash.Finalize(reinterpret_cast<uint8_t *>(&result));
+    return result;
+  }
 
   protected:
 
@@ -213,4 +327,8 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
       check_mirror();
     }
   }
+
+  private: 
+
+  std::vector<Item> _items;
 };

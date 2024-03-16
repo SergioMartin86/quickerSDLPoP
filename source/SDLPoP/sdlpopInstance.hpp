@@ -19,13 +19,14 @@ extern byte* level_var_palettes;
 class SDLPoPInstance final : public SDLPoPInstanceBase
 {
   public:
-  SDLPoPInstance(const nlohmann::json& config) : SDLPoPInstanceBase(config)  {  }
+  SDLPoPInstance(const nlohmann::json& config) : SDLPoPInstanceBase(config)  
+  {
+     // Initializing items map
+    _items = GenerateItemsMap();
+  }
 
    __INLINE__ void initialize() override
    {
-     // Initializing items map
-    _items = GenerateItemsMap();
-
     // Initializing game
     found_exe_dir = false;
     if (std::filesystem::exists(_sdlPopRootPath.c_str()))
@@ -52,6 +53,10 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
 
     fixes->fix_quicksave_during_feather = 1;
     fixes->fix_quicksave_during_lvl1_music = 1;
+
+    // Game initialization
+    prandom(1);
+
 
     // debug only: check that the sequence table deobfuscation did not mess things up
     load_global_options();
@@ -164,7 +169,6 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
     grab_timer = 0;
     can_guard_see_kid = 0;
     united_with_shadow = 0;
-    flash_time = 0;
     leveldoor_open = 0;
     demo_index = 0;
     demo_time = 0;
@@ -179,30 +183,17 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
 
     find_start_level_door();
 
-    // busy waiting?
-    while (check_sound_playing() && !do_paused()) idle();
-
-    stop_sounds();
-
-    restore_room_after_quick_load();
-    draw_level_first();
-
-    show_copyprot(0);
-    enable_copyprot = 1;
-    reset_timer(timer_1);
-
-    set_timer_length(timer_1, 12);
-
     if (need_level1_music != 0 && current_level == custom->intro_music_level)
-      if (fixes->fix_quicksave_during_lvl1_music)
       need_level1_music = custom->intro_music_time_restart;
   }
   
   __INLINE__ void printInfo() const override
   {
-      printf("Kid Room: %u\n", Kid.room);
-      printf("Kid X: %u\n", Kid.x);
-      printf("Kid y: %u\n", Kid.y);
+      printf("[]  + Kid Room: %u\n", Kid.room);
+      printf("[]  + Kid X: %u\n", Kid.x);
+      printf("[]  + Kid y: %u\n", Kid.y);
+      printf("[]  + Last Tile Loost Sound: %u\n", last_loose_sound);
+      printf("[]  + RNG: 0x%X\n", random_seed);
   }
 
   char quick_control[9] = "........";
@@ -210,9 +201,8 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
 
   enum ItemType
   {
-    PER_FRAME_STATE,
     HASHABLE,
-    HASHABLE_MANUAL,
+    NON_HASHABLE,
   };
 
   struct Item
@@ -231,92 +221,76 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
  std::vector<Item> GenerateItemsMap()
  {
    std::vector<Item> dest;
-   AddItem(&dest, quick_control, PER_FRAME_STATE);
-   AddItem(&dest, level, HASHABLE_MANUAL);
-   AddItem(&dest, checkpoint, PER_FRAME_STATE);
-   AddItem(&dest, upside_down, PER_FRAME_STATE);
-   AddItem(&dest, drawn_room, HASHABLE);
-   AddItem(&dest, current_level, PER_FRAME_STATE);
-   AddItem(&dest, next_level, PER_FRAME_STATE);
-   AddItem(&dest, mobs_count, HASHABLE_MANUAL);
-   AddItem(&dest, mobs, HASHABLE_MANUAL);
-   AddItem(&dest, trobs_count, HASHABLE_MANUAL);
-   AddItem(&dest, trobs, HASHABLE_MANUAL);
-   AddItem(&dest, leveldoor_open, HASHABLE);
-   AddItem(&dest, Kid, HASHABLE);
-   AddItem(&dest, hitp_curr, PER_FRAME_STATE);
-   AddItem(&dest, hitp_max, PER_FRAME_STATE);
-   AddItem(&dest, hitp_beg_lev, PER_FRAME_STATE);
-   AddItem(&dest, grab_timer, HASHABLE);
-   AddItem(&dest, holding_sword, HASHABLE);
-   AddItem(&dest, united_with_shadow, HASHABLE);
-   AddItem(&dest, have_sword, HASHABLE);
-   /*AddItem(&dest, *ctrl1_forward, HASHABLE);
-   AddItem(&dest, *ctrl1_backward, HASHABLE);
-   AddItem(&dest, *ctrl1_up, HASHABLE);
-   AddItem(&dest, *ctrl1_down, HASHABLE);
-   AddItem(&dest, *ctrl1_shift2, HASHABLE);*/
-   AddItem(&dest, kid_sword_strike, HASHABLE);
-   AddItem(&dest, pickup_obj_type, HASHABLE);
-   AddItem(&dest, offguard, HASHABLE);
-   // guard
-   AddItem(&dest, Guard, PER_FRAME_STATE);
-   AddItem(&dest, Char, PER_FRAME_STATE);
-   AddItem(&dest, Opp, PER_FRAME_STATE);
-   AddItem(&dest, guardhp_curr, PER_FRAME_STATE);
-   AddItem(&dest, guardhp_max, PER_FRAME_STATE);
-   AddItem(&dest, demo_index, PER_FRAME_STATE);
-   AddItem(&dest, demo_time, PER_FRAME_STATE);
-   AddItem(&dest, curr_guard_color, PER_FRAME_STATE);
-   AddItem(&dest, guard_notice_timer, HASHABLE);
-   AddItem(&dest, guard_skill, PER_FRAME_STATE);
-   AddItem(&dest, shadow_initialized, PER_FRAME_STATE);
-   AddItem(&dest, guard_refrac, HASHABLE);
-   AddItem(&dest, justblocked, HASHABLE);
-   AddItem(&dest, droppedout, HASHABLE);
-   // collision
-   AddItem(&dest, curr_row_coll_room, PER_FRAME_STATE);
-   AddItem(&dest, curr_row_coll_flags, PER_FRAME_STATE);
-   AddItem(&dest, below_row_coll_room, PER_FRAME_STATE);
-   AddItem(&dest, below_row_coll_flags, PER_FRAME_STATE);
-   AddItem(&dest, above_row_coll_room, PER_FRAME_STATE);
-   AddItem(&dest, above_row_coll_flags, PER_FRAME_STATE);
-   AddItem(&dest, prev_collision_row, PER_FRAME_STATE);
-   // flash
-   AddItem(&dest, flash_color, PER_FRAME_STATE);
-   AddItem(&dest, flash_time, PER_FRAME_STATE);
-   // sounds
-   AddItem(&dest, need_level1_music, HASHABLE);
-   AddItem(&dest, is_screaming, HASHABLE);
-   AddItem(&dest, is_feather_fall, HASHABLE);
-   AddItem(&dest, last_loose_sound, HASHABLE);
-   // AddItem(&dest, *next_sound, HASHABLE);
-   // AddItem(&dest, *current_sound, HASHABLE);
-   // random
-   AddItem(&dest, random_seed, PER_FRAME_STATE);
-   // remaining time
-   AddItem(&dest, rem_min, PER_FRAME_STATE);
-   AddItem(&dest, rem_tick, PER_FRAME_STATE);
-   // saved controls
-   AddItem(&dest, control_x, PER_FRAME_STATE);
-   AddItem(&dest, control_y, PER_FRAME_STATE);
-   AddItem(&dest, control_shift, PER_FRAME_STATE);
-   AddItem(&dest, control_forward, PER_FRAME_STATE);
-   AddItem(&dest, control_backward, PER_FRAME_STATE);
-   AddItem(&dest, control_up, PER_FRAME_STATE);
-   AddItem(&dest, control_down, PER_FRAME_STATE);
-   AddItem(&dest, control_shift2, PER_FRAME_STATE);
-   AddItem(&dest, ctrl1_forward, PER_FRAME_STATE);
-   AddItem(&dest, ctrl1_backward, PER_FRAME_STATE);
-   AddItem(&dest, ctrl1_up, PER_FRAME_STATE);
-   AddItem(&dest, ctrl1_down, PER_FRAME_STATE);
-   AddItem(&dest, ctrl1_shift2, PER_FRAME_STATE);
-   // Support for overflow glitch
-   AddItem(&dest, exit_room_timer, PER_FRAME_STATE);
-   // replay recording state
-   AddItem(&dest, replay_curr_tick, PER_FRAME_STATE);
-   AddItem(&dest, is_guard_notice, PER_FRAME_STATE);
-   AddItem(&dest, can_guard_see_kid, PER_FRAME_STATE);
+   AddItem(&dest, quick_control,        HASHABLE);
+   AddItem(&dest, level,                NON_HASHABLE);
+   AddItem(&dest, checkpoint,           HASHABLE);
+   AddItem(&dest, upside_down,          HASHABLE);
+   AddItem(&dest, drawn_room,           HASHABLE);
+   AddItem(&dest, current_level,        HASHABLE);
+   AddItem(&dest, next_level,           HASHABLE);
+   AddItem(&dest, mobs_count,           HASHABLE);
+   AddItem(&dest, mobs,                 HASHABLE);
+   AddItem(&dest, trobs_count,          HASHABLE);
+   AddItem(&dest, trobs,                HASHABLE);
+   AddItem(&dest, leveldoor_open,       HASHABLE);
+   AddItem(&dest, Kid,                  HASHABLE);
+   AddItem(&dest, hitp_curr,            HASHABLE);
+   AddItem(&dest, hitp_max,             HASHABLE);
+   AddItem(&dest, hitp_beg_lev,         HASHABLE);
+   AddItem(&dest, grab_timer,           HASHABLE);
+   AddItem(&dest, holding_sword,        HASHABLE);
+   AddItem(&dest, united_with_shadow,   HASHABLE);
+   AddItem(&dest, have_sword,           HASHABLE);
+   AddItem(&dest, kid_sword_strike,     HASHABLE);
+   AddItem(&dest, pickup_obj_type,      HASHABLE);
+   AddItem(&dest, offguard,             HASHABLE);
+   AddItem(&dest, Guard,                HASHABLE);
+   AddItem(&dest, Char,                 NON_HASHABLE);
+   AddItem(&dest, Opp,                  NON_HASHABLE);
+   AddItem(&dest, guardhp_curr,         HASHABLE);
+   AddItem(&dest, guardhp_max,          HASHABLE);
+   AddItem(&dest, demo_index,           NON_HASHABLE);
+   AddItem(&dest, demo_time,            NON_HASHABLE);
+   AddItem(&dest, curr_guard_color,     NON_HASHABLE);
+   AddItem(&dest, guard_notice_timer,   HASHABLE);
+   AddItem(&dest, guard_skill,          HASHABLE);
+   AddItem(&dest, shadow_initialized,   HASHABLE);
+   AddItem(&dest, guard_refrac,         HASHABLE);
+   AddItem(&dest, justblocked,          HASHABLE);
+   AddItem(&dest, droppedout,           HASHABLE);
+   AddItem(&dest, curr_row_coll_room,   HASHABLE);
+   AddItem(&dest, curr_row_coll_flags,  HASHABLE);
+   AddItem(&dest, below_row_coll_room,  HASHABLE);
+   AddItem(&dest, below_row_coll_flags, HASHABLE);
+   AddItem(&dest, above_row_coll_room,  HASHABLE);
+   AddItem(&dest, above_row_coll_flags, HASHABLE);
+   AddItem(&dest, prev_collision_row,   HASHABLE);
+   AddItem(&dest, flash_color,          HASHABLE);
+   AddItem(&dest, flash_time,           HASHABLE);
+   AddItem(&dest, need_level1_music,    HASHABLE);
+   AddItem(&dest, is_screaming,         HASHABLE);
+   AddItem(&dest, is_feather_fall,      HASHABLE);
+   AddItem(&dest, last_loose_sound,     HASHABLE);
+   AddItem(&dest, random_seed,          HASHABLE);
+   AddItem(&dest, rem_min,              NON_HASHABLE);
+   AddItem(&dest, rem_tick,             NON_HASHABLE);
+   AddItem(&dest, control_x,            NON_HASHABLE);
+   AddItem(&dest, control_y,            NON_HASHABLE);
+   AddItem(&dest, control_shift,        NON_HASHABLE);
+   AddItem(&dest, control_forward,      NON_HASHABLE);
+   AddItem(&dest, control_backward,     NON_HASHABLE);
+   AddItem(&dest, control_up,           NON_HASHABLE);
+   AddItem(&dest, control_down,         NON_HASHABLE);
+   AddItem(&dest, control_shift2,       NON_HASHABLE);
+   AddItem(&dest, ctrl1_forward,        NON_HASHABLE);
+   AddItem(&dest, ctrl1_backward,       NON_HASHABLE);
+   AddItem(&dest, ctrl1_up,             NON_HASHABLE);
+   AddItem(&dest, ctrl1_down,           NON_HASHABLE);
+   AddItem(&dest, ctrl1_shift2,         NON_HASHABLE);
+   AddItem(&dest, exit_room_timer,      HASHABLE);
+   AddItem(&dest, replay_curr_tick,     HASHABLE);
+   AddItem(&dest, is_guard_notice,      HASHABLE);
+   AddItem(&dest, can_guard_see_kid,    HASHABLE);
    return dest;
  }
 
@@ -372,6 +346,19 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
     init_copyprot();
   }
 
+  jaffarCommon::hash::hash_t getStateHash() const override
+  {
+    // for (size_t i = 0; i < _items.size(); i++)
+    //  if (_items[i].type == HASHABLE)
+    //  printf("Item %lu, Hash: %s\n", i, jaffarCommon::hash::hashToString(jaffarCommon::hash::calculateMetroHash(_items[i].ptr, _items[i].size)).c_str());
+
+    MetroHash128 hash;
+    for (const auto &item : _items) if (item.type == HASHABLE) hash.Update(item.ptr, item.size);
+    jaffarCommon::hash::hash_t result;
+    hash.Finalize(reinterpret_cast<uint8_t *>(&result));
+    return result;
+  }
+  
   __INLINE__ void advanceStateImpl(const Controller::input_t input) override
   {
     key_states[SDL_SCANCODE_UP] = input.up;
