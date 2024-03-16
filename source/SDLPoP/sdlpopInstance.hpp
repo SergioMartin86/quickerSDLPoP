@@ -405,6 +405,21 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
     }
   }
 
+  void updateRenderer() override
+  {
+    restore_room_after_quick_load();
+    draw_game_frame();
+    update_screen();
+
+    if (Kid.sword == sword_2_drawn) set_timer_length(timer_1, 5);
+    else set_timer_length(timer_1, 4);
+    do_simple_wait(timer_1);
+
+    SDL_RenderClear(renderer_);
+    SDL_RenderCopy(renderer_, target_texture, NULL, NULL);
+    SDL_RenderPresent(renderer_);
+  }
+
   private: 
 
   std::vector<Item> _items;

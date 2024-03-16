@@ -88,6 +88,9 @@ int main(int argc, char *argv[])
   // Creating emulator instance
   SDLPoPInstance e(SDLPoPConfigJs);
 
+  // Initializing emulator
+  e.initialize();
+
   // If an initial state is provided, load it now
   if (stateFilePath != "")
   {

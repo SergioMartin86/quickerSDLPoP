@@ -21,12 +21,20 @@ jaffarCommonDependency = jaffarCommonSubproject.get_variable('jaffarCommonDepend
 
 # Building playback tool
   if get_option('buildPlayer') == true
-    executable('player',
+    quickerSDLPoPPlayer = executable('quickerSDLPoPPlayer',
       'source/player.cpp',
       cpp_args            : [ commonCompileArgs, '-DNCURSES' ],
       dependencies        : [ jaffarCommonDependency, quickerSDLPoPDependency, toolDependency],
       link_args           : [ '-lncurses' ]
     )
+
+    SDLPoPPlayer = executable('SDLPoPPlayer',
+    'source/player.cpp',
+      cpp_args            : [ commonCompileArgs, '-DNCURSES' ],
+      dependencies        : [ jaffarCommonDependency, SDLPoPDependency, toolDependency],
+      link_args           : [ '-lncurses' ]
+    )
+    
   endif
 
   # Building tester tool for QuickerSDLPoP

@@ -58,11 +58,11 @@ class PlaybackInstance
   // Function to render frame
   void renderFrame(const size_t stepId)
   {
-    // Checking the required step id does not exceed contents of the sequence
+// Checking the required step id does not exceed contents of the sequence
     if (stepId > _stepSequence.size()) JAFFAR_THROW_LOGIC("[Error] Attempting to render a step larger than the step sequence");
 
     // If its the first step, then simply reset
-    // if (stepId == 0) _emu->doHardReset();
+    if (stepId == 0);
 
     // Else we load the previous frame
     if (stepId > 0)
@@ -72,6 +72,8 @@ class PlaybackInstance
       _emu->deserializeState(deserializer);
       _emu->advanceState(getStateInput(stepId - 1));
     }
+
+    _emu->updateRenderer();
   }
 
   size_t getSequenceLength() const
@@ -82,7 +84,7 @@ class PlaybackInstance
   const std::string getInput(const size_t stepId) const
   {
     // Checking the required step id does not exceed contents of the sequence
-    if (stepId > _stepSequence.size()) JAFFAR_THROW_LOGIC("[Error] Attempting to render a step larger than the step sequence");
+    if (stepId > _stepSequence.size()) JAFFAR_THROW_LOGIC("[Error] Attempting to render a step larger than the step sequence %lu > %lu", stepId, _stepSequence.size());
 
     // Getting step information
     const auto &step = _stepSequence[stepId];
@@ -94,7 +96,7 @@ class PlaybackInstance
   const uint8_t *getStateData(const size_t stepId) const
   {
     // Checking the required step id does not exceed contents of the sequence
-    if (stepId > _stepSequence.size()) JAFFAR_THROW_LOGIC("[Error] Attempting to render a step larger than the step sequence");
+    if (stepId > _stepSequence.size()) JAFFAR_THROW_LOGIC("[Error] Attempting to render a step larger than the step sequence %lu > %lu", stepId, _stepSequence.size());
 
     // Getting step information
     const auto &step = _stepSequence[stepId];
@@ -106,7 +108,7 @@ class PlaybackInstance
   const jaffarCommon::hash::hash_t getStateHash(const size_t stepId) const
   {
     // Checking the required step id does not exceed contents of the sequence
-    if (stepId > _stepSequence.size()) JAFFAR_THROW_LOGIC("[Error] Attempting to render a step larger than the step sequence");
+    if (stepId > _stepSequence.size()) JAFFAR_THROW_LOGIC("[Error] Attempting to render a step larger than the step sequence %lu > %lu", stepId, _stepSequence.size());
 
     // Getting step information
     const auto &step = _stepSequence[stepId];

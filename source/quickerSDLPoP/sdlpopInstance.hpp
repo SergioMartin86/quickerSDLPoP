@@ -271,6 +271,10 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
    return dest;
  }
 
+   void updateRenderer() override
+  {
+  }
+
   jaffarCommon::hash::hash_t getStateHash() const override
   {
     // for (size_t i = 0; i < _items.size(); i++)

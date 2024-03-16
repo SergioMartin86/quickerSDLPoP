@@ -46,12 +46,14 @@ class SDLPoPInstanceBase
   virtual void setRNGValue(const uint32_t rngValue) = 0;
   virtual void setLooseTileSound(const uint16_t looseTileSound) = 0;
   virtual void initializeCopyProtection() = 0;
-
+  virtual void updateRenderer() = 0;
+  
   protected:
 
   virtual jaffarCommon::hash::hash_t getStateHash() const = 0;
   virtual void printInfo() const = 0;
   virtual void advanceStateImpl(const Controller::input_t input) = 0;
+
 
   // Storage for the light state size
   size_t _stateSize;
