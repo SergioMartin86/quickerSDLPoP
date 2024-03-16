@@ -58,13 +58,12 @@ class PlaybackInstance
   // Function to render frame
   void renderFrame(const size_t stepId)
   {
-// Checking the required step id does not exceed contents of the sequence
+    // Checking the required step id does not exceed contents of the sequence
     if (stepId > _stepSequence.size()) JAFFAR_THROW_LOGIC("[Error] Attempting to render a step larger than the step sequence");
 
     const auto stateData = getStateData(stepId);
     jaffarCommon::deserializer::Contiguous deserializer(stateData);
     _emu->deserializeState(deserializer);
-    _emu->advanceState(getStateInput(stepId));
 
     _emu->updateRenderer();
   }
