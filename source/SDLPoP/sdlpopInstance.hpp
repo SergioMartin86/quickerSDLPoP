@@ -7,9 +7,12 @@
 class SDLPoPInstance final : public SDLPoPInstanceBase
 {
   public:
-  SDLPoPInstance() : SDLPoPInstanceBase()
-  {
-  }
+  SDLPoPInstance(const nlohmann::json& config) : SDLPoPInstanceBase(config)  {  }
+
+   __INLINE__ void initialize() override
+   {
+    
+   }
 
   void serializeState(jaffarCommon::serializer::Base& serializer) const override
   {

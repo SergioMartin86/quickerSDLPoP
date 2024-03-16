@@ -51,32 +51,40 @@ int main(int argc, char *argv[])
   std::string cycleType = program.get<std::string>("--cycleType");
 
   // Loading script file
-  std::string scriptJsonRaw;
-  if (jaffarCommon::file::loadStringFromFile(scriptJsonRaw, scriptFilePath) == false) JAFFAR_THROW_LOGIC("Could not find/read script file: %s\n", scriptFilePath.c_str());
+  std::string scriptJsRaw;
+  if (jaffarCommon::file::loadStringFromFile(scriptJsRaw, scriptFilePath) == false) JAFFAR_THROW_LOGIC("Could not find/read script file: %s\n", scriptFilePath.c_str());
 
   // Parsing script
-  const auto scriptJson = nlohmann::json::parse(scriptJsonRaw);
+  const auto scriptJs = nlohmann::json::parse(scriptJsRaw);
 
   // Getting initial state file path
-  std::string initialStateFilePath = jaffarCommon::json::getString(scriptJson, "Initial State File");
+  std::string stateFilePath = jaffarCommon::json::getString(scriptJs, "Initial State File");
 
   // Getting sequence file path
-  std::string sequenceFilePath = jaffarCommon::json::getString(scriptJson, "Sequence File");
+  std::string sequenceFilePath = jaffarCommon::json::getString(scriptJs, "Sequence File");
 
   // Getting differential compression configuration
-  const auto& differentialCompressionJs = jaffarCommon::json::getObject(scriptJson, "Differential Compression");
+  const auto& differentialCompressionJs = jaffarCommon::json::getObject(scriptJs, "Differential Compression");
   const auto differentialCompressionEnabled = jaffarCommon::json::getBoolean(differentialCompressionJs, "Enabled");
   const auto differentialCompressionMaxDifferences = jaffarCommon::json::getNumber<size_t>(differentialCompressionJs, "Max Differences"); 
   const auto differentialCompressionUseZlib = jaffarCommon::json::getBoolean(differentialCompressionJs, "Use Zlib"); 
 
+  // Getting SDLPoP configuration
+  const auto& SDLPoPConfigJs = jaffarCommon::json::getObject(scriptJs, "SDLPoP Configuration");
+
   // Creating emulator instance
-  SDLPoPInstance e;
+  SDLPoPInstance e(SDLPoPConfigJs);
+
+  // Initializing emulator instance
+  e.initialize();
+
+  exit(0);
 
   // If an initial state is provided, load it now
-  if (initialStateFilePath != "")
+  if (stateFilePath != "")
   {
     std::string stateFileData;
-    if (jaffarCommon::file::loadStringFromFile(stateFileData, initialStateFilePath) == false) JAFFAR_THROW_LOGIC("Could not initial state file: %s\n", initialStateFilePath.c_str());
+    if (jaffarCommon::file::loadStringFromFile(stateFileData, stateFilePath) == false) JAFFAR_THROW_LOGIC("Could not initial state file: %s\n", stateFilePath.c_str());
     jaffarCommon::deserializer::Contiguous d(stateFileData.data());
     e.deserializeState(d);
   }

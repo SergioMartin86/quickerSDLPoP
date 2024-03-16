@@ -13,13 +13,13 @@ int main(int argc, char *argv[])
   // Parsing command line arguments
   argparse::ArgumentParser program("player", "1.0");
 
+  program.add_argument("scriptFile")
+    .help("Path to the test script file to run.")
+    .required();
+
   program.add_argument("sequenceFile")
     .help("Path to the input sequence file (.sol) to reproduce.")
     .required();
-
-  program.add_argument("stateFile")
-    .help("(Optional) Path to the initial state file to load.")
-    .default_value(std::string(""));
 
   program.add_argument("--reproduce")
     .help("Plays the entire sequence without interruptions and exit at the end.")
@@ -41,14 +41,11 @@ int main(int argc, char *argv[])
     JAFFAR_THROW_LOGIC("%s\n%s", err.what(), program.help().str().c_str());
   }
 
-  // Getting ROM file path
-  std::string romFilePath = program.get<std::string>("romFile");
+  // Getting test script file path
+  std::string scriptFilePath = program.get<std::string>("scriptFile");
 
   // Getting sequence file path
   std::string sequenceFilePath = program.get<std::string>("sequenceFile");
-
-  // If initial state file is specified, load it
-  std::string stateFilePath = program.get<std::string>("stateFile");
 
   // Getting reproduce flag
   bool isReproduce = program.get<bool>("--reproduce");
@@ -56,11 +53,15 @@ int main(int argc, char *argv[])
   // Getting reproduce flag
   bool disableRender = program.get<bool>("--disableRender");
 
-  // Getting controller 1 Type
-  std::string controller1Type = program.get<std::string>("--controller1");
+  // Loading script file
+  std::string scriptJsRaw;
+  if (jaffarCommon::file::loadStringFromFile(scriptJsRaw, scriptFilePath) == false) JAFFAR_THROW_LOGIC("Could not find/read script file: %s\n", scriptFilePath.c_str());
 
-  // Getting controller 2 Type
-  std::string controller2Type = program.get<std::string>("--controller2");
+  // Parsing script
+  const auto scriptJs = nlohmann::json::parse(scriptJsRaw);
+
+  // Getting initial state file path
+  std::string stateFilePath = jaffarCommon::json::getString(scriptJs, "Initial State File");
 
   // Loading sequence file
   std::string inputSequence;
@@ -74,15 +75,18 @@ int main(int argc, char *argv[])
   jaffarCommon::logger::initializeTerminal();
 
   // Printing provided parameters
-  printw("[] Sequence File Path: '%s'\n", sequenceFilePath.c_str());
-  printw("[] Sequence Length:    %lu\n", sequence.size());
-  printw("[] State File Path:    '%s'\n", stateFilePath.empty() ? "<Boot Start>" : stateFilePath.c_str());
-  printw("[] Generating Sequence...\n");
+  jaffarCommon::logger::log("[] Sequence File Path: '%s'\n", sequenceFilePath.c_str());
+  jaffarCommon::logger::log("[] Sequence Length:    %lu\n", sequence.size());
+  jaffarCommon::logger::log("[] State File Path:    '%s'\n", stateFilePath.empty() ? "<Boot Start>" : stateFilePath.c_str());
+  jaffarCommon::logger::log("[] Generating Sequence...\n");
 
   jaffarCommon::logger::refreshTerminal();
 
+  // Getting SDLPoP configuration
+  const auto& SDLPoPConfigJs = jaffarCommon::json::getObject(scriptJs, "SDLPoP Configuration");
+
   // Creating emulator instance
-  SDLPoPInstance e;
+  SDLPoPInstance e(SDLPoPConfigJs);
 
   // If an initial state is provided, load it now
   if (stateFilePath != "")
@@ -129,13 +133,13 @@ int main(int argc, char *argv[])
     {
       jaffarCommon::logger::clearTerminal();
 
-      printw("[] ----------------------------------------------------------------\n");
-      printw("[] Current Step #: %lu / %lu\n", currentStep + 1, sequenceLength);
-      printw("[] Input:          %s\n", input.c_str());
-      printw("[] State Hash:     0x%lX%lX\n", hash.first, hash.second);
+      jaffarCommon::logger::log("[] ----------------------------------------------------------------\n");
+      jaffarCommon::logger::log("[] Current Step #: %lu / %lu\n", currentStep + 1, sequenceLength);
+      jaffarCommon::logger::log("[] Input:          %s\n", input.c_str());
+      jaffarCommon::logger::log("[] State Hash:     0x%lX%lX\n", hash.first, hash.second);
 
       // Only print commands if not in reproduce mode
-      if (isReproduce == false) printw("[] Commands: n: -1 m: +1 | h: -10 | j: +10 | y: -100 | u: +100 | k: -1000 | i: +1000 | s: quicksave | p: play | q: quit\n");
+      if (isReproduce == false) jaffarCommon::logger::log("[] Commands: n: -1 m: +1 | h: -10 | j: +10 | y: -100 | u: +100 | k: -1000 | i: +1000 | s: quicksave | p: play | q: quit\n");
 
       jaffarCommon::logger::refreshTerminal();
     }
@@ -170,7 +174,7 @@ int main(int argc, char *argv[])
       saveData.resize(stateSize);
       memcpy(saveData.data(), stateData, stateSize);
       if (jaffarCommon::file::saveStringToFile(saveData, saveFileName.c_str()) == false) JAFFAR_THROW_LOGIC("[ERROR] Could not save state file: %s\n", saveFileName.c_str());
-      printw("[] Saved state to %s\n", saveFileName.c_str());
+      jaffarCommon::logger::log("[] Saved state to %s\n", saveFileName.c_str());
 
       // Do no show frame info again after this action
       showFrameInfo = false;

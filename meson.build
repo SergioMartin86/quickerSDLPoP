@@ -49,7 +49,7 @@ jaffarCommonDependency = jaffarCommonSubproject.get_variable('jaffarCommonDepend
 
   # Building tests
   if get_option('buildSDLPoP') == true
-    #subdir('tests')
+    subdir('tests')
   endif
   
 endif # If not subproject
