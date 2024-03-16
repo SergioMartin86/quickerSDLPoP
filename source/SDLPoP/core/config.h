@@ -103,6 +103,8 @@ The authors of this program may be contacted at https://forum.princed.org
 
 // The mentioned tricks can be found here: https://www.popot.org/documentation.php?doc=Tricks
 
+#define DISABLE_ALL_FIXES
+
 // A compilation-time option to disable all fixes. Useful for automated solving tools that require vanilla emulation. 
 #ifndef DISABLE_ALL_FIXES
 
@@ -278,7 +280,7 @@ The authors of this program may be contacted at https://forum.princed.org
 #define USE_LIGHTING
 
 // Enable screenshot features.
-#define USE_SCREENSHOT
+//#define USE_SCREENSHOT
 
 // Automatically switch to keyboard or joystick/gamepad mode if there is input from that device.
 // Useful if SDL detected a gamepad but there is none.

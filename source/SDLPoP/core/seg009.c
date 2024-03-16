@@ -68,7 +68,8 @@ FILE* fcache_open(const char * filename, const char * mode)
  _cachedFileBufferTable[_cachedFileCounter] = malloc(fileSize);
 
  // Reading source file info buffer
- fread(_cachedFileBufferTable[_cachedFileCounter], 1, fileSize, srcFile);
+ int readBytes = fread(_cachedFileBufferTable[_cachedFileCounter], 1, fileSize, srcFile);
+ if (readBytes < 0) printf("Warning: read no bytes from file\n");
 
  // Closing source file
  fclose(srcFile);

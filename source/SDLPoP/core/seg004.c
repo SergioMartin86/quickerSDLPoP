@@ -493,7 +493,7 @@ void __pascal far check_gate_push() {
 	) {
 		get_tile_at_char();
 		orig_col = tile_col;
-		int orig_room = curr_room;
+		//int orig_room = curr_room;
 		if ((curr_tile2 == tiles_4_gate ||
 			get_tile(curr_room, --tile_col, tile_row) == tiles_4_gate) &&
 			(curr_row_coll_flags[tile_col] & prev_coll_flags[tile_col]) == 0xFF &&

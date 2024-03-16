@@ -12,7 +12,7 @@ subdir('source')
 if meson.is_subproject() == false
 
 # Common application flags
-commonCompileArgs = [ '-Wfatal-errors', '-Wall']
+commonCompileArgs = [ '-Wfatal-errors', '-Wall', '-Werror' ]
 
 # Grabbing jaffarCommon dependency
 
