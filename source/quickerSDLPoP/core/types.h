@@ -1502,14 +1502,5 @@ struct sdlPopState_t {
  sbyte prev_coll_room[10];
  byte prev_coll_flags[10];
  short jumped_through_mirror;
- uint8_t currentCutsceneDelay;
- uint8_t cumulativeCutsceneDelay;
- byte kidPrevframe;
- uint16_t globalStepCounter;
- uint16_t lastInputStep;
- uint8_t guardPrevHP;
- uint16_t guardJingleTimerStart;
- uint16_t guardJingleTimerTotal;
- uint8_t deadGuardCount;
 };
 #pragma pack(pop)

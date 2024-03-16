@@ -69,6 +69,12 @@ int main(int argc, char *argv[])
   const auto differentialCompressionMaxDifferences = jaffarCommon::json::getNumber<size_t>(differentialCompressionJs, "Max Differences"); 
   const auto differentialCompressionUseZlib = jaffarCommon::json::getBoolean(differentialCompressionJs, "Use Zlib"); 
 
+  auto overrideRNGEnabled = jaffarCommon::json::getBoolean(scriptJs, "Override RNG Enabled");
+  auto overrideRNGValue = jaffarCommon::json::getNumber<uint32_t>(scriptJs, "Override RNG Value");
+  auto overrideLooseTileSoundEnabled = jaffarCommon::json::getBoolean(scriptJs, "Override Loose Tile Sound Enabled");
+  auto overrideLooseTileSoundValue = jaffarCommon::json::getNumber<uint32_t>(scriptJs, "Override Loose Tile Sound Value");
+  auto initializeCopyProtection = jaffarCommon::json::getBoolean(scriptJs, "Initialize Copy Protection");
+
   // Getting SDLPoP configuration
   const auto& SDLPoPConfigJs = jaffarCommon::json::getObject(scriptJs, "SDLPoP Configuration");
 
@@ -78,17 +84,19 @@ int main(int argc, char *argv[])
   // Initializing emulator instance
   e.initialize();
 
-  exit(0);
-
   // If an initial state is provided, load it now
-  if (stateFilePath != "")
-  {
-    std::string stateFileData;
-    if (jaffarCommon::file::loadStringFromFile(stateFileData, stateFilePath) == false) JAFFAR_THROW_LOGIC("Could not initial state file: %s\n", stateFilePath.c_str());
-    jaffarCommon::deserializer::Contiguous d(stateFileData.data());
-    e.deserializeState(d);
-  }
+  std::string stateFileData;
+  if (jaffarCommon::file::loadStringFromFile(stateFileData, stateFilePath) == false) JAFFAR_THROW_LOGIC("Could not initial state file: %s\n", stateFilePath.c_str());
+  jaffarCommon::deserializer::Contiguous d(stateFileData.data());
+  e.deserializeState(d);
   
+  // Check if RNG elements need overriding
+  if (overrideRNGEnabled) e.setRNGValue(overrideRNGValue);
+  if (overrideLooseTileSoundEnabled) e.setRNGValue(overrideLooseTileSoundValue);
+
+  // Check if copy protection needs initializing
+  if (initializeCopyProtection) e.initializeCopyProtection();
+
   // Disable rendering
   e.disableRendering();
 

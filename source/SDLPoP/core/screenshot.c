@@ -23,7 +23,7 @@ The authors of this program may be contacted at https://forum.princed.org
 #ifdef USE_SCREENSHOT
 
 char screenshots_folder[POP_MAX_PATH] = "screenshots";
-char screenshot_filename[POP_MAX_PATH] = "screenshot.png";
+char screenshot_filename[POP_MAX_PATH + 256] = "screenshot.png";
 int screenshot_index = 0;
 
 // Use incrementing numbers and a separate folder, like DOSBox.
@@ -38,7 +38,7 @@ void make_screenshot_filename() {
 #endif
 	// Find the first unused filename:
 	for (;;) {
-		snprintf(screenshot_filename, sizeof(screenshot_filename), "%s/screenshot_%03d.png", screenshots_folder, screenshot_index);
+		snprintf(screenshot_filename, POP_MAX_PATH + 256, "%s/screenshot_%03d.png", screenshots_folder, screenshot_index);
 		if (! file_exists(screenshot_filename)) {
 			return;
 		}

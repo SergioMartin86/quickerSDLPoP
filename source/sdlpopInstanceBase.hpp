@@ -14,11 +14,6 @@ class SDLPoPInstanceBase
   {
     _sdlPopRootPath = jaffarCommon::json::getString(config, "SDLPoP Root Path");
     _levelsFilePath = jaffarCommon::json::getString(config, "Levels File Path");
-    _overrideRNGEnabled = jaffarCommon::json::getBoolean(config, "Override RNG Enabled");
-    _overrideRNGValue = jaffarCommon::json::getNumber<uint32_t>(config, "Override RNG Value");
-    _overrideLooseTileSoundEnabled = jaffarCommon::json::getBoolean(config, "Override Loose Tile Sound Enabled");
-    _overrideLooseTileSound = jaffarCommon::json::getNumber<uint32_t>(config, "Override Loose Tile Sound Value");
-    _initializeCopyProtection = jaffarCommon::json::getBoolean(config, "Initialize Copy Protection");
   }
 
   virtual ~SDLPoPInstanceBase() = default;
@@ -42,6 +37,10 @@ class SDLPoPInstanceBase
 
   virtual std::string getCoreName() const = 0;
 
+  virtual void setRNGValue(const uint32_t rngValue) = 0;
+  virtual void setLooseTileSound(const uint16_t looseTileSound) = 0;
+  virtual void initializeCopyProtection() = 0;
+
   protected:
 
   virtual void advanceStateImpl(const Controller::input_t input) = 0;
@@ -54,14 +53,6 @@ class SDLPoPInstanceBase
 
   std::string _sdlPopRootPath;
   std::string _levelsFilePath;
-
-  bool _overrideRNGEnabled;
-  uint32_t _overrideRNGValue;
-
-  bool _overrideLooseTileSoundEnabled;
-  uint16_t _overrideLooseTileSound;
-  
-  bool _initializeCopyProtection;
 
   private:
 

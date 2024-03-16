@@ -44,9 +44,10 @@ void __pascal far init_game(int level) {
 	}
 
 	if (fixes->fix_quicksave_during_lvl1_music)
-  if (level == /*1*/ custom->intro_music_level) need_level1_music = custom->intro_music_time_initial;
+	{
+  if (level == /*1*/ custom->intro_music_level) need_level1_music = custom->intro_music_time_initial; }
 	else
-	 need_level1_music = (level == /*1*/ custom->intro_music_level);
+	 { need_level1_music = (level == /*1*/ custom->intro_music_level); } 
 
 	play_level(level);
 }
@@ -521,7 +522,6 @@ void __pascal far timers() {
 
 // seg003:0798
 void __pascal far check_mirror() {
-	word clip_top;
 	if (jumped_through_mirror == -1) {
 		jump_through_mirror();
 	}

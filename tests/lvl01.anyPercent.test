@@ -1,16 +1,16 @@
 {
   "SDLPoP Configuration":
   {
-    "SDLPoP Root Path": "",
-    "Levels File Path": "",
-    "Override RNG Enabled": false,
-    "Override RNG Value": 0,
-    "Override Loose Tile Sound Enabled": false,
-    "Override Loose Tile Sound Value": 20,
-    "Initialize Copy Protection": false
+    "SDLPoP Root Path": "../data",
+    "Levels File Path": ""
   },
+  "Override RNG Enabled": false,
+  "Override RNG Value": 0,
+  "Override Loose Tile Sound Enabled": false,
+  "Override Loose Tile Sound Value": 20,
+  "Initialize Copy Protection": false,
   "Initial State File": "lvl01.anyPercent.state",
-  "Sequence File": "arkanoid.warpless.sol", 
+  "Sequence File": "lvl01.anyPercent.sol", 
   "Differential Compression":
   {
     "Enabled": false,

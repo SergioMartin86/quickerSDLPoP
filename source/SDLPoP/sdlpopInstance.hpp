@@ -27,6 +27,18 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
 
   std::string getCoreName() const override { return "SDLPoP"; }
 
+  void setRNGValue(const uint32_t rngValue) override
+  {
+  }
+
+  void setLooseTileSound(const uint16_t looseTileSound) override
+  {
+  }
+
+  void initializeCopyProtection() override
+  {
+  }
+  
   protected:
 
   __INLINE__ void advanceStateImpl(const Controller::input_t input) override
