@@ -24,49 +24,49 @@ The authors of this program may be contacted at https://forum.princed.org
 */
 
 #ifndef TYPES_H
-#define TYPES_H
+  #define TYPES_H
 
-//#if !defined(_MSC_VER)
-//# include <SDL2/SDL.h>
-//# include <SDL2/SDL_image.h>
-//#else
-// These headers for SDL seem to be the pkgconfig/meson standard as per the
-// latest versions. If the old ones should be used, the ifdef must be used
-// to compare versions.
-#include <SDL.h>
-#include <SDL_image.h>
+  //#if !defined(_MSC_VER)
+  //# include <SDL2/SDL.h>
+  //# include <SDL2/SDL_image.h>
+  //#else
+  // These headers for SDL seem to be the pkgconfig/meson standard as per the
+  // latest versions. If the old ones should be used, the ifdef must be used
+  // to compare versions.
+  #include <SDL.h>
+  #include <SDL_image.h>
 //#endif
 
-#define MAX_CACHED_FILES 2048
-#define POP_MAX_PATH 1024
-#define POP_MAX_OPTIONS_SIZE 256
+  #define MAX_CACHED_FILES 2048
+  #define POP_MAX_PATH 1024
+  #define POP_MAX_OPTIONS_SIZE 256
 
-#if SDL_BYTEORDER != SDL_LIL_ENDIAN
-  #error This program is not (yet) prepared for big endian CPUs, please contact the author.
-#endif
+  #if SDL_BYTEORDER != SDL_LIL_ENDIAN
+    #error This program is not (yet) prepared for big endian CPUs, please contact the author.
+  #endif
 
-// This macro is from SDL_types.h / SDL_stdinc.h .
-// It used to be #undefined at the end of that file, but since some time in 2006 it's kept available.
-// And SDL's definition changed in SDL 2.0.6, which caused a warning at this redefinition.
-// So we should just use the macro from SDL and not define our own.
-/* Make sure the types really have the right sizes */
-/*
-#define SDL_COMPILE_TIME_ASSERT(name, x)               \
-       typedef int SDL_dummy_ ## name[(x) * 2 - 1]
-*/
+  // This macro is from SDL_types.h / SDL_stdinc.h .
+  // It used to be #undefined at the end of that file, but since some time in 2006 it's kept available.
+  // And SDL's definition changed in SDL 2.0.6, which caused a warning at this redefinition.
+  // So we should just use the macro from SDL and not define our own.
+  /* Make sure the types really have the right sizes */
+  /*
+  #define SDL_COMPILE_TIME_ASSERT(name, x)               \
+         typedef int SDL_dummy_ ## name[(x) * 2 - 1]
+  */
 
-// "far" and "near" makes sense only for 16-bit
-#define far
-#define near
-#define __pascal
-#define malloc_near malloc
-#define malloc_far malloc
-#define free_near free
-#define free_far free
-#define memset_near memset
-#define memset_far memset
-#define memcpy_near memcpy
-#define memcpy_far memcpy
+  // "far" and "near" makes sense only for 16-bit
+  #define far
+  #define near
+  #define __pascal
+  #define malloc_near malloc
+  #define malloc_far malloc
+  #define free_near free
+  #define free_far free
+  #define memset_near memset
+  #define memset_far memset
+  #define memcpy_near memcpy
+  #define memcpy_far memcpy
 
 typedef Uint8 byte;
 typedef Sint8 sbyte;
@@ -241,7 +241,7 @@ enum sound_modes
   smTandy = 6
 };
 
-#pragma pack(push, 1)
+  #pragma pack(push, 1)
 typedef struct link_type
 {
   byte left, right, up, down;
@@ -272,12 +272,12 @@ typedef struct level_type
   byte fill_3[18];
 } level_type;
 SDL_COMPILE_TIME_ASSERT(level_size, sizeof(level_type) == 2305);
-#pragma pack(pop)
+  #pragma pack(pop)
 
 typedef struct image_type
 {
- int h;
- int w;
+  int h;
+  int w;
 } image_type;
 
 typedef struct peel_type
@@ -303,7 +303,7 @@ typedef struct full_image_type
   int xpos, ypos;
 } full_image_type;
 
-#pragma pack(push, 1)
+  #pragma pack(push, 1)
 typedef struct rgb_type
 {
   byte r, g, b;
@@ -322,7 +322,7 @@ typedef struct dat_shpl_type
   dat_pal_type palette;
 } dat_shpl_type;
 SDL_COMPILE_TIME_ASSERT(dat_shpl_size, sizeof(dat_shpl_type) == 100);
-#pragma pack(pop)
+  #pragma pack(pop)
 
 typedef struct char_type
 {
@@ -367,13 +367,13 @@ typedef struct auto_move_type
 } auto_move_type;
 
 /* obj_type:
-	0 = Kid, princess, vizier
-	1 = shadow
-	2 = Guard
-	3 = sword
-	4 = mirror image
-	5 = hurt splash
-	0x80 = loose floor
+  0 = Kid, princess, vizier
+  1 = shadow
+  2 = Guard
+  3 = sword
+  4 = mirror image
+  5 = hurt splash
+  0x80 = loose floor
 */
 typedef struct objtable_type
 {
@@ -458,7 +458,7 @@ typedef struct sword_table_type
   sbyte y;
 } sword_table_type;
 
-#pragma pack(push, 1)
+  #pragma pack(push, 1)
 typedef struct dat_header_type
 {
   Uint32 table_offset;
@@ -489,7 +489,7 @@ typedef struct image_data_type
   byte data[];
 } image_data_type;
 SDL_COMPILE_TIME_ASSERT(image_data_size, sizeof(image_data_type) == 6);
-#pragma pack(pop)
+  #pragma pack(pop)
 
 typedef struct dat_type
 {
@@ -502,7 +502,7 @@ typedef struct dat_type
 
 typedef void __pascal far (*cutscene_ptr_type)();
 
-#ifdef USE_FADE
+  #ifdef USE_FADE
 typedef struct palette_fade_type
 {
   word which_rows;
@@ -513,13 +513,13 @@ typedef struct palette_fade_type
   int __pascal far (*proc_fade_frame)(struct palette_fade_type far *palette_buffer);
   void __pascal far (*proc_restore_free)(struct palette_fade_type far *palette_buffer);
 } palette_fade_type;
-#endif
+  #endif
 
-#ifndef O_BINARY
-  #define O_BINARY 0
-#endif
+  #ifndef O_BINARY
+    #define O_BINARY 0
+  #endif
 
-#ifdef USE_TEXT
+  #ifdef USE_TEXT
 typedef struct font_type
 {
   byte first_char;
@@ -540,7 +540,7 @@ typedef struct textstate_type
   font_type *ptr_font;
 } textstate_type;
 
-  #pragma pack(push, 1)
+    #pragma pack(push, 1)
 typedef struct rawfont_type
 {
   byte first_char;
@@ -552,9 +552,9 @@ typedef struct rawfont_type
   word offsets[];
 } rawfont_type;
 SDL_COMPILE_TIME_ASSERT(rawfont_type, sizeof(rawfont_type) == 10);
-  #pragma pack(pop)
+    #pragma pack(pop)
 
-#endif
+  #endif
 
 typedef enum data_location
 {
@@ -572,7 +572,7 @@ enum sound_type
   sound_music = 4,
   sound_digi_converted = 6,
 };
-#pragma pack(push, 1)
+  #pragma pack(push, 1)
 typedef struct note_type
 {
   word frequency; // 0x00 or 0x01 = rest, 0x12 = end
@@ -705,7 +705,7 @@ typedef struct parsed_midi_type
   dword ticks_per_beat;
 } parsed_midi_type;
 
-#pragma pack(push, 1)
+  #pragma pack(push, 1)
 typedef struct operator_type
 {
   byte mul;
@@ -724,7 +724,7 @@ typedef struct instrument_type
   byte percussion;
   byte unknown[2];
 } instrument_type;
-#pragma pack(pop)
+  #pragma pack(pop)
 
 struct dialog_type; // (declaration only)
 typedef struct dialog_settings_type
@@ -749,7 +749,7 @@ typedef struct dialog_type
   peel_type *peel;
 } dialog_type;
 
-#pragma pack(pop)
+  #pragma pack(pop)
 
 enum soundids
 {
@@ -784,10 +784,10 @@ enum soundids
   sound_28_death_in_fight = 28,
   sound_29_meet_Jaffar = 29,
   sound_30_big_potion = 30,
-  //sound_31 = 31,
+  // sound_31 = 31,
   sound_32_shadow_music = 32,
   sound_33_small_potion = 33,
-  //sound_34 = 34,
+  // sound_34 = 34,
   sound_35_cutscene_8_9 = 35,
   sound_36_out_of_time = 36,
   sound_37_victory = 37,
@@ -795,7 +795,7 @@ enum soundids
   sound_39_low_weight = 39,
   sound_40_cutscene_12_short_time = 40,
   sound_41_end_level_music = 41,
-  //sound_42 = 42,
+  // sound_42 = 42,
   sound_43_victory_Jaffar = 43,
   sound_44_skel_alive = 44,
   sound_45_jump_through_mirror = 45,
@@ -812,7 +812,7 @@ enum soundids
   sound_56_ending_music = 56,
 };
 
-#define NUM_TIMERS 3
+  #define NUM_TIMERS 3
 enum timerids
 {
   timer_0 = 0,
@@ -1206,7 +1206,7 @@ enum colorids
   color_15_brightwhite = 15,
 };
 
-#ifdef USE_REPLAY
+  #ifdef USE_REPLAY
 enum replay_special_moves
 {
   MOVE_RESTART_LEVEL = 1, // player pressed Ctrl+A
@@ -1219,9 +1219,9 @@ enum replay_seek_targets
   replay_seek_1_next_level = 1,
   replay_seek_2_end = 2,
 };
-#endif
+  #endif
 
-#define COUNT(array) (sizeof(array) / sizeof(array[0]))
+  #define COUNT(array) (sizeof(array) / sizeof(array[0]))
 
 // These are or'ed with SDL_SCANCODE_* constants in last_key_scancode.
 enum key_modifiers
@@ -1231,7 +1231,7 @@ enum key_modifiers
   WITH_ALT = 0x2000,
 };
 
-#define MAX_OPTION_VALUE_NAME_LENGTH 20
+  #define MAX_OPTION_VALUE_NAME_LENGTH 20
 typedef struct key_value_type
 {
   char key[MAX_OPTION_VALUE_NAME_LENGTH];
@@ -1256,16 +1256,16 @@ typedef struct names_list_type
   };
 } names_list_type;
 
-// Macros for declaring and initializing a names_list_type (for names lists and key/value pair lists).
-#define NAMES_LIST(listname, ...)                                    \
-  const char listname[][MAX_OPTION_VALUE_NAME_LENGTH] = __VA_ARGS__; \
-  names_list_type listname##_list = {.type = 0, .names = {&listname, COUNT(listname)}}
+  // Macros for declaring and initializing a names_list_type (for names lists and key/value pair lists).
+  #define NAMES_LIST(listname, ...)                                    \
+    const char listname[][MAX_OPTION_VALUE_NAME_LENGTH] = __VA_ARGS__; \
+    names_list_type listname##_list = {.type = 0, .names = {&listname, COUNT(listname)}}
 
-#define KEY_VALUE_LIST(listname, ...)            \
-  const key_value_type listname[] = __VA_ARGS__; \
-  names_list_type listname##_list = {.type = 1, .kv_pairs = {(key_value_type *)&listname, COUNT(listname)}}
+  #define KEY_VALUE_LIST(listname, ...)            \
+    const key_value_type listname[] = __VA_ARGS__; \
+    names_list_type listname##_list = {.type = 1, .kv_pairs = {(key_value_type *)&listname, COUNT(listname)}}
 
-#pragma pack(push, 1)
+  #pragma pack(push, 1)
 typedef struct fixes_options_type
 {
   byte enable_crouch_after_climbing;
@@ -1307,7 +1307,7 @@ typedef struct fixes_options_type
   byte fix_quicksave_during_lvl1_music;
 } fixes_options_type;
 
-#define NUM_GUARD_SKILLS 12
+  #define NUM_GUARD_SKILLS 12
 
 typedef struct custom_options_type
 {
@@ -1415,92 +1415,93 @@ typedef struct custom_options_type
   byte chomper_speed;
 
 } custom_options_type;
-#pragma pack(pop)
+  #pragma pack(pop)
 
 typedef struct directory_listing_type directory_listing_type;
 
-#define BASE_FPS 60
+  #define BASE_FPS 60
 
-#define FEATHER_FALL_LENGTH 18.75
+  #define FEATHER_FALL_LENGTH 18.75
 
 #endif
 
 // SDLPop state to miniPop State conversion
-#pragma pack(push,1)
-struct sdlPopState_t {
- char quick_control[9];
- level_type level;
- word checkpoint;
- word upside_down;
- word drawn_room;
- word current_level;
- word next_level;
- short mobs_count;
- mob_type mobs[14];
- short trobs_count;
- trob_type trobs[30];
- word leveldoor_open;
- char_type Kid;
- word hitp_curr;
- word hitp_max;
- word hitp_beg_lev;
- word grab_timer;
- word holding_sword;
- short united_with_shadow;
- word have_sword;
- word kid_sword_strike;
- short pickup_obj_type;
- word offguard; // name from Apple II source
- char_type Guard;
- char_type Char;
- char_type Opp;
- word guardhp_curr;
- word guardhp_max;
- word demo_index;
- short demo_time;
- word curr_guard_color;
- short guard_notice_timer;
- word guard_skill;
- word shadow_initialized;
- word guard_refrac;
- word justblocked; // name from Apple II source
- word droppedout; // name from Apple II source
- sbyte curr_row_coll_room[10];
- byte curr_row_coll_flags[10];
- sbyte below_row_coll_room[10];
- byte below_row_coll_flags[10];
- sbyte above_row_coll_room[10];
- byte above_row_coll_flags[10];
- sbyte prev_collision_row;
- word flash_color;
- word flash_time;
- word need_level1_music;
- word is_screaming;
- word is_feather_fall;
- word last_loose_sound;
- dword random_seed;
- short rem_min;
- word rem_tick;
- sbyte control_x;
- sbyte control_y;
- sbyte control_shift;
- sbyte control_forward;
- sbyte control_backward;
- sbyte control_up;
- sbyte control_down;
- sbyte control_shift2;
- sbyte ctrl1_forward;
- sbyte ctrl1_backward;
- sbyte ctrl1_up;
- sbyte ctrl1_down;
- sbyte ctrl1_shift2;
- word exit_room_timer;
- float replay_curr_tick;
- word is_guard_notice;
- short can_guard_see_kid;
- sbyte collision_row;
- sbyte prev_coll_room[10];
- byte prev_coll_flags[10];
- short jumped_through_mirror;
+#pragma pack(push, 1)
+struct sdlPopState_t
+{
+  char quick_control[9];
+  level_type level;
+  word checkpoint;
+  word upside_down;
+  word drawn_room;
+  word current_level;
+  word next_level;
+  short mobs_count;
+  mob_type mobs[14];
+  short trobs_count;
+  trob_type trobs[30];
+  word leveldoor_open;
+  char_type Kid;
+  word hitp_curr;
+  word hitp_max;
+  word hitp_beg_lev;
+  word grab_timer;
+  word holding_sword;
+  short united_with_shadow;
+  word have_sword;
+  word kid_sword_strike;
+  short pickup_obj_type;
+  word offguard; // name from Apple II source
+  char_type Guard;
+  char_type Char;
+  char_type Opp;
+  word guardhp_curr;
+  word guardhp_max;
+  word demo_index;
+  short demo_time;
+  word curr_guard_color;
+  short guard_notice_timer;
+  word guard_skill;
+  word shadow_initialized;
+  word guard_refrac;
+  word justblocked; // name from Apple II source
+  word droppedout;  // name from Apple II source
+  sbyte curr_row_coll_room[10];
+  byte curr_row_coll_flags[10];
+  sbyte below_row_coll_room[10];
+  byte below_row_coll_flags[10];
+  sbyte above_row_coll_room[10];
+  byte above_row_coll_flags[10];
+  sbyte prev_collision_row;
+  word flash_color;
+  word flash_time;
+  word need_level1_music;
+  word is_screaming;
+  word is_feather_fall;
+  word last_loose_sound;
+  dword random_seed;
+  short rem_min;
+  word rem_tick;
+  sbyte control_x;
+  sbyte control_y;
+  sbyte control_shift;
+  sbyte control_forward;
+  sbyte control_backward;
+  sbyte control_up;
+  sbyte control_down;
+  sbyte control_shift2;
+  sbyte ctrl1_forward;
+  sbyte ctrl1_backward;
+  sbyte ctrl1_up;
+  sbyte ctrl1_down;
+  sbyte ctrl1_shift2;
+  word exit_room_timer;
+  float replay_curr_tick;
+  word is_guard_notice;
+  short can_guard_see_kid;
+  sbyte collision_row;
+  sbyte prev_coll_room[10];
+  byte prev_coll_flags[10];
+  short jumped_through_mirror;
 };
 #pragma pack(pop)

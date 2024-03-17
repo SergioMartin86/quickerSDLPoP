@@ -23,61 +23,62 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 The authors of this program may be contacted at https://forum.princed.org
 */
 
-
 #ifndef COMMON_H
 #define COMMON_H
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
+#include "dirent.h"
+#include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
-#include <stdint.h>
-#include <stdbool.h>
-#include "dirent.h"
 
 #ifndef _MSC_VER // unistd.h does not exist in the Windows SDK.
-#include <unistd.h>
+  #include <unistd.h>
 #else
-#ifndef _UNISTD_H
-#define _UNISTD_H    1
-#define F_OK    0       /* Test for existence.  */
-#define access _access
-#endif
+  #ifndef _UNISTD_H
+    #define _UNISTD_H 1
+    #define F_OK 0 /* Test for existence.  */
+    #define access _access
+  #endif
 #endif
 
 // S_ISREG and S_ISDIR may not be defined under MSVC
 #ifndef S_ISREG
-#define S_ISREG(mode)  (((mode) & S_IFMT) == S_IFREG)
+  #define S_ISREG(mode) (((mode)&S_IFMT) == S_IFREG)
 #endif
 #ifndef S_ISDIR
-#define S_ISDIR(mode)  (((mode) & S_IFMT) == S_IFDIR)
+  #define S_ISDIR(mode) (((mode)&S_IFMT) == S_IFDIR)
 #endif
 
 #include "types.h"
 
-
 #ifndef MAX
-#define MAX(a,b) ((a)>(b)?(a):(b))
+  #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #endif
 #ifndef MIN
-#define MIN(a,b) ((a)<(b)?(a):(b))
+  #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #endif
 #ifndef ABS
-#define ABS(x) ((x)<0?-(x):(x))
+  #define ABS(x) ((x) < 0 ? -(x) : (x))
 #endif
 
 #define locate_file(filename) locate_file_(filename, alloca(POP_MAX_PATH), POP_MAX_PATH)
-#define snprintf_check(dst, size, ...)	do {			\
-		int __len;					\
-		__len = snprintf(dst, size, __VA_ARGS__);	\
-		if (__len < 0 || __len >= size) {		\
-			fprintf(stderr, "%s: buffer truncation detected!\n", __func__);\
-		}						\
-	} while (0)
+#define snprintf_check(dst, size, ...)                                \
+  do {                                                                \
+    int __len;                                                        \
+    __len = snprintf(dst, size, __VA_ARGS__);                         \
+    if (__len < 0 || __len >= size)                                   \
+    {                                                                 \
+      fprintf(stderr, "%s: buffer truncation detected!\n", __func__); \
+    }                                                                 \
+  } while (0)
 
 #ifdef __cplusplus
 }

@@ -23,7 +23,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 The authors of this program may be contacted at https://forum.princed.org
 */
 
-
 #include "common.h"
 
 struct directory_listing_type
@@ -59,7 +58,6 @@ struct directory_listing_type
 #define midtable_count table_counts[3]
 #define objtable_count table_counts[4]
 
-
 #define SEQTBL_BASE 0x196E
 #define SEQTBL_0 (seqtbl - SEQTBL_BASE)
 
@@ -83,159 +81,159 @@ struct directory_listing_type
 
 // Labels
 #define running SEQTBL_BASE                // 0x196E
-#define startrun 5 + running               //SEQTBL_BASE + 5     // 0x1973
-#define runstt1 2 + startrun               //SEQTBL_BASE + 7     // 0x1975
-#define runstt4 3 + runstt1                //SEQTBL_BASE + 10    // 0x1978
-#define runcyc1 9 + runstt4                //SEQTBL_BASE + 19    // 0x1981
-#define runcyc7 20 + runcyc1               //SEQTBL_BASE + 39    // 0x1995
-#define stand 11 + runcyc7                 //SEQTBL_BASE + 50    // 0x19A0
-#define goalertstand 6 + stand             //SEQTBL_BASE + 56    // 0x19A6
-#define alertstand 2 + goalertstand        //SEQTBL_BASE + 58    // 0x19A8
-#define arise 4 + alertstand               //SEQTBL_BASE + 62    // 0x19AC
-#define guardengarde 21 + arise            //SEQTBL_BASE + 83    // 0x19C1
-#define engarde 3 + guardengarde           //SEQTBL_BASE + 86    // 0x19C4
-#define ready 14 + engarde                 //SEQTBL_BASE + 100   // 0x19D2
-#define ready_loop 6 + ready               //SEQTBL_BASE + 106   // 0x19D8
-#define stabbed 4 + ready_loop             //SEQTBL_BASE + 110   // 0x19DC
-#define strikeadv 29 + stabbed             //SEQTBL_BASE + 139   // 0x19F9
-#define strikeret 14 + strikeadv           //SEQTBL_BASE + 153   // 0x1A07
-#define advance 12 + strikeret             //SEQTBL_BASE + 165   // 0x1A13
-#define fastadvance 15 + advance           //SEQTBL_BASE + 180   // 0x1A22
-#define retreat 12 + fastadvance           //SEQTBL_BASE + 192   // 0x1A2E
-#define strike 14 + retreat                //SEQTBL_BASE + 206   // 0x1A3C
-#define faststrike 6 + strike              //SEQTBL_BASE + 212   // 0x1A42
-#define guy4 3 + faststrike                //SEQTBL_BASE + 215   // 0x1A45
-#define guy7 5 + guy4                      //SEQTBL_BASE + 220   // 0x1A4A
-#define guy8 3 + guy7                      //SEQTBL_BASE + 223   // 0x1A4D
-#define blockedstrike 7 + guy8             //SEQTBL_BASE + 230   // 0x1A54
-#define blocktostrike 6 + blockedstrike    //SEQTBL_BASE + 236   // 0x1A5A
-#define readyblock 4 + blocktostrike       //SEQTBL_BASE + 240   // 0x1A5E
-#define blocking 1 + readyblock            //SEQTBL_BASE + 241   // 0x1A5F
-#define striketoblock 4 + blocking         //SEQTBL_BASE + 245   // 0x1A63
-#define landengarde 5 + striketoblock      //SEQTBL_BASE + 250   // 0x1A68
-#define bumpengfwd 6 + landengarde         //SEQTBL_BASE + 256   // 0x1A6E
-#define bumpengback 7 + bumpengfwd         //SEQTBL_BASE + 263   // 0x1A75
-#define flee 7 + bumpengback               //SEQTBL_BASE + 270   // 0x1A7C
-#define turnengarde 7 + flee               //SEQTBL_BASE + 277   // 0x1A83
-#define alertturn 8 + turnengarde          //SEQTBL_BASE + 285   // 0x1A8B
-#define standjump 8 + alertturn            //SEQTBL_BASE + 293   // 0x1A93
-#define sjland 29 + standjump              //SEQTBL_BASE + 322   // 0x1AB0
-#define runjump 29 + sjland                //SEQTBL_BASE + 351   // 0x1ACD
-#define rjlandrun 46 + runjump             //SEQTBL_BASE + 397   // 0x1AFB
-#define rdiveroll 9 + rjlandrun            //SEQTBL_BASE + 406   // 0x1B04
-#define rdiveroll_crouch 18 + rdiveroll    //SEQTBL_BASE + 424   // 0x1B16
-#define sdiveroll 4 + rdiveroll_crouch     //SEQTBL_BASE + 428   // 0x1B1A
-#define crawl 1 + sdiveroll                //SEQTBL_BASE + 429   // 0x1B1B
-#define crawl_crouch 14 + crawl            //SEQTBL_BASE + 443   // 0x1B29
-#define turndraw 4 + crawl_crouch          //SEQTBL_BASE + 447   // 0x1B2D
-#define turn 12 + turndraw                 //SEQTBL_BASE + 459   // 0x1B39
-#define turnrun 26 + turn                  //SEQTBL_BASE + 485   // 0x1B53
-#define runturn 7 + turnrun                //SEQTBL_BASE + 492   // 0x1B5A
-#define fightfall 43 + runturn             //SEQTBL_BASE + 535   // 0x1B85
-#define efightfall 28 + fightfall          //SEQTBL_BASE + 563   // 0x1BA1
-#define efightfallfwd 30 + efightfall      //SEQTBL_BASE + 593   // 0x1BBF
-#define stepfall 28 + efightfallfwd        //SEQTBL_BASE + 621   // 0x1BDB
-#define fall1 9 + stepfall                 //SEQTBL_BASE + 630   // 0x1BE4
-#define patchfall 22 + fall1               //SEQTBL_BASE + 652   // 0x1BFA
-#define stepfall2 7 + patchfall            //SEQTBL_BASE + 659   // 0x1C01
-#define stepfloat 5 + stepfall2            //SEQTBL_BASE + 664   // 0x1C06
-#define jumpfall 22 + stepfloat            //SEQTBL_BASE + 686   // 0x1C1C
-#define rjumpfall 28 + jumpfall            //SEQTBL_BASE + 714   // 0x1C38
-#define jumphangMed 28 + rjumpfall         //SEQTBL_BASE + 742   // 0x1C54
-#define jumphangLong 21 + jumphangMed      //SEQTBL_BASE + 763   // 0x1C69
-#define jumpbackhang 27 + jumphangLong     //SEQTBL_BASE + 790   // 0x1C84
-#define hang 29 + jumpbackhang             //SEQTBL_BASE + 819   // 0x1CA1
-#define hang1 3 + hang                     //SEQTBL_BASE + 822   // 0x1CA4
-#define hangstraight 45 + hang1            //SEQTBL_BASE + 867   // 0x1CD1
-#define hangstraight_loop 7 + hangstraight //SEQTBL_BASE + 874   // 0x1CD8
-#define climbfail 4 + hangstraight_loop    //SEQTBL_BASE + 878   // 0x1CDC
-#define climbdown 16 + climbfail           //SEQTBL_BASE + 894   // 0x1CEC
-#define climbup 24 + climbdown             //SEQTBL_BASE + 918   // 0x1D04
-#define hangdrop 33 + climbup              //SEQTBL_BASE + 951   // 0x1D25
-#define hangfall 17 + hangdrop             //SEQTBL_BASE + 968   // 0x1D36
-#define freefall 19 + hangfall             //SEQTBL_BASE + 987   // 0x1D49
-#define freefall_loop 2 + freefall         //SEQTBL_BASE + 989   // 0x1D4B
-#define runstop 4 + freefall_loop          //SEQTBL_BASE + 993   // 0x1D4F
-#define jumpup 25 + runstop                //SEQTBL_BASE + 1018  // 0x1D68
-#define highjump 21 + jumpup               //SEQTBL_BASE + 1039  // 0x1D7D
-#define superhijump 30 + highjump          //SEQTBL_BASE + 1069  // 0x1D9B
-#define fallhang 91 + superhijump          //SEQTBL_BASE + 1160  // 0x1DF6
-#define bump 6 + fallhang                  //SEQTBL_BASE + 1166  // 0x1DFC
-#define bumpfall 10 + bump                 //SEQTBL_BASE + 1176  // 0x1E06
-#define bumpfloat 31 + bumpfall            //SEQTBL_BASE + 1207  // 0x1E25
-#define hardbump 22 + bumpfloat            //SEQTBL_BASE + 1229  // 0x1E3B
-#define testfoot 30 + hardbump             //SEQTBL_BASE + 1259  // 0x1E59
-#define stepback 31 + testfoot             //SEQTBL_BASE + 1290  // 0x1E78
-#define step14 5 + stepback                //SEQTBL_BASE + 1295  // 0x1E7D
-#define step13 31 + step14                 //SEQTBL_BASE + 1326  // 0x1E9C
-#define step12 31 + step13                 //SEQTBL_BASE + 1357  // 0x1EBB
-#define step11 31 + step12                 //SEQTBL_BASE + 1388  // 0x1EDA
-#define step10 29 + step11                 //SEQTBL_BASE + 1417  // 0x1EF7
-#define step10a 5 + step10                 //SEQTBL_BASE + 1422  // 0x1EFC
-#define step9 23 + step10a                 //SEQTBL_BASE + 1445  // 0x1F13
-#define step8 6 + step9                    //SEQTBL_BASE + 1451  // 0x1F19
-#define step7 26 + step8                   //SEQTBL_BASE + 1477  // 0x1F33
-#define step6 21 + step7                   //SEQTBL_BASE + 1498  // 0x1F48
-#define step5 21 + step6                   //SEQTBL_BASE + 1519  // 0x1F5D
-#define step4 21 + step5                   //SEQTBL_BASE + 1540  // 0x1F72
-#define step3 16 + step4                   //SEQTBL_BASE + 1556  // 0x1F82
-#define step2 16 + step3                   //SEQTBL_BASE + 1572  // 0x1F92
-#define step1 12 + step2                   //SEQTBL_BASE + 1584  // 0x1F9E
-#define stoop 9 + step1                    //SEQTBL_BASE + 1593  // 0x1FA7
-#define stoop_crouch 8 + stoop             //SEQTBL_BASE + 1601  // 0x1FAF
-#define standup 4 + stoop_crouch           //SEQTBL_BASE + 1605  // 0x1FB3
-#define pickupsword 23 + standup           //SEQTBL_BASE + 1628  // 0x1FCA
-#define resheathe 16 + pickupsword         //SEQTBL_BASE + 1644  // 0x1FDA
-#define fastsheathe 33 + resheathe         //SEQTBL_BASE + 1677  // 0x1FFB
-#define drinkpotion 14 + fastsheathe       //SEQTBL_BASE + 1691  // 0x2009
-#define softland 34 + drinkpotion          //SEQTBL_BASE + 1725  // 0x202B
-#define softland_crouch 11 + softland      //SEQTBL_BASE + 1736  // 0x2036
-#define landrun 4 + softland_crouch        //SEQTBL_BASE + 1740  // 0x203A
-#define medland 32 + landrun               //SEQTBL_BASE + 1772  // 0x205A
-#define hardland 66 + medland              //SEQTBL_BASE + 1838  // 0x209C
-#define hardland_dead 9 + hardland         //SEQTBL_BASE + 1847  // 0x20A5
-#define stabkill 4 + hardland_dead         //SEQTBL_BASE + 1851  // 0x20A9
-#define dropdead 5 + stabkill              //SEQTBL_BASE + 1856  // 0x20AE
-#define dropdead_dead 12 + dropdead        //SEQTBL_BASE + 1868  // 0x20BA
-#define impale 4 + dropdead_dead           //SEQTBL_BASE + 1872  // 0x20BE
-#define impale_dead 7 + impale             //SEQTBL_BASE + 1879  // 0x20C5
-#define halve 4 + impale_dead              //SEQTBL_BASE + 1883  // 0x20C9
-#define halve_dead 4 + halve               //SEQTBL_BASE + 1887  // 0x20CD
-#define crush 4 + halve_dead               //SEQTBL_BASE + 1891  // 0x20D1
-#define deadfall 3 + crush                 //SEQTBL_BASE + 1894  // 0x20D4
-#define deadfall_loop 5 + deadfall         //SEQTBL_BASE + 1899  // 0x20D9
-#define climbstairs 4 + deadfall_loop      //SEQTBL_BASE + 1903  // 0x20DD
-#define climbstairs_loop 81 + climbstairs  //SEQTBL_BASE + 1984  // 0x212E
-#define Vstand 4 + climbstairs_loop        //SEQTBL_BASE + 1988  // 0x2132
-#define Vraise 4 + Vstand                  //SEQTBL_BASE + 1992  // 0x2136
-#define Vraise_loop 21 + Vraise            //SEQTBL_BASE + 2013  // 0x214B
-#define Vwalk 4 + Vraise_loop              //SEQTBL_BASE + 2017  // 0x214F
-#define Vwalk1 2 + Vwalk                   //SEQTBL_BASE + 2019  // 0x2151
-#define Vwalk2 3 + Vwalk1                  //SEQTBL_BASE + 2022  // 0x2154
-#define Vstop 18 + Vwalk2                  //SEQTBL_BASE + 2040  // 0x2166
-#define Vexit 7 + Vstop                    //SEQTBL_BASE + 2047  // 0x216D
-#define Pstand 40 + Vexit                  //SEQTBL_BASE + 2087  // 0x2195
-#define Palert 4 + Pstand                  //SEQTBL_BASE + 2091  // 0x2199
-#define Pstepback 15 + Palert              //SEQTBL_BASE + 2106  // 0x21A8
-#define Pstepback_loop 16 + Pstepback      //SEQTBL_BASE + 2122  // 0x21B8
-#define Plie 4 + Pstepback_loop            //SEQTBL_BASE + 2126  // 0x21BC
-#define Pwaiting 4 + Plie                  //SEQTBL_BASE + 2130  // 0x21C0
-#define Pembrace 4 + Pwaiting              //SEQTBL_BASE + 2134  // 0x21C4
-#define Pembrace_loop 30 + Pembrace        //SEQTBL_BASE + 2164  // 0x21E2
-#define Pstroke 4 + Pembrace_loop          //SEQTBL_BASE + 2168  // 0x21E6
-#define Prise 4 + Pstroke                  //SEQTBL_BASE + 2172  // 0x21EA
-#define Prise_loop 14 + Prise              //SEQTBL_BASE + 2186  // 0x21F8
-#define Pcrouch 4 + Prise_loop             //SEQTBL_BASE + 2190  // 0x21FC
-#define Pcrouch_loop 64 + Pcrouch          //SEQTBL_BASE + 2254  // 0x223C
-#define Pslump 4 + Pcrouch_loop            //SEQTBL_BASE + 2258  // 0x2240
-#define Pslump_loop 1 + Pslump             //SEQTBL_BASE + 2259  // 0x2241
-#define Mscurry 4 + Pslump_loop            //SEQTBL_BASE + 2263  // 0x2245
-#define Mscurry1 2 + Mscurry               //SEQTBL_BASE + 2265  // 0x2247
-#define Mstop 12 + Mscurry1                //SEQTBL_BASE + 2277  // 0x2253
-#define Mraise 4 + Mstop                   //SEQTBL_BASE + 2281  // 0x2257
-#define Mleave 4 + Mraise                  //SEQTBL_BASE + 2285  // 0x225B
-#define Mclimb 19 + Mleave                 //SEQTBL_BASE + 2304  // 0x226E
-#define Mclimb_loop 2 + Mclimb             //SEQTBL_BASE + 2306  // 0x2270
+#define startrun 5 + running               // SEQTBL_BASE + 5     // 0x1973
+#define runstt1 2 + startrun               // SEQTBL_BASE + 7     // 0x1975
+#define runstt4 3 + runstt1                // SEQTBL_BASE + 10    // 0x1978
+#define runcyc1 9 + runstt4                // SEQTBL_BASE + 19    // 0x1981
+#define runcyc7 20 + runcyc1               // SEQTBL_BASE + 39    // 0x1995
+#define stand 11 + runcyc7                 // SEQTBL_BASE + 50    // 0x19A0
+#define goalertstand 6 + stand             // SEQTBL_BASE + 56    // 0x19A6
+#define alertstand 2 + goalertstand        // SEQTBL_BASE + 58    // 0x19A8
+#define arise 4 + alertstand               // SEQTBL_BASE + 62    // 0x19AC
+#define guardengarde 21 + arise            // SEQTBL_BASE + 83    // 0x19C1
+#define engarde 3 + guardengarde           // SEQTBL_BASE + 86    // 0x19C4
+#define ready 14 + engarde                 // SEQTBL_BASE + 100   // 0x19D2
+#define ready_loop 6 + ready               // SEQTBL_BASE + 106   // 0x19D8
+#define stabbed 4 + ready_loop             // SEQTBL_BASE + 110   // 0x19DC
+#define strikeadv 29 + stabbed             // SEQTBL_BASE + 139   // 0x19F9
+#define strikeret 14 + strikeadv           // SEQTBL_BASE + 153   // 0x1A07
+#define advance 12 + strikeret             // SEQTBL_BASE + 165   // 0x1A13
+#define fastadvance 15 + advance           // SEQTBL_BASE + 180   // 0x1A22
+#define retreat 12 + fastadvance           // SEQTBL_BASE + 192   // 0x1A2E
+#define strike 14 + retreat                // SEQTBL_BASE + 206   // 0x1A3C
+#define faststrike 6 + strike              // SEQTBL_BASE + 212   // 0x1A42
+#define guy4 3 + faststrike                // SEQTBL_BASE + 215   // 0x1A45
+#define guy7 5 + guy4                      // SEQTBL_BASE + 220   // 0x1A4A
+#define guy8 3 + guy7                      // SEQTBL_BASE + 223   // 0x1A4D
+#define blockedstrike 7 + guy8             // SEQTBL_BASE + 230   // 0x1A54
+#define blocktostrike 6 + blockedstrike    // SEQTBL_BASE + 236   // 0x1A5A
+#define readyblock 4 + blocktostrike       // SEQTBL_BASE + 240   // 0x1A5E
+#define blocking 1 + readyblock            // SEQTBL_BASE + 241   // 0x1A5F
+#define striketoblock 4 + blocking         // SEQTBL_BASE + 245   // 0x1A63
+#define landengarde 5 + striketoblock      // SEQTBL_BASE + 250   // 0x1A68
+#define bumpengfwd 6 + landengarde         // SEQTBL_BASE + 256   // 0x1A6E
+#define bumpengback 7 + bumpengfwd         // SEQTBL_BASE + 263   // 0x1A75
+#define flee 7 + bumpengback               // SEQTBL_BASE + 270   // 0x1A7C
+#define turnengarde 7 + flee               // SEQTBL_BASE + 277   // 0x1A83
+#define alertturn 8 + turnengarde          // SEQTBL_BASE + 285   // 0x1A8B
+#define standjump 8 + alertturn            // SEQTBL_BASE + 293   // 0x1A93
+#define sjland 29 + standjump              // SEQTBL_BASE + 322   // 0x1AB0
+#define runjump 29 + sjland                // SEQTBL_BASE + 351   // 0x1ACD
+#define rjlandrun 46 + runjump             // SEQTBL_BASE + 397   // 0x1AFB
+#define rdiveroll 9 + rjlandrun            // SEQTBL_BASE + 406   // 0x1B04
+#define rdiveroll_crouch 18 + rdiveroll    // SEQTBL_BASE + 424   // 0x1B16
+#define sdiveroll 4 + rdiveroll_crouch     // SEQTBL_BASE + 428   // 0x1B1A
+#define crawl 1 + sdiveroll                // SEQTBL_BASE + 429   // 0x1B1B
+#define crawl_crouch 14 + crawl            // SEQTBL_BASE + 443   // 0x1B29
+#define turndraw 4 + crawl_crouch          // SEQTBL_BASE + 447   // 0x1B2D
+#define turn 12 + turndraw                 // SEQTBL_BASE + 459   // 0x1B39
+#define turnrun 26 + turn                  // SEQTBL_BASE + 485   // 0x1B53
+#define runturn 7 + turnrun                // SEQTBL_BASE + 492   // 0x1B5A
+#define fightfall 43 + runturn             // SEQTBL_BASE + 535   // 0x1B85
+#define efightfall 28 + fightfall          // SEQTBL_BASE + 563   // 0x1BA1
+#define efightfallfwd 30 + efightfall      // SEQTBL_BASE + 593   // 0x1BBF
+#define stepfall 28 + efightfallfwd        // SEQTBL_BASE + 621   // 0x1BDB
+#define fall1 9 + stepfall                 // SEQTBL_BASE + 630   // 0x1BE4
+#define patchfall 22 + fall1               // SEQTBL_BASE + 652   // 0x1BFA
+#define stepfall2 7 + patchfall            // SEQTBL_BASE + 659   // 0x1C01
+#define stepfloat 5 + stepfall2            // SEQTBL_BASE + 664   // 0x1C06
+#define jumpfall 22 + stepfloat            // SEQTBL_BASE + 686   // 0x1C1C
+#define rjumpfall 28 + jumpfall            // SEQTBL_BASE + 714   // 0x1C38
+#define jumphangMed 28 + rjumpfall         // SEQTBL_BASE + 742   // 0x1C54
+#define jumphangLong 21 + jumphangMed      // SEQTBL_BASE + 763   // 0x1C69
+#define jumpbackhang 27 + jumphangLong     // SEQTBL_BASE + 790   // 0x1C84
+#define hang 29 + jumpbackhang             // SEQTBL_BASE + 819   // 0x1CA1
+#define hang1 3 + hang                     // SEQTBL_BASE + 822   // 0x1CA4
+#define hangstraight 45 + hang1            // SEQTBL_BASE + 867   // 0x1CD1
+#define hangstraight_loop 7 + hangstraight // SEQTBL_BASE + 874   // 0x1CD8
+#define climbfail 4 + hangstraight_loop    // SEQTBL_BASE + 878   // 0x1CDC
+#define climbdown 16 + climbfail           // SEQTBL_BASE + 894   // 0x1CEC
+#define climbup 24 + climbdown             // SEQTBL_BASE + 918   // 0x1D04
+#define hangdrop 33 + climbup              // SEQTBL_BASE + 951   // 0x1D25
+#define hangfall 17 + hangdrop             // SEQTBL_BASE + 968   // 0x1D36
+#define freefall 19 + hangfall             // SEQTBL_BASE + 987   // 0x1D49
+#define freefall_loop 2 + freefall         // SEQTBL_BASE + 989   // 0x1D4B
+#define runstop 4 + freefall_loop          // SEQTBL_BASE + 993   // 0x1D4F
+#define jumpup 25 + runstop                // SEQTBL_BASE + 1018  // 0x1D68
+#define highjump 21 + jumpup               // SEQTBL_BASE + 1039  // 0x1D7D
+#define superhijump 30 + highjump          // SEQTBL_BASE + 1069  // 0x1D9B
+#define fallhang 91 + superhijump          // SEQTBL_BASE + 1160  // 0x1DF6
+#define bump 6 + fallhang                  // SEQTBL_BASE + 1166  // 0x1DFC
+#define bumpfall 10 + bump                 // SEQTBL_BASE + 1176  // 0x1E06
+#define bumpfloat 31 + bumpfall            // SEQTBL_BASE + 1207  // 0x1E25
+#define hardbump 22 + bumpfloat            // SEQTBL_BASE + 1229  // 0x1E3B
+#define testfoot 30 + hardbump             // SEQTBL_BASE + 1259  // 0x1E59
+#define stepback 31 + testfoot             // SEQTBL_BASE + 1290  // 0x1E78
+#define step14 5 + stepback                // SEQTBL_BASE + 1295  // 0x1E7D
+#define step13 31 + step14                 // SEQTBL_BASE + 1326  // 0x1E9C
+#define step12 31 + step13                 // SEQTBL_BASE + 1357  // 0x1EBB
+#define step11 31 + step12                 // SEQTBL_BASE + 1388  // 0x1EDA
+#define step10 29 + step11                 // SEQTBL_BASE + 1417  // 0x1EF7
+#define step10a 5 + step10                 // SEQTBL_BASE + 1422  // 0x1EFC
+#define step9 23 + step10a                 // SEQTBL_BASE + 1445  // 0x1F13
+#define step8 6 + step9                    // SEQTBL_BASE + 1451  // 0x1F19
+#define step7 26 + step8                   // SEQTBL_BASE + 1477  // 0x1F33
+#define step6 21 + step7                   // SEQTBL_BASE + 1498  // 0x1F48
+#define step5 21 + step6                   // SEQTBL_BASE + 1519  // 0x1F5D
+#define step4 21 + step5                   // SEQTBL_BASE + 1540  // 0x1F72
+#define step3 16 + step4                   // SEQTBL_BASE + 1556  // 0x1F82
+#define step2 16 + step3                   // SEQTBL_BASE + 1572  // 0x1F92
+#define step1 12 + step2                   // SEQTBL_BASE + 1584  // 0x1F9E
+#define stoop 9 + step1                    // SEQTBL_BASE + 1593  // 0x1FA7
+#define stoop_crouch 8 + stoop             // SEQTBL_BASE + 1601  // 0x1FAF
+#define standup 4 + stoop_crouch           // SEQTBL_BASE + 1605  // 0x1FB3
+#define pickupsword 23 + standup           // SEQTBL_BASE + 1628  // 0x1FCA
+#define resheathe 16 + pickupsword         // SEQTBL_BASE + 1644  // 0x1FDA
+#define fastsheathe 33 + resheathe         // SEQTBL_BASE + 1677  // 0x1FFB
+#define drinkpotion 14 + fastsheathe       // SEQTBL_BASE + 1691  // 0x2009
+#define softland 34 + drinkpotion          // SEQTBL_BASE + 1725  // 0x202B
+#define softland_crouch 11 + softland      // SEQTBL_BASE + 1736  // 0x2036
+#define landrun 4 + softland_crouch        // SEQTBL_BASE + 1740  // 0x203A
+#define medland 32 + landrun               // SEQTBL_BASE + 1772  // 0x205A
+#define hardland 66 + medland              // SEQTBL_BASE + 1838  // 0x209C
+#define hardland_dead 9 + hardland         // SEQTBL_BASE + 1847  // 0x20A5
+#define stabkill 4 + hardland_dead         // SEQTBL_BASE + 1851  // 0x20A9
+#define dropdead 5 + stabkill              // SEQTBL_BASE + 1856  // 0x20AE
+#define dropdead_dead 12 + dropdead        // SEQTBL_BASE + 1868  // 0x20BA
+#define impale 4 + dropdead_dead           // SEQTBL_BASE + 1872  // 0x20BE
+#define impale_dead 7 + impale             // SEQTBL_BASE + 1879  // 0x20C5
+#define halve 4 + impale_dead              // SEQTBL_BASE + 1883  // 0x20C9
+#define halve_dead 4 + halve               // SEQTBL_BASE + 1887  // 0x20CD
+#define crush 4 + halve_dead               // SEQTBL_BASE + 1891  // 0x20D1
+#define deadfall 3 + crush                 // SEQTBL_BASE + 1894  // 0x20D4
+#define deadfall_loop 5 + deadfall         // SEQTBL_BASE + 1899  // 0x20D9
+#define climbstairs 4 + deadfall_loop      // SEQTBL_BASE + 1903  // 0x20DD
+#define climbstairs_loop 81 + climbstairs  // SEQTBL_BASE + 1984  // 0x212E
+#define Vstand 4 + climbstairs_loop        // SEQTBL_BASE + 1988  // 0x2132
+#define Vraise 4 + Vstand                  // SEQTBL_BASE + 1992  // 0x2136
+#define Vraise_loop 21 + Vraise            // SEQTBL_BASE + 2013  // 0x214B
+#define Vwalk 4 + Vraise_loop              // SEQTBL_BASE + 2017  // 0x214F
+#define Vwalk1 2 + Vwalk                   // SEQTBL_BASE + 2019  // 0x2151
+#define Vwalk2 3 + Vwalk1                  // SEQTBL_BASE + 2022  // 0x2154
+#define Vstop 18 + Vwalk2                  // SEQTBL_BASE + 2040  // 0x2166
+#define Vexit 7 + Vstop                    // SEQTBL_BASE + 2047  // 0x216D
+#define Pstand 40 + Vexit                  // SEQTBL_BASE + 2087  // 0x2195
+#define Palert 4 + Pstand                  // SEQTBL_BASE + 2091  // 0x2199
+#define Pstepback 15 + Palert              // SEQTBL_BASE + 2106  // 0x21A8
+#define Pstepback_loop 16 + Pstepback      // SEQTBL_BASE + 2122  // 0x21B8
+#define Plie 4 + Pstepback_loop            // SEQTBL_BASE + 2126  // 0x21BC
+#define Pwaiting 4 + Plie                  // SEQTBL_BASE + 2130  // 0x21C0
+#define Pembrace 4 + Pwaiting              // SEQTBL_BASE + 2134  // 0x21C4
+#define Pembrace_loop 30 + Pembrace        // SEQTBL_BASE + 2164  // 0x21E2
+#define Pstroke 4 + Pembrace_loop          // SEQTBL_BASE + 2168  // 0x21E6
+#define Prise 4 + Pstroke                  // SEQTBL_BASE + 2172  // 0x21EA
+#define Prise_loop 14 + Prise              // SEQTBL_BASE + 2186  // 0x21F8
+#define Pcrouch 4 + Prise_loop             // SEQTBL_BASE + 2190  // 0x21FC
+#define Pcrouch_loop 64 + Pcrouch          // SEQTBL_BASE + 2254  // 0x223C
+#define Pslump 4 + Pcrouch_loop            // SEQTBL_BASE + 2258  // 0x2240
+#define Pslump_loop 1 + Pslump             // SEQTBL_BASE + 2259  // 0x2241
+#define Mscurry 4 + Pslump_loop            // SEQTBL_BASE + 2263  // 0x2245
+#define Mscurry1 2 + Mscurry               // SEQTBL_BASE + 2265  // 0x2247
+#define Mstop 12 + Mscurry1                // SEQTBL_BASE + 2277  // 0x2253
+#define Mraise 4 + Mstop                   // SEQTBL_BASE + 2281  // 0x2257
+#define Mleave 4 + Mraise                  // SEQTBL_BASE + 2285  // 0x225B
+#define Mclimb 19 + Mleave                 // SEQTBL_BASE + 2304  // 0x226E
+#define Mclimb_loop 2 + Mclimb             // SEQTBL_BASE + 2306  // 0x2270
 
 const word seqtbl_offsets[] = {
   0x0000, startrun, stand, standjump, runjump, turn, runturn, stepfall, jumphangMed, hang, climbup, hangdrop, freefall, runstop, jumpup, fallhang, jumpbackhang, softland, jumpfall, stepfall2, medland, rjumpfall, hardland, hangfall, jumphangLong, hangstraight, rdiveroll, sdiveroll, highjump, step1, step2, step3, step4, step5, step6, step7, step8, step9, step10, step11, step12, step13, step14, turnrun, testfoot, bumpfall, hardbump, bump, superhijump, standup, stoop, impale, crush, deadfall, halve, engarde, advance, retreat, strike, flee, turnengarde, striketoblock, readyblock, landengarde, bumpengfwd, bumpengback, blocktostrike, strikeadv, climbdown, blockedstrike, climbstairs, dropdead, stepback, climbfail, stabbed, faststrike, strikeret, alertstand, drinkpotion, crawl, alertturn, fightfall, efightfall, efightfallfwd, running, stabkill, fastadvance, goalertstand, arise, turndraw, guardengarde, pickupsword, resheathe, fastsheathe, Pstand, Vstand, Vwalk, Vstop, Palert, Pstepback, Vexit, Mclimb, Vraise, Plie, patchfall, Mscurry, Mstop, Mleave, Pembrace, Pwaiting, Pstroke, Prise, Pcrouch, Pslump, Mraise};
@@ -2675,7 +2673,7 @@ static const frame_type frame_tbl_cuts[] = {
 };
 
 static const rect_type screen_rect = {0, 0, 200, 320};
-//1.0//static const char copyprot_letter[] = {'A', 'A', 'B', 'B', 'C', 'C', 'D', 'D', 'E', 'F', 'F', 'G', 'H', 'H', 'I', 'I', 'J', 'J', 'K', 'L', 'L', 'M', 'M', 'N', 'O', 'O', 'P', 'P', 'R', 'R', 'S', 'S', 'T', 'T', 'U', 'U', 'V', 'Y', 'W', 'Y'};
+// 1.0//static const char copyprot_letter[] = {'A', 'A', 'B', 'B', 'C', 'C', 'D', 'D', 'E', 'F', 'F', 'G', 'H', 'H', 'I', 'I', 'J', 'J', 'K', 'L', 'L', 'M', 'M', 'N', 'O', 'O', 'P', 'P', 'R', 'R', 'S', 'S', 'T', 'T', 'U', 'U', 'V', 'Y', 'W', 'Y'};
 static const char copyprot_letter[] = {'W', 'O', 'E', 'S', 'P', 'B', 'Y', 'S', 'K', 'J', 'T', 'B', 'C', 'F', 'E', 'S', 'K', 'M', 'M', 'T', 'P', 'Y', 'K', 'C', 'G', 'S', 'U', 'L', 'J', 'C', 'D', 'I', 'L', 'T', 'T', 'A', 'M', 'C', 'S', 'G'};
 static const word tbl_line[] = {0, 10, 20};
 static const byte chtab_flip_clip[10] = {1, 0, 1, 1, 1, 1, 0, 0, 0, 0};
@@ -2690,121 +2688,121 @@ static const sbyte dir_front[] = {-1, 1};
 static const sbyte dir_behind[] = {1, -1};
 
 static custom_options_type custom_defaults = {
-                                                  .start_minutes_left = 60,
-                                                  .start_ticks_left = 719,
-                                                  .start_hitp = 3,
-                                                  .max_hitp_allowed = 10,
-                                                  .saving_allowed_first_level = 3,
-                                                  .saving_allowed_last_level = 13,
-                                                  .start_upside_down = 0,
-                                                  .start_in_blind_mode = 0,
-                                                  // data:009E
-                                                  .copyprot_level = 2,
-                                                  .drawn_tile_top_level_edge = tiles_1_floor,
-                                                  .drawn_tile_left_level_edge = tiles_20_wall,
-                                                  .level_edge_hit_tile = tiles_20_wall,
-                                                  .allow_triggering_any_tile = 0,
-                                                  .enable_wda_in_palace = 0,
-                                                  .vga_palette = VGA_PALETTE_DEFAULT,
-                                                  .first_level = 1,
-                                                  .skip_title = 0,
-                                                  .shift_L_allowed_until_level = 4,
-                                                  .shift_L_reduced_minutes = 15,
-                                                  .shift_L_reduced_ticks = 719,
-                                                  .demo_hitp = 4,
-                                                  .demo_end_room = 24,
-                                                  .intro_music_level = 1,
-                                                  .intro_music_time_initial = 33,
-                                                  .intro_music_time_restart = 4,
-                                                  .have_sword_from_level = 2,
-                                                  .checkpoint_level = 3,
-                                                  .checkpoint_respawn_dir = dir_FF_left,
-                                                  .checkpoint_respawn_room = 2,
-                                                  .checkpoint_respawn_tilepos = 6,
-                                                  .checkpoint_clear_tile_room = 7,
-                                                  .checkpoint_clear_tile_col = 4,
-                                                  .checkpoint_clear_tile_row = 0,
-                                                  .skeleton_level = 3,
-                                                  .skeleton_room = 1,
-                                                  .skeleton_trigger_column_1 = 2,
-                                                  .skeleton_trigger_column_2 = 3,
-                                                  .skeleton_column = 5,
-                                                  .skeleton_row = 1,
-                                                  .skeleton_require_open_level_door = 1,
-                                                  .skeleton_skill = 2,
-                                                  .skeleton_reappear_room = 3,
-                                                  .skeleton_reappear_x = 133,
-                                                  .skeleton_reappear_row = 1,
-                                                  .skeleton_reappear_dir = dir_0_right,
-                                                  .mirror_level = 4,
-                                                  .mirror_room = 4,
-                                                  .mirror_column = 4,
-                                                  .mirror_row = 0,
-                                                  .mirror_tile = tiles_13_mirror,
-                                                  .show_mirror_image = 1,
-                                                  .falling_exit_level = 6,
-                                                  .falling_exit_room = 1,
-                                                  .falling_entry_level = 7,
-                                                  .falling_entry_room = 17,
-                                                  .mouse_level = 8,
-                                                  .mouse_room = 16,
-                                                  .mouse_delay = 150,
-                                                  .mouse_object = 24,
-                                                  .mouse_start_x = 200,
-                                                  .loose_tiles_level = 13,
-                                                  .loose_tiles_room_1 = 23,
-                                                  .loose_tiles_room_2 = 16,
-                                                  .loose_tiles_first_tile = 22,
-                                                  .loose_tiles_last_tile = 27,
-                                                  .jaffar_victory_level = 13,
-                                                  .jaffar_victory_flash_time = 18,
-                                                  .hide_level_number_from_level = 14,
-                                                  .level_13_level_number = 12,
-                                                  .victory_stops_time_level = 13,
-                                                  .win_level = 14,
-                                                  .win_room = 5,
-                                                  .loose_floor_delay = 11,
-                                                  // data:02B2
-                                                  .tbl_level_type = {0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0},
-                                                  // 1.3
-                                                  .tbl_level_color = {0, 0, 0, 1, 0, 0, 0, 1, 2, 2, 0, 0, 3, 3, 4, 0},
-                                                  // data:03D4
-                                                  .tbl_guard_type = {0, 0, 0, 2, 0, 0, 1, 0, 0, 0, 0, 0, 4, 3, -1, -1},
-                                                  // data:0EDA
-                                                  .tbl_guard_hp = {4, 3, 3, 3, 3, 4, 5, 4, 4, 5, 5, 5, 4, 6, 0, 0},
-                                                  .tbl_cutscenes_by_index = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15},
-                                                  .tbl_entry_pose = {0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0},
-                                                  .tbl_seamless_exit = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 23, -1, -1, -1},
+  .start_minutes_left = 60,
+  .start_ticks_left = 719,
+  .start_hitp = 3,
+  .max_hitp_allowed = 10,
+  .saving_allowed_first_level = 3,
+  .saving_allowed_last_level = 13,
+  .start_upside_down = 0,
+  .start_in_blind_mode = 0,
+  // data:009E
+  .copyprot_level = 2,
+  .drawn_tile_top_level_edge = tiles_1_floor,
+  .drawn_tile_left_level_edge = tiles_20_wall,
+  .level_edge_hit_tile = tiles_20_wall,
+  .allow_triggering_any_tile = 0,
+  .enable_wda_in_palace = 0,
+  .vga_palette = VGA_PALETTE_DEFAULT,
+  .first_level = 1,
+  .skip_title = 0,
+  .shift_L_allowed_until_level = 4,
+  .shift_L_reduced_minutes = 15,
+  .shift_L_reduced_ticks = 719,
+  .demo_hitp = 4,
+  .demo_end_room = 24,
+  .intro_music_level = 1,
+  .intro_music_time_initial = 33,
+  .intro_music_time_restart = 4,
+  .have_sword_from_level = 2,
+  .checkpoint_level = 3,
+  .checkpoint_respawn_dir = dir_FF_left,
+  .checkpoint_respawn_room = 2,
+  .checkpoint_respawn_tilepos = 6,
+  .checkpoint_clear_tile_room = 7,
+  .checkpoint_clear_tile_col = 4,
+  .checkpoint_clear_tile_row = 0,
+  .skeleton_level = 3,
+  .skeleton_room = 1,
+  .skeleton_trigger_column_1 = 2,
+  .skeleton_trigger_column_2 = 3,
+  .skeleton_column = 5,
+  .skeleton_row = 1,
+  .skeleton_require_open_level_door = 1,
+  .skeleton_skill = 2,
+  .skeleton_reappear_room = 3,
+  .skeleton_reappear_x = 133,
+  .skeleton_reappear_row = 1,
+  .skeleton_reappear_dir = dir_0_right,
+  .mirror_level = 4,
+  .mirror_room = 4,
+  .mirror_column = 4,
+  .mirror_row = 0,
+  .mirror_tile = tiles_13_mirror,
+  .show_mirror_image = 1,
+  .falling_exit_level = 6,
+  .falling_exit_room = 1,
+  .falling_entry_level = 7,
+  .falling_entry_room = 17,
+  .mouse_level = 8,
+  .mouse_room = 16,
+  .mouse_delay = 150,
+  .mouse_object = 24,
+  .mouse_start_x = 200,
+  .loose_tiles_level = 13,
+  .loose_tiles_room_1 = 23,
+  .loose_tiles_room_2 = 16,
+  .loose_tiles_first_tile = 22,
+  .loose_tiles_last_tile = 27,
+  .jaffar_victory_level = 13,
+  .jaffar_victory_flash_time = 18,
+  .hide_level_number_from_level = 14,
+  .level_13_level_number = 12,
+  .victory_stops_time_level = 13,
+  .win_level = 14,
+  .win_room = 5,
+  .loose_floor_delay = 11,
+  // data:02B2
+  .tbl_level_type = {0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0},
+  // 1.3
+  .tbl_level_color = {0, 0, 0, 1, 0, 0, 0, 1, 2, 2, 0, 0, 3, 3, 4, 0},
+  // data:03D4
+  .tbl_guard_type = {0, 0, 0, 2, 0, 0, 1, 0, 0, 0, 0, 0, 4, 3, -1, -1},
+  // data:0EDA
+  .tbl_guard_hp = {4, 3, 3, 3, 3, 4, 5, 4, 4, 5, 5, 5, 4, 6, 0, 0},
+  .tbl_cutscenes_by_index = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15},
+  .tbl_entry_pose = {0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0},
+  .tbl_seamless_exit = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 23, -1, -1, -1},
 
-//                                                  // guard skills 1.0
-//                                                  .strikeprob =    { 61, 100, 61, 61, 61, 40, 100, 220, 0, 48, 32, 48},
-//                                                  .restrikeprob =  { 0, 0, 0, 5, 5, 175, 16, 8, 0, 255, 255, 150},
-//                                                  .blockprob =     { 0, 150, 150, 200, 200, 255, 200, 250, 0, 255, 255, 255},
-//                                                  .impblockprob =  { 0, 61, 61, 100, 100, 145, 100, 250, 0, 145, 255, 175},
-//                                                  .advprob =       { 255, 200, 200, 200, 255, 255, 200, 0, 0, 255, 100, 100},
-//                                                  .refractimer =   { 16, 16, 16, 16, 8, 8, 8, 8, 0, 8, 0, 0},
-//                                                  .extrastrength = { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
+  //                                                  // guard skills 1.0
+  //                                                  .strikeprob =    { 61, 100, 61, 61, 61, 40, 100, 220, 0, 48, 32, 48},
+  //                                                  .restrikeprob =  { 0, 0, 0, 5, 5, 175, 16, 8, 0, 255, 255, 150},
+  //                                                  .blockprob =     { 0, 150, 150, 200, 200, 255, 200, 250, 0, 255, 255, 255},
+  //                                                  .impblockprob =  { 0, 61, 61, 100, 100, 145, 100, 250, 0, 145, 255, 175},
+  //                                                  .advprob =       { 255, 200, 200, 200, 255, 255, 200, 0, 0, 255, 100, 100},
+  //                                                  .refractimer =   { 16, 16, 16, 16, 8, 8, 8, 8, 0, 8, 0, 0},
+  //                                                  .extrastrength = { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
 
-                                                  // guard skills 1.4
-                                                  .strikeprob =    { 75, 100, 75, 75, 75, 50, 100, 220, 0, 60, 40,  60},
-                                                  .restrikeprob =  { 0, 0, 0, 5, 5, 175, 20, 10, 0, 255, 255, 150},
-                                                  .blockprob =     { 0, 150, 150, 200, 200, 255, 200, 250, 0, 255, 255, 255},
-                                                  .impblockprob =  { 0, 75, 75, 100, 100, 145, 100, 250, 0, 145, 255, 175},
-                                                  .advprob =       { 255, 200, 200, 200, 255, 255, 200, 0, 0, 255, 100, 100},
-                                                  .refractimer =   { 20, 20, 20, 20, 10, 10, 10, 10, 0, 10, 0, 0},
-                                                  .extrastrength = { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
+  // guard skills 1.4
+  .strikeprob = {75, 100, 75, 75, 75, 50, 100, 220, 0, 60, 40, 60},
+  .restrikeprob = {0, 0, 0, 5, 5, 175, 20, 10, 0, 255, 255, 150},
+  .blockprob = {0, 150, 150, 200, 200, 255, 200, 250, 0, 255, 255, 255},
+  .impblockprob = {0, 75, 75, 100, 100, 145, 100, 250, 0, 145, 255, 175},
+  .advprob = {255, 200, 200, 200, 255, 255, 200, 0, 0, 255, 100, 100},
+  .refractimer = {20, 20, 20, 20, 10, 10, 10, 10, 0, 10, 0, 0},
+  .extrastrength = {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
 
-                                                  // shadow's starting positions
-                                                  .init_shad_6 = {0x0F, 0x51, 0x76, 0, 0, 1, 0, 0},
-                                                  .init_shad_5 = {0x0F, 0x37, 0x37, 0, 0xFF, 0, 0, 0},
-                                                  .init_shad_12 = {0x0F, 0x51, 0xE8, 0, 0, 0, 0, 0},
-                                                  // automatic moves
-                                                  .demo_moves = {{0x00, 0}, {0x01, 1}, {0x0D, 0}, {0x1E, 1}, {0x25, 5}, {0x2F, 0}, {0x30, 1}, {0x41, 0}, {0x49, 2}, {0x4B, 0}, {0x63, 2}, {0x64, 0}, {0x73, 5}, {0x80, 6}, {0x88, 3}, {0x9D, 7}, {0x9E, 0}, {0x9F, 1}, {0xAB, 4}, {0xB1, 0}, {0xB2, 1}, {0xBC, 0}, {0xC1, 1}, {0xCD, 0}, {0xE9, -1}},
-                                                  .shad_drink_move = {{0x00, 0}, {0x01, 1}, {0x0E, 0}, {0x12, 6}, {0x1D, 7}, {0x2D, 2}, {0x31, 1}, {0xFF, -2}},
+  // shadow's starting positions
+  .init_shad_6 = {0x0F, 0x51, 0x76, 0, 0, 1, 0, 0},
+  .init_shad_5 = {0x0F, 0x37, 0x37, 0, 0xFF, 0, 0, 0},
+  .init_shad_12 = {0x0F, 0x51, 0xE8, 0, 0, 0, 0, 0},
+  // automatic moves
+  .demo_moves = {{0x00, 0}, {0x01, 1}, {0x0D, 0}, {0x1E, 1}, {0x25, 5}, {0x2F, 0}, {0x30, 1}, {0x41, 0}, {0x49, 2}, {0x4B, 0}, {0x63, 2}, {0x64, 0}, {0x73, 5}, {0x80, 6}, {0x88, 3}, {0x9D, 7}, {0x9E, 0}, {0x9F, 1}, {0xAB, 4}, {0xB1, 0}, {0xB2, 1}, {0xBC, 0}, {0xC1, 1}, {0xCD, 0}, {0xE9, -1}},
+  .shad_drink_move = {{0x00, 0}, {0x01, 1}, {0x0E, 0}, {0x12, 6}, {0x1D, 7}, {0x2D, 2}, {0x31, 1}, {0xFF, -2}},
 
-                                                  // speeds
-                                                  .base_speed = 5,
-                                                  .fight_speed = 6,
-                                                  .chomper_speed = 15,
-                                                };
+  // speeds
+  .base_speed = 5,
+  .fight_speed = 6,
+  .chomper_speed = 15,
+};
 char *g_argv[] = {(char *)"prince"};
