@@ -57,16 +57,6 @@ extern "C"
   #define S_ISDIR(mode) (((mode)&S_IFMT) == S_IFDIR)
 #endif
 
-#ifndef MAX
-  #define MAX(a, b) ((a) > (b) ? (a) : (b))
-#endif
-#ifndef MIN
-    #define MIN(a, b) ((a) < (b) ? (a) : (b))
-#endif
-#ifndef ABS
-  #define ABS(x) ((x) < 0 ? -(x) : (x))
-#endif
-
 #define locate_file(filename) locate_file_(filename, (char*)alloca(POP_MAX_PATH), POP_MAX_PATH)
 #define snprintf_check(dst, size, ...)                                \
   do {                                                                \

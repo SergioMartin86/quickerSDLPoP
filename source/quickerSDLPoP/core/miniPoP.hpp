@@ -836,10 +836,10 @@ __INLINE__ int load_from_opendats_to_area(int resource, void  far *area, int len
   load_from_opendats_metadata(resource, extension, &fp, &result, &checksum, &size, &pointer);
   if (result == data_none)
     return 0;
-  if (fread(area, MIN(size, length), 1, fp) != 1)
+  if (fread(area, std::min(size, length), 1, fp) != 1)
   {
     fprintf(stderr, "%s: %s, resource %d, size %d, failed: %s\n", __func__, pointer->filename, resource, size, strerror(errno));
-    memset(area, 0, MIN(size, length));
+    memset(area, 0, std::min(size, length));
   }
   if (result == data_directory)
     fclose(fp);
@@ -1249,8 +1249,8 @@ __INLINE__ void  do_delta_hp()
   {
     hitp_delta = guardhp_delta;
   }
-  gameState.hitp_curr = MIN(MAX(gameState.hitp_curr + hitp_delta, 0), gameState.hitp_max);
-  gameState.guardhp_curr = MIN(MAX(gameState.guardhp_curr + guardhp_delta, 0), gameState.guardhp_max);
+  gameState.hitp_curr = std::min(std::max(gameState.hitp_curr + hitp_delta, 0), (int)gameState.hitp_max);
+  gameState.guardhp_curr = std::min(std::max(gameState.guardhp_curr + guardhp_delta, 0), (int)gameState.guardhp_max);
 }
 
 // seg000:1353
@@ -3071,7 +3071,7 @@ __INLINE__ void  bump_into_opponent()
   )
   {
     distance = char_opp_dist();
-    if (ABS(distance) <= 15)
+    if (std::abs(distance) <= 15)
     {
       gameState.Char.y = y_land[gameState.Char.curr_row + 1];
       gameState.Char.fall_y = 0;
@@ -3593,12 +3593,12 @@ __INLINE__ void  x_to_xh_and_xl(int xpos, sbyte *xh_addr, sbyte *xl_addr)
 {
   if (xpos < 0)
   {
-    *xh_addr = -((ABS(-xpos) >> 3) + 1);
+    *xh_addr = -((std::abs(-xpos) >> 3) + 1);
     *xl_addr = -((-xpos - 1) % 8 - 7);
   }
   else
   {
-    *xh_addr = ABS(xpos) >> 3;
+    *xh_addr = std::abs(xpos) >> 3;
     *xl_addr = xpos % 8;
   }
 }
@@ -3801,8 +3801,8 @@ __INLINE__ void  set_char_collision()
   {
     char_bottom_row = 3;
   }
-  char_col_left = MAX(get_tile_div_mod(char_x_left), 0);
-  char_col_right = MIN(get_tile_div_mod(char_x_right), 9);
+  char_col_left = std::max(get_tile_div_mod(char_x_left), 0);
+  char_col_right = std::min(get_tile_div_mod(char_x_right), 9);
   if (cur_frame.flags & FRAME_THIN)
   {
     // "thin" this frame for collision detection
@@ -4778,7 +4778,7 @@ __INLINE__ void  check_collisions()
   gameState.collision_row = gameState.Char.curr_row;
   move_coll_to_prev();
   gameState.prev_collision_row = gameState.collision_row;
-  right_checked_col = MIN(get_tile_div_mod_m7(char_x_right_coll) + 2, 11);
+  right_checked_col = std::min(get_tile_div_mod_m7(char_x_right_coll) + 2, 11);
   left_checked_col = get_tile_div_mod_m7(char_x_left_coll) - 1;
   get_row_collision_data(gameState.collision_row, gameState.curr_row_coll_room, gameState.curr_row_coll_flags);
   get_row_collision_data(gameState.collision_row + 1, gameState.below_row_coll_room, gameState.below_row_coll_flags);

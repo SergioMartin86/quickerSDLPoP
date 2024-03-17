@@ -193,14 +193,14 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
   
     __INLINE__ void printInfo() const override
     {
-jaffarCommon::logger::log("[Jaffar]  + Current/Next Level:   %2d / %2d\n", current_level, next_level);
-      jaffarCommon::logger::log("[Jaffar]  + [Kid]                 HP: %d/%d, Alive: %d\n", int(hitp_curr), int(hitp_max), int(Kid.alive));
-      jaffarCommon::logger::log("[Jaffar]  + [Kid]                 Room: %d, Pos.x: %3d, Pos.y: %3d, Frame: %3d, Action: %2d, Dir: %d\n", int(Kid.room), int(Kid.x), int(Kid.y), int(Kid.frame), int(Kid.action), int(Kid.direction));
-      jaffarCommon::logger::log("[Jaffar]  + [Guard]               Room: %d, Pos.x: %3d, Pos.y: %3d, Frame: %3d, Action: %2d, Color: %3u, Dir: %d, HP: %d/%d, Alive: %d\n", int(Guard.room), int(Guard.x), int(Guard.y), int(Guard.frame), int(Guard.action), int(curr_guard_color), int(Guard.direction), int(guardhp_curr), int(guardhp_max), int(Guard.alive));
-      jaffarCommon::logger::log("[Jaffar]  + Exit Room Timer:      %d\n", exit_room_timer);
-      jaffarCommon::logger::log("[Jaffar]  + Kid Has Sword:        %d\n", have_sword);
-      jaffarCommon::logger::log("[]  + Last Tile Loost Sound: %u\n", last_loose_sound);
-      jaffarCommon::logger::log("[]  + RNG: 0x%X\n", random_seed);
+      jaffarCommon::logger::log("[]    + Current/Next Level:   %2d / %2d\n", current_level, next_level);
+      jaffarCommon::logger::log("[]    + [Kid]                 HP: %d/%d, Alive: %d\n", int(hitp_curr), int(hitp_max), int(Kid.alive));
+      jaffarCommon::logger::log("[]    + [Kid]                 Room: %d, Pos.x: %3d, Pos.y: %3d, Frame: %3d, Action: %2d, Dir: %d\n", int(Kid.room), int(Kid.x), int(Kid.y), int(Kid.frame), int(Kid.action), int(Kid.direction));
+      jaffarCommon::logger::log("[]    + [Guard]               Room: %d, Pos.x: %3d, Pos.y: %3d, Frame: %3d, Action: %2d, Color: %3u, Dir: %d, HP: %d/%d, Alive: %d\n", int(Guard.room), int(Guard.x), int(Guard.y), int(Guard.frame), int(Guard.action), int(curr_guard_color), int(Guard.direction), int(guardhp_curr), int(guardhp_max), int(Guard.alive));
+      jaffarCommon::logger::log("[]    + Exit Room Timer:      %d\n", exit_room_timer);
+      jaffarCommon::logger::log("[]    + Kid Has Sword:        %d\n", have_sword);
+      jaffarCommon::logger::log("[]    + Last Tile Loost Sound: %u\n", last_loose_sound);
+      jaffarCommon::logger::log("[]    + RNG: 0x%X\n", random_seed);
     }
 
   char quick_control[9] = "........";

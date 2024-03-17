@@ -29,90 +29,30 @@ public:
   {
     // Parse valid flag
     bool isValid = true;
+  
+    input_t newInput;
 
-    // Converting input into a stream for parsing
-    std::istringstream ss(input);
+    if (input.size() != 9) return false;
+    if (input[0] != '|') return false;
+    if (input[1] == 'r') newInput.restart = true;
+    if (input[2] != '|') return false;
+    if (input[3] == 'L') newInput.left = true;
+    if (input[4] == 'R') newInput.right = true;
+    if (input[5] == 'U') newInput.up = true;
+    if (input[6] == 'D') newInput.down = true;
+    if (input[7] == 'S') newInput.shift = true;
+    if (input[8] != '|') return false;
 
-    // Start separator
-    if (ss.get() != '|') isValid = false;
-
-    // Clearing input 
-    _input = input_t();
-
-    // Parsing console inputs
-    isValid &= parseConsoleInput(_input.restart, ss);
-
-    // Mid separator
-    if (ss.get() != '|') isValid = false;
-
-    // Parsing controller 1 inputs
-    isValid &= parseGameInput(_input, ss);
-
-    // End separator
-    if (ss.get() != '|') isValid = false;
-
-    // If its not the end of the stream, then extra values remain and its invalid
-    ss.get();
-    if (ss.eof() == false) isValid = false;
-
+    _input = newInput;
+    
     // Returning valid flag
     return isValid;
-  };
+  }
 
   inline input_t getParsedInput() { return _input; }
 
-  private:
-
-  static bool parseGameInput(input_t& input, std::istringstream& ss)
-  {
-    // Currently read character
-    char c;
-
-    // Left
-    c = ss.get();
-    if (c != '.' && c != 'L') return false;
-    if (c == 'L') input.left = true;
-
-    // Right
-    c = ss.get();
-    if (c != '.' && c != 'R') return false;
-    if (c == 'R') input.right = true;
-
-    // Up
-    c = ss.get();
-    if (c != '.' && c != 'U') return false;
-    if (c == 'U') input.up = true;
-
-    // Down
-    c = ss.get();
-    if (c != '.' && c != 'D') return false;
-    if (c == 'D') input.down = true;
-
-    // Shift
-    c = ss.get();
-    if (c != '.' && c != 'S') return false;
-    if (c == 'S') input.shift = true;
-
-    return true;
-  }
-
-  static bool parseConsoleInput(bool& restart, std::istringstream& ss)
-  {
-    // Parse valid flag
-    bool isValid = true; 
-
-    // Currently read character
-    char c;
-
-    // Reset trigger
-    c = ss.get();
-    if (c != '.' && c != 'r') isValid = false;
-    if (c == 'r') restart = true;
-    if (c == '.') restart = false;
-
-    // Return valid flag
-    return isValid;
-  }
-
+  private: 
+  
   input_t _input;
+
 };

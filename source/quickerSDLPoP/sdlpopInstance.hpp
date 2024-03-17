@@ -76,14 +76,14 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
 
     __INLINE__ void printInfo() const override
     {
-      jaffarCommon::logger::log("[Jaffar]  + Current/Next Level:   %2d / %2d\n", _emu.gameState.current_level, _emu.gameState.next_level);
-      jaffarCommon::logger::log("[Jaffar]  + [Kid]                 HP: %d/%d, Alive: %d\n", int(_emu.gameState.hitp_curr), int(_emu.gameState.hitp_max), int(_emu.gameState.Kid.alive));
-      jaffarCommon::logger::log("[Jaffar]  + [Kid]                 Room: %d, Pos.x: %3d, Pos.y: %3d, Frame: %3d, Action: %2d, Dir: %d\n", int(_emu.gameState.Kid.room), int(_emu.gameState.Kid.x), int(_emu.gameState.Kid.y), int(_emu.gameState.Kid.frame), int(_emu.gameState.Kid.action), int(_emu.gameState.Kid.direction));
-      jaffarCommon::logger::log("[Jaffar]  + [Guard]               Room: %d, Pos.x: %3d, Pos.y: %3d, Frame: %3d, Action: %2d, Color: %3u, Dir: %d, HP: %d/%d, Alive: %d\n", int(_emu.gameState.Guard.room), int(_emu.gameState.Guard.x), int(_emu.gameState.Guard.y), int(_emu.gameState.Guard.frame), int(_emu.gameState.Guard.action), int(_emu.gameState.curr_guard_color), int(_emu.gameState.Guard.direction), int(_emu.gameState.guardhp_curr), int(_emu.gameState.guardhp_max), int(_emu.gameState.Guard.alive));
-      jaffarCommon::logger::log("[Jaffar]  + Exit Room Timer:      %d\n", _emu.gameState.exit_room_timer);
-      jaffarCommon::logger::log("[Jaffar]  + Kid Has Sword:        %d\n", _emu.gameState.have_sword);
-      jaffarCommon::logger::log("[]  + Last Tile Loost Sound: %u\n", _emu.gameState.last_loose_sound);
-      jaffarCommon::logger::log("[]  + RNG: 0x%X\n", _emu.gameState.random_seed);
+      jaffarCommon::logger::log("[]    + Current/Next Level:   %2d / %2d\n", _emu.gameState.current_level, _emu.gameState.next_level);
+      jaffarCommon::logger::log("[]    + [Kid]                 HP: %d/%d, Alive: %d\n", int(_emu.gameState.hitp_curr), int(_emu.gameState.hitp_max), int(_emu.gameState.Kid.alive));
+      jaffarCommon::logger::log("[]    + [Kid]                 Room: %d, Pos.x: %3d, Pos.y: %3d, Frame: %3d, Action: %2d, Dir: %d\n", int(_emu.gameState.Kid.room), int(_emu.gameState.Kid.x), int(_emu.gameState.Kid.y), int(_emu.gameState.Kid.frame), int(_emu.gameState.Kid.action), int(_emu.gameState.Kid.direction));
+      jaffarCommon::logger::log("[]    + [Guard]               Room: %d, Pos.x: %3d, Pos.y: %3d, Frame: %3d, Action: %2d, Color: %3u, Dir: %d, HP: %d/%d, Alive: %d\n", int(_emu.gameState.Guard.room), int(_emu.gameState.Guard.x), int(_emu.gameState.Guard.y), int(_emu.gameState.Guard.frame), int(_emu.gameState.Guard.action), int(_emu.gameState.curr_guard_color), int(_emu.gameState.Guard.direction), int(_emu.gameState.guardhp_curr), int(_emu.gameState.guardhp_max), int(_emu.gameState.Guard.alive));
+      jaffarCommon::logger::log("[]    + Exit Room Timer:      %d\n", _emu.gameState.exit_room_timer);
+      jaffarCommon::logger::log("[]    + Kid Has Sword:        %d\n", _emu.gameState.have_sword);
+      jaffarCommon::logger::log("[]    + Last Tile Loost Sound: %u\n", _emu.gameState.last_loose_sound);
+      jaffarCommon::logger::log("[]    + RNG: 0x%X\n", _emu.gameState.random_seed);
     }
 
       enum ItemType
