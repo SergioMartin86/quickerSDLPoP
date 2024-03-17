@@ -13,8 +13,8 @@
   "Sequence File": "lvl01.anyPercent.sol", 
   "Differential Compression":
   {
-    "Enabled": false,
-    "Max Differences": 2200,
+    "Enabled": true,
+    "Max Differences": 300,
     "Use Zlib": true
   }
 }

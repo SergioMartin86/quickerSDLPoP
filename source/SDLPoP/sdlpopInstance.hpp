@@ -352,9 +352,9 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
 
   jaffarCommon::hash::hash_t getStateHash() const override
   {
-    for (size_t i = 0; i < _items.size(); i++)
-     if (_items[i].type == HASHABLE)
-     printf("Item %lu, Hash: %s\n", i, jaffarCommon::hash::hashToString(jaffarCommon::hash::calculateMetroHash(_items[i].ptr, _items[i].size)).c_str());
+    // for (size_t i = 0; i < _items.size(); i++)
+    //  if (_items[i].type == HASHABLE)
+    //  printf("Item %lu, Hash: %s\n", i, jaffarCommon::hash::hashToString(jaffarCommon::hash::calculateMetroHash(_items[i].ptr, _items[i].size)).c_str());
 
     MetroHash128 hash;
     for (const auto &item : _items) if (item.type == HASHABLE) hash.Update(item.ptr, item.size);
