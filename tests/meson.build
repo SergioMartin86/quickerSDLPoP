@@ -21,6 +21,7 @@ testSet = [
   'lvl12.anyPercent.test',
   'lvl13.anyPercent.test',
   'lvl14.anyPercent.test',
+  'lvl15.potion0.test',
 ]
 
 # Adding tests to the suite
