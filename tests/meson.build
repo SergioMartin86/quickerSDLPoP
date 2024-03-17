@@ -10,7 +10,17 @@ testSet = [
   'lvl01.pacifist.test',
   'lvl01.100percent.test',
   'lvl02.anyPercent.test',
-  'lvl03.anyPercent.test',
+  'lvl04.anyPercent.test',
+  'lvl05.anyPercent.test',
+  'lvl06.anyPercent.test',
+  'lvl07.anyPercent.test',
+  'lvl08.anyPercent.test',
+  'lvl09.anyPercent.test',
+  'lvl10.anyPercent.test',
+  'lvl11.anyPercent.test',
+  'lvl12.anyPercent.test',
+  'lvl13.anyPercent.test',
+  'lvl14.anyPercent.test',
 ]
 
 # Adding tests to the suite

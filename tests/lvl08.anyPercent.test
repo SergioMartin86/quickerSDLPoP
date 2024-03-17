@@ -1,0 +1,20 @@
+{
+  "SDLPoP Configuration":
+  {
+    "SDLPoP Root Path": "../SDLPoPData",
+    "Levels File Path": ""
+  },
+  "Override RNG Enabled": true,
+  "Override RNG Value":  478337907,
+  "Override Loose Tile Sound Enabled": true,
+  "Override Loose Tile Sound Value": 21,
+  "Initialize Copy Protection": false,
+  "Initial State File": "lvl08.state",
+  "Sequence File": "lvl08.anyPercent.sol", 
+  "Differential Compression":
+  {
+    "Enabled": false,
+    "Max Differences": 2200,
+    "Use Zlib": true
+  }
+}

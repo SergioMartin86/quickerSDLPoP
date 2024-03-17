@@ -269,8 +269,8 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
    AddItem(&dest, above_row_coll_room,  HASHABLE);
    AddItem(&dest, above_row_coll_flags, HASHABLE);
    AddItem(&dest, prev_collision_row,   HASHABLE);
-   AddItem(&dest, flash_color,          HASHABLE);
-   AddItem(&dest, flash_time,           HASHABLE);
+   AddItem(&dest, flash_color,          NON_HASHABLE);
+   AddItem(&dest, flash_time,           NON_HASHABLE);
    AddItem(&dest, need_level1_music,    HASHABLE);
    AddItem(&dest, is_screaming,         HASHABLE);
    AddItem(&dest, is_feather_fall,      HASHABLE);
@@ -352,9 +352,9 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
 
   jaffarCommon::hash::hash_t getStateHash() const override
   {
-    // for (size_t i = 0; i < _items.size(); i++)
-    //  if (_items[i].type == HASHABLE)
-    //  printf("Item %lu, Hash: %s\n", i, jaffarCommon::hash::hashToString(jaffarCommon::hash::calculateMetroHash(_items[i].ptr, _items[i].size)).c_str());
+    for (size_t i = 0; i < _items.size(); i++)
+     if (_items[i].type == HASHABLE)
+     printf("Item %lu, Hash: %s\n", i, jaffarCommon::hash::hashToString(jaffarCommon::hash::calculateMetroHash(_items[i].ptr, _items[i].size)).c_str());
 
     MetroHash128 hash;
     for (const auto &item : _items) if (item.type == HASHABLE) hash.Update(item.ptr, item.size);
