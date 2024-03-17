@@ -5,12 +5,12 @@
     "Levels File Path": ""
   },
   "Override RNG Enabled": true,
-  "Override RNG Value": 5618,
+  "Override RNG Value": 5,
   "Override Loose Tile Sound Enabled": true,
   "Override Loose Tile Sound Value": 20,
   "Initialize Copy Protection": false,
-  "Initial State File": "lvl02.state",
-  "Sequence File": "lvl02.anyPercent.sol", 
+  "Initial State File": "lvl03.state",
+  "Sequence File": "lvl03.anyPercent.sol", 
   "Differential Compression":
   {
     "Enabled": false,

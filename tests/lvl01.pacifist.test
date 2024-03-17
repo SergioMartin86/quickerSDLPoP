@@ -9,7 +9,7 @@
   "Override Loose Tile Sound Enabled": false,
   "Override Loose Tile Sound Value": 0,
   "Initialize Copy Protection": false,
-  "Initial State File": "lvl01.anyPercent.state",
+  "Initial State File": "lvl01.state",
   "Sequence File": "lvl01.pacifist.sol", 
   "Differential Compression":
   {

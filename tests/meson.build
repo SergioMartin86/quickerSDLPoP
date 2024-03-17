@@ -7,6 +7,10 @@ testTimeout = 30
 # Tests to run
 testSet = [ 
   'lvl01.anyPercent.test',
+  'lvl01.pacifist.test',
+  'lvl01.100percent.test',
+  'lvl02.anyPercent.test',
+  'lvl03.anyPercent.test',
 ]
 
 # Adding tests to the suite

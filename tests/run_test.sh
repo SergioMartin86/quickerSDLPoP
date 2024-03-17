@@ -24,8 +24,8 @@ folder=`basename $PWD`
 pid=$$
 
 # Hash files
-baseHashFile="/tmp/quickerNES.${folder}.${script}.${mode}.${pid}.hash"
-newHashFile="/tmp/quickNES.${folder}.${script}.${mode}.${pid}.hash"
+baseHashFile="/tmp/quickerSDLPoP.${folder}.${script}.${mode}.${pid}.hash"
+newHashFile="/tmp/SDLPoP.${folder}.${script}.${mode}.${pid}.hash"
 
 # Removing them if already present
 rm -f ${baseHashFile}

@@ -21,10 +21,19 @@ jaffarCommonDependency = jaffarCommonSubproject.get_variable('jaffarCommonDepend
 
 # Building playback tool
   if get_option('buildPlayer') == true
+
+    # First, building sdlpop as library only for display
+    
+    SDLPoPLib = library('SDLPoPLib',
+      cpp_args            : [ commonCompileArgs, '-DNCURSES' ],
+      dependencies        : [ jaffarCommonDependency, SDLPoPDependency, toolDependency],
+     )
+  
     quickerSDLPoPPlayer = executable('quickerSDLPoPPlayer',
       'source/player.cpp',
       cpp_args            : [ commonCompileArgs, '-DNCURSES' ],
       dependencies        : [ jaffarCommonDependency, quickerSDLPoPDependency, toolDependency],
+      link_with           : [ SDLPoPLib ],
       link_args           : [ '-lncurses' ]
     )
 
