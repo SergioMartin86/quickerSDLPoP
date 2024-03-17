@@ -57,8 +57,6 @@ extern "C"
   #define S_ISDIR(mode) (((mode)&S_IFMT) == S_IFDIR)
 #endif
 
-#include "types.h"
-
 #ifndef MAX
   #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #endif

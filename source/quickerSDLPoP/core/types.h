@@ -23,8 +23,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 The authors of this program may be contacted at https://forum.princed.org
 */
 
-#ifndef TYPES_H
-  #define TYPES_H
+#pragma once
 
   //#if !defined(_MSC_VER)
   //# include <SDL2/SDL.h>
@@ -1423,7 +1422,6 @@ typedef struct directory_listing_type directory_listing_type;
 
   #define FEATHER_FALL_LENGTH 18.75
 
-#endif
 
 // SDLPop state to miniPop State conversion
 #pragma pack(push, 1)
