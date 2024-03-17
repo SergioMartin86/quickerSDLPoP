@@ -37,6 +37,9 @@ class quickerSDLPoP
 
 public:
 
+__attribute__((aligned(1024)))
+sdlPopState_t gameState;
+
 // Extracted values
 sbyte control_x;
 sbyte control_y;
@@ -50,7 +53,6 @@ char_type Opp;
 word flash_color;
 word flash_time;
 word upside_down;
-struct sdlPopState_t gameState;
 custom_options_type *custom = &custom_defaults;
 byte is_validate_mode;
 word text_time_remaining;
@@ -277,7 +279,7 @@ byte sound_interruptible[58] = {
   0, // sound_56_ending_music
   0};
 
- __INLINE__ void initialize(const std::string& sdlpopDir)
+ __INLINE__ void  initialize(const std::string& sdlpopDir)
  {
      found_exe_dir = false;
       if (std::filesystem::exists(sdlpopDir.c_str()))
@@ -339,7 +341,7 @@ byte sound_interruptible[58] = {
       gameState.need_level1_music = custom->intro_music_time_initial;
 }
 
-  void advanceState(const bool upPressed, const bool downPressed, const bool leftPressed, const bool rightPressed, const bool shiftPressed, const bool restartPressed)
+  __INLINE__ void  advanceState(const bool upPressed, const bool downPressed, const bool leftPressed, const bool rightPressed, const bool shiftPressed, const bool restartPressed)
   {
     _upPressed = upPressed;
     _downPressed = downPressed;
@@ -381,7 +383,7 @@ byte sound_interruptible[58] = {
     }
   }
 
-void startLevel(const word level)
+__INLINE__ void  startLevel(const word level)
  {
    ///////////////////////////////////////////////////////////////
    // play_level
@@ -419,7 +421,7 @@ void startLevel(const word level)
      gameState.need_level1_music = custom->intro_music_time_restart;
  }
 
-void find_exe_dir()
+__INLINE__ void  find_exe_dir()
 {
   if (found_exe_dir)
     return;
@@ -441,12 +443,12 @@ void find_exe_dir()
   found_exe_dir = true;
 }
 
-bool file_exists(const char *filename)
+__INLINE__ bool file_exists(const char *filename)
 {
   return (access(filename, F_OK) != -1);
 }
 
-const char *locate_file_(const char *filename, char *path_buffer, int buffer_size)
+__INLINE__ const char *locate_file_(const char *filename, char *path_buffer, int buffer_size)
 {
   if (file_exists(filename))
   {
@@ -462,7 +464,7 @@ const char *locate_file_(const char *filename, char *path_buffer, int buffer_siz
   }
 }
 
-directory_listing_type *create_directory_listing_and_find_first_file(const char *directory, const char *extension)
+__INLINE__ directory_listing_type *create_directory_listing_and_find_first_file(const char *directory, const char *extension)
 {
   directory_listing_type *data = (directory_listing_type*)calloc(1, sizeof(directory_listing_type));
   bool ok = false;
@@ -493,12 +495,12 @@ directory_listing_type *create_directory_listing_and_find_first_file(const char 
   }
 }
 
-char *get_current_filename_from_directory_listing(directory_listing_type *data)
+__INLINE__ char *get_current_filename_from_directory_listing(directory_listing_type *data)
 {
   return data->found_filename;
 }
 
-bool find_next_file(directory_listing_type *data)
+__INLINE__ bool find_next_file(directory_listing_type *data)
 {
   bool ok = false;
   struct dirent *ep;
@@ -515,14 +517,14 @@ bool find_next_file(directory_listing_type *data)
   return ok;
 }
 
-void close_directory_listing(directory_listing_type *data)
+__INLINE__ void  close_directory_listing(directory_listing_type *data)
 {
   closedir(data->dp);
   free(data);
 }
 
 // seg009:000D
-int read_key()
+__INLINE__ int read_key()
 {
   // stub
   int key = last_key_scancode;
@@ -531,7 +533,7 @@ int read_key()
 }
 
 // seg009:019A
-void clear_kbd_buf()
+__INLINE__ void  clear_kbd_buf()
 {
   // stub
   last_key_scancode = 0;
@@ -539,7 +541,7 @@ void clear_kbd_buf()
 }
 
 // seg009:040A
-word prandom(word max)
+__INLINE__ word prandom(word max)
 {
   if (!seed_was_init)
   {
@@ -551,7 +553,7 @@ word prandom(word max)
   return (gameState.random_seed >> 16) % (max + 1);
 }
 
-FILE *open_dat_from_root_or_data_dir(const char *filename)
+__INLINE__ FILE *open_dat_from_root_or_data_dir(const char *filename)
 {
   FILE *fp = NULL;
   fp = fopen(filename, "rb");
@@ -575,7 +577,7 @@ FILE *open_dat_from_root_or_data_dir(const char *filename)
 }
 
 // seg009:0F58
-dat_type *__pascal open_dat(const char *filename, int drive)
+__INLINE__ dat_type *__pascal open_dat(const char *filename, int drive)
 {
   FILE *fp = NULL;
   fp = open_dat_from_root_or_data_dir(filename);
@@ -612,7 +614,7 @@ failed:
 }
 
 // seg000:0000
-void far pop_main()
+__INLINE__ void  far pop_main()
 {
   // Fix bug: with start_in_blind_mode enabled, moving objects are not displayed until blind mode is toggled off+on??
   need_drects = 1;
@@ -625,7 +627,7 @@ void far pop_main()
 }
 
 // seg009:9F80
-void far *__pascal load_from_opendats_alloc(int resource, const char *extension, data_location *out_result, int *out_size)
+__INLINE__ void  far *__pascal load_from_opendats_alloc(int resource, const char *extension, data_location *out_result, int *out_size)
 {
   // stub
   // printf("id = %d\n",resource);
@@ -642,7 +644,7 @@ void far *__pascal load_from_opendats_alloc(int resource, const char *extension,
   if (result == data_none)
     return NULL;
 
-  void *area = malloc(size);
+  void  *area = malloc(size);
   // read(fd, area, size);
   if (fread(area, size, 1, fp) != 1)
   {
@@ -659,7 +661,7 @@ void far *__pascal load_from_opendats_alloc(int resource, const char *extension,
 }
 
 // seg009:121A
-image_type *far load_image(int resource_id, dat_pal_type *palette)
+__INLINE__ image_type *far load_image(int resource_id, dat_pal_type *palette)
 {
   // stub
   data_location result;
@@ -692,7 +694,7 @@ image_type *far load_image(int resource_id, dat_pal_type *palette)
 }
 
 // seg009:104E
-chtab_type *__pascal load_sprites_from_file(int resource, int palette_bits, int quit_on_error)
+__INLINE__ chtab_type *__pascal load_sprites_from_file(int resource, int palette_bits, int quit_on_error)
 {
   int i;
   int n_images = 0;
@@ -703,7 +705,7 @@ chtab_type *__pascal load_sprites_from_file(int resource, int palette_bits, int 
   dat_pal_type *pal_ptr = &shpl->palette;
 
   n_images = shpl->n_images;
-  size_t alloc_size = sizeof(chtab_type) + sizeof(void far *) * n_images;
+  size_t alloc_size = sizeof(chtab_type) + sizeof(void  far *) * n_images;
   chtab = (chtab_type *)malloc(alloc_size);
   memset(chtab, 0, alloc_size);
   chtab->n_images = n_images;
@@ -715,7 +717,7 @@ chtab_type *__pascal load_sprites_from_file(int resource, int palette_bits, int 
   return chtab;
 }
 
-void load_from_opendats_metadata(int resource_id, const char *extension, FILE **out_fp, data_location *result, byte *checksum, int *size, dat_type **out_pointer)
+__INLINE__ void  load_from_opendats_metadata(int resource_id, const char *extension, FILE **out_fp, data_location *result, byte *checksum, int *size, dat_type **out_pointer)
 {
   char image_filename[POP_MAX_PATH];
   FILE *fp = NULL;
@@ -799,7 +801,7 @@ void load_from_opendats_metadata(int resource_id, const char *extension, FILE **
 }
 
 // seg009:9F34
-void close_dat(dat_type far *pointer)
+__INLINE__ void  close_dat(dat_type far *pointer)
 {
   dat_type **prev = &dat_chain_ptr;
   dat_type *curr = dat_chain_ptr;
@@ -822,7 +824,7 @@ void close_dat(dat_type far *pointer)
 }
 
 // seg009:A172
-int load_from_opendats_to_area(int resource, void far *area, int length, const char *extension)
+__INLINE__ int load_from_opendats_to_area(int resource, void  far *area, int length, const char *extension)
 {
   // stub
   // return 0;
@@ -846,7 +848,7 @@ int load_from_opendats_to_area(int resource, void far *area, int length, const c
 }
 
 // seg000:024F
-void init_game_main()
+__INLINE__ void  init_game_main()
 {
   doorlink1_ad = /*&*/ gameState.level.doorlinks1;
   doorlink2_ad = /*&*/ gameState.level.doorlinks2;
@@ -860,7 +862,7 @@ void init_game_main()
   start_game();
 }
 
-void init_copyprot()
+__INLINE__ void  init_copyprot()
 {
   word which_entry;
   word pos;
@@ -889,7 +891,7 @@ void init_copyprot()
   }
 }
 
-void start_game()
+__INLINE__ void  start_game()
 {
   // Prevent filling of stack.
   // start_game is called from many places to restart the game, for example:
@@ -899,7 +901,7 @@ void start_game()
   init_game(start_level);
 }
 
-void restore_room_after_quick_load()
+__INLINE__ void  restore_room_after_quick_load()
 {
   int temp1 = gameState.curr_guard_color;
   int temp2 = gameState.next_level;
@@ -930,20 +932,20 @@ void restore_room_after_quick_load()
   text_time_total = text_time_remaining = 0;
 }
 
-Uint32 temp_shift_release_callback(Uint32 interval, void *param)
+__INLINE__ Uint32 temp_shift_release_callback(Uint32 interval, void  *param)
 {
   return 0; // causes the timer to be removed
 }
 
 // seg000:04CD
-int process_key()
+__INLINE__ int process_key()
 {
 
   return 1;
 }
 
 // seg000:08EB
-void play_frame()
+__INLINE__ void  play_frame()
 {
   do_mobs();
   process_trobs();
@@ -995,14 +997,14 @@ void play_frame()
 }
 
 // seg007:1041
-short get_curr_tile(short tilepos)
+__INLINE__ short get_curr_tile(short tilepos)
 {
   curr_modifier = curr_room_modif[tilepos];
   return curr_tile = curr_room_tiles[tilepos] & 0x1F;
 }
 
 // seg000:0B12
-void anim_tile_modif()
+__INLINE__ void  anim_tile_modif()
 {
   word tilepos;
   for (tilepos = 0; tilepos < 30; ++tilepos)
@@ -1036,7 +1038,7 @@ void anim_tile_modif()
   }
 }
 
-void load_lev_spr(int level)
+__INLINE__ void  load_lev_spr(int level)
 {
   dat_type *dathandle;
   short guardtype;
@@ -1065,7 +1067,7 @@ void load_lev_spr(int level)
 }
 
 // seg000:0E6C
-void load_level()
+__INLINE__ void  load_level()
 {
   if (is_restart_level == 0)
   {
@@ -1078,7 +1080,7 @@ void load_level()
   reset_level_unused_fields(true); // added
 }
 
-void reset_level_unused_fields(bool loading_clean_level)
+__INLINE__ void  reset_level_unused_fields(bool loading_clean_level)
 {
   // Entirely unused fields in the level format: reset to zero for now
   // They can be repurposed to add new stuff to the level format in the future
@@ -1113,7 +1115,7 @@ void reset_level_unused_fields(bool loading_clean_level)
 
 // seg000:0EA8
 // returns 1 if level is restarted, 0 otherwise
-int play_kid_frame()
+__INLINE__ int play_kid_frame()
 {
   loadkid_and_opp();
   load_fram_det_col();
@@ -1155,7 +1157,7 @@ int play_kid_frame()
 }
 
 // seg000:0F48
-void play_guard_frame()
+__INLINE__ void  play_guard_frame()
 {
   if (gameState.Guard.direction != dir_56_none)
   {
@@ -1186,7 +1188,7 @@ void play_guard_frame()
 }
 
 // seg000:0FBD
-void check_the_end()
+__INLINE__ void  check_the_end()
 {
   if (next_room != 0 && next_room != gameState.drawn_room)
   {
@@ -1202,7 +1204,7 @@ void check_the_end()
 }
 
 // seg000:1009
-void check_fall_flo()
+__INLINE__ void  check_fall_flo()
 {
   // Special event: falling floors
   if (gameState.current_level == /*13*/ custom->loose_tiles_level &&
@@ -1219,7 +1221,7 @@ void check_fall_flo()
 }
 
 // seg000:11EC
-void add_life()
+__INLINE__ void  add_life()
 {
   short hpmax = gameState.hitp_max;
   ++hpmax;
@@ -1232,13 +1234,13 @@ void add_life()
 }
 
 // seg000:1200
-void set_health_life()
+__INLINE__ void  set_health_life()
 {
   hitp_delta = gameState.hitp_max - gameState.hitp_curr;
 }
 
 // seg000:127B
-void do_delta_hp()
+__INLINE__ void  do_delta_hp()
 {
   // level 12: if the shadow is hurt, gameState.Kid is also hurt
   if (Opp.charid == charid_1_shadow &&
@@ -1252,12 +1254,12 @@ void do_delta_hp()
 }
 
 // seg000:1353
-void check_sword_vs_sword()
+__INLINE__ void  check_sword_vs_sword()
 {
 }
 
 // seg000:136A
-void load_chtab_from_file(int chtab_id, int resource, const char near *filename, int palette_bits)
+__INLINE__ void  load_chtab_from_file(int chtab_id, int resource, const char near *filename, int palette_bits)
 {
   // printf("Loading chtab %d, id %d from %s\n",chtab_id,resource,filename);
   dat_type *dathandle;
@@ -1269,7 +1271,7 @@ void load_chtab_from_file(int chtab_id, int resource, const char near *filename,
 }
 
 // seg009:12EF
-void load_one_optgraf(chtab_type *chtab_ptr, dat_pal_type far *pal_ptr, int base_id, int min_index, int max_index)
+__INLINE__ void  load_one_optgraf(chtab_type *chtab_ptr, dat_pal_type far *pal_ptr, int base_id, int min_index, int max_index)
 {
   short index;
   for (index = min_index; index <= max_index; ++index)
@@ -1281,7 +1283,7 @@ void load_one_optgraf(chtab_type *chtab_ptr, dat_pal_type far *pal_ptr, int base
 }
 
 // seg000:13FC
-void load_more_opt_graf(const char *filename)
+__INLINE__ void  load_more_opt_graf(const char *filename)
 {
   // stub
   dat_type *dathandle;
@@ -1307,7 +1309,7 @@ void load_more_opt_graf(const char *filename)
 }
 
 // seg000:148D
-int do_paused()
+__INLINE__ int do_paused()
 {
   word key;
   key = 0;
@@ -1321,7 +1323,7 @@ int do_paused()
 }
 
 // seg000:1500
-void read_keyb_control()
+__INLINE__ void  read_keyb_control()
 {
   if (_upPressed == true) control_y = -1;
   if (_upPressed == false && _downPressed == true) control_y = 1;
@@ -1331,14 +1333,14 @@ void read_keyb_control()
 }
 
 // seg000:15E9
-void toggle_upside()
+__INLINE__ void  toggle_upside()
 {
   upside_down = ~upside_down;
   need_redraw_because_flipped = 1;
 }
 
 // seg000:15F8
-void feather_fall()
+__INLINE__ void  feather_fall()
 {
   gameState.is_feather_fall = 1;
   flash_color = 2; // green
@@ -1346,7 +1348,7 @@ void feather_fall()
 }
 
 // seg000:172C
-void gen_palace_wall_colors()
+__INLINE__ void  gen_palace_wall_colors()
 {
   dword old_randseed;
   word prev_color;
@@ -1388,13 +1390,13 @@ void gen_palace_wall_colors()
 }
 
 // seg000:1D2C
-void load_kid_sprite()
+__INLINE__ void  load_kid_sprite()
 {
   load_chtab_from_file(id_chtab_2_kid, 400, "KID.DAT", 1 << 7);
 }
 
 // seg000:1F7B
-void parse_cmdline_sound()
+__INLINE__ void  parse_cmdline_sound()
 {
   // Use digi (wave) sounds and MIDI music.
   sound_flags |= sfDigi;
@@ -1403,7 +1405,7 @@ void parse_cmdline_sound()
 }
 
 // seg002:0000
-void do_init_shad(const byte *source, int seq_index)
+__INLINE__ void  do_init_shad(const byte *source, int seq_index)
 {
   memcpy_near(&gameState.Char, source, 7);
   seqtbl_offset_char(seq_index);
@@ -1415,13 +1417,13 @@ void do_init_shad(const byte *source, int seq_index)
 }
 
 // seg002:0044
-void get_guard_hp()
+__INLINE__ void  get_guard_hp()
 {
   guardhp_delta = gameState.guardhp_curr = gameState.guardhp_max = custom->extrastrength[gameState.guard_skill] + custom->tbl_guard_hp[gameState.current_level];
 }
 
 // seg002:0064
-void check_shadow()
+__INLINE__ void  check_shadow()
 {
   gameState.offguard = 0;
   if (gameState.current_level == 12)
@@ -1471,7 +1473,7 @@ void check_shadow()
 }
 
 // seg002:0112
-void enter_guard()
+__INLINE__ void  enter_guard()
 {
   word room_minus_1;
   word guard_tile;
@@ -1553,7 +1555,7 @@ void enter_guard()
 }
 
 // seg002:0269
-void check_guard_fallout()
+__INLINE__ void  check_guard_fallout()
 {
   if (gameState.Guard.direction == dir_56_none || gameState.Guard.y < 211)
   {
@@ -1589,7 +1591,7 @@ void check_guard_fallout()
 }
 
 // seg002:02F5
-void leave_guard()
+__INLINE__ void  leave_guard()
 {
   word room_minus_1;
   if (gameState.Guard.direction == dir_56_none || gameState.Guard.charid == charid_1_shadow || gameState.Guard.charid == charid_24_mouse)
@@ -1618,7 +1620,7 @@ void leave_guard()
 }
 
 // seg002:0486
-int goto_other_room(short direction)
+__INLINE__ int goto_other_room(short direction)
 {
   // printf("goto_other_room: direction = %d, gameState.Char.room = %d\n", direction, gameState.Char.room);
   short opposite_dir;
@@ -1654,7 +1656,7 @@ int goto_other_room(short direction)
 }
 
 // seg002:039E
-void follow_guard()
+__INLINE__ void  follow_guard()
 {
   gameState.level.guards_tile[gameState.Kid.room - 1] = 0xFF;
   gameState.level.guards_tile[gameState.Guard.room - 1] = 0xFF;
@@ -1664,7 +1666,7 @@ void follow_guard()
 }
 
 // seg002:0504
-short leave_room()
+__INLINE__ short leave_room()
 {
   short frame;
   word action;
@@ -1762,7 +1764,7 @@ short leave_room()
 }
 
 // seg002:03C7
-void exit_room()
+__INLINE__ void  exit_room()
 {
   word leave;
   word kid_room_m1;
@@ -1837,7 +1839,7 @@ void exit_room()
 }
 
 // seg002:0643
-void Jaffar_exit()
+__INLINE__ void  Jaffar_exit()
 {
   if (gameState.leveldoor_open == 2)
   {
@@ -1847,7 +1849,7 @@ void Jaffar_exit()
 }
 
 // seg002:0665
-void level3_set_chkp()
+__INLINE__ void  level3_set_chkp()
 {
   // Special event: set gameState.checkpoint
   if (gameState.current_level == /*3*/ custom->checkpoint_level && gameState.Char.room == 7 /* TODO: add a custom option */)
@@ -1858,7 +1860,7 @@ void level3_set_chkp()
 }
 
 // seg002:0680
-void sword_disappears()
+__INLINE__ void  sword_disappears()
 {
   // Special event: sword disappears
   if (gameState.current_level == 12 && gameState.Char.room == 18)
@@ -1870,7 +1872,7 @@ void sword_disappears()
 }
 
 // seg002:06AE
-void meet_Jaffar()
+__INLINE__ void  meet_Jaffar()
 {
   // Special event: play music
   if (gameState.current_level == 13 && gameState.leveldoor_open == 0 && gameState.Char.room == 3)
@@ -1881,7 +1883,7 @@ void meet_Jaffar()
 }
 
 // seg002:06D3
-void play_mirr_mus()
+__INLINE__ void  play_mirr_mus()
 {
   // Special event: mirror music
   if (
@@ -1897,7 +1899,7 @@ void play_mirr_mus()
 }
 
 // seg002:0706
-void move_0_nothing()
+__INLINE__ void  move_0_nothing()
 {
   control_shift = 0;
   control_y = 0;
@@ -1910,69 +1912,69 @@ void move_0_nothing()
 }
 
 // seg002:0721
-void move_1_forward()
+__INLINE__ void  move_1_forward()
 {
   control_x = -1;
   control_forward = -1;
 }
 
 // seg002:072A
-void move_2_backward()
+__INLINE__ void  move_2_backward()
 {
   control_backward = -1;
   control_x = 1;
 }
 
 // seg002:0735
-void move_3_up()
+__INLINE__ void  move_3_up()
 {
   control_y = -1;
   control_up = -1;
 }
 
 // seg002:073E
-void move_4_down()
+__INLINE__ void  move_4_down()
 {
   control_down = -1;
   control_y = 1;
 }
 
 // seg002:0749
-void move_up_back()
+__INLINE__ void  move_up_back()
 {
   control_up = -1;
   move_2_backward();
 }
 
 // seg002:0753
-void move_down_back()
+__INLINE__ void  move_down_back()
 {
   control_down = -1;
   move_2_backward();
 }
 
 // seg002:075D
-void move_down_forw()
+__INLINE__ void  move_down_forw()
 {
   control_down = -1;
   move_1_forward();
 }
 
 // seg002:0767
-void move_6_shift()
+__INLINE__ void  move_6_shift()
 {
   control_shift = -1;
   control_shift2 = -1;
 }
 
 // seg002:0770
-void move_7()
+__INLINE__ void  move_7()
 {
   control_shift = 0;
 }
 
 // seg002:0776
-void autocontrol_opponent()
+__INLINE__ void  autocontrol_opponent()
 {
   word charid;
   move_0_nothing();
@@ -2013,7 +2015,7 @@ void autocontrol_opponent()
 }
 
 // seg002:07EB
-void autocontrol_mouse()
+__INLINE__ void  autocontrol_mouse()
 {
   if (gameState.Char.direction == dir_56_none)
   {
@@ -2037,7 +2039,7 @@ void autocontrol_mouse()
 }
 
 // seg002:081D
-void autocontrol_shadow()
+__INLINE__ void  autocontrol_shadow()
 {
   if (gameState.current_level == 4)
   {
@@ -2058,26 +2060,26 @@ void autocontrol_shadow()
 }
 
 // seg002:0850
-void autocontrol_skeleton()
+__INLINE__ void  autocontrol_skeleton()
 {
   gameState.Char.sword = sword_2_drawn;
   autocontrol_guard();
 }
 
 // seg002:085A
-void autocontrol_Jaffar()
+__INLINE__ void  autocontrol_Jaffar()
 {
   autocontrol_guard();
 }
 
 // seg002:085F
-void autocontrol_kid()
+__INLINE__ void  autocontrol_kid()
 {
   autocontrol_guard();
 }
 
 // seg002:0864
-void autocontrol_guard()
+__INLINE__ void  autocontrol_guard()
 {
   if (gameState.Char.sword < sword_2_drawn)
   {
@@ -2090,7 +2092,7 @@ void autocontrol_guard()
 }
 
 // seg002:0876
-void autocontrol_guard_inactive()
+__INLINE__ void  autocontrol_guard_inactive()
 {
   short distance;
   if (gameState.Kid.alive >= 0)
@@ -2128,7 +2130,7 @@ void autocontrol_guard_inactive()
 }
 
 // seg002:08DC
-void autocontrol_guard_active()
+__INLINE__ void  autocontrol_guard_active()
 {
   short opp_frame;
   short char_frame;
@@ -2213,7 +2215,7 @@ void autocontrol_guard_active()
 }
 
 // seg006:0FC3
-int wall_type(byte tiletype)
+__INLINE__ int wall_type(byte tiletype)
 {
   switch (tiletype)
   {
@@ -2233,7 +2235,7 @@ int wall_type(byte tiletype)
 }
 
 // seg002:09CB
-void autocontrol_guard_kid_far()
+__INLINE__ void  autocontrol_guard_kid_far()
 {
   if (tile_is_floor(get_tile_infrontof_char()) ||
       tile_is_floor(get_tile_infrontof2_char()))
@@ -2247,7 +2249,7 @@ void autocontrol_guard_kid_far()
 }
 
 // seg002:09F8
-void guard_follows_kid_down()
+__INLINE__ void  guard_follows_kid_down()
 {
   // This is called from autocontrol_guard_active, so char=Guard, Opp=gameState.Kid
   word opp_action;
@@ -2280,7 +2282,7 @@ void guard_follows_kid_down()
 }
 
 // seg002:0A93
-void autocontrol_guard_kid_in_sight(short distance)
+__INLINE__ void  autocontrol_guard_kid_in_sight(short distance)
 {
   if (Opp.sword == sword_2_drawn)
   {
@@ -2300,7 +2302,7 @@ void autocontrol_guard_kid_in_sight(short distance)
 }
 
 // seg002:0AC1
-void autocontrol_guard_kid_armed(short distance)
+__INLINE__ void  autocontrol_guard_kid_armed(short distance)
 {
   if (distance < 10 || distance >= 29)
   {
@@ -2324,7 +2326,7 @@ void autocontrol_guard_kid_armed(short distance)
 }
 
 // seg002:0AF5
-void guard_advance()
+__INLINE__ void  guard_advance()
 {
   if (gameState.guard_skill == 0 || gameState.kid_sword_strike == 0)
   {
@@ -2336,7 +2338,7 @@ void guard_advance()
 }
 
 // seg002:0B1D
-void guard_block()
+__INLINE__ void  guard_block()
 {
   word opp_frame;
   opp_frame = Opp.frame;
@@ -2360,7 +2362,7 @@ void guard_block()
 }
 
 // seg002:0B73
-void guard_strike()
+__INLINE__ void  guard_strike()
 {
   word opp_frame;
   word char_frame;
@@ -2385,7 +2387,7 @@ void guard_strike()
 }
 
 // seg002:0BCD
-void hurt_by_sword()
+__INLINE__ void  hurt_by_sword()
 {
   short distance;
   if (gameState.Char.alive >= 0)
@@ -2435,7 +2437,7 @@ void hurt_by_sword()
 }
 
 // seg002:0CD4
-void check_sword_hurt()
+__INLINE__ void  check_sword_hurt()
 {
   if (gameState.Guard.action == actions_99_hurt)
   {
@@ -2460,7 +2462,7 @@ void check_sword_hurt()
 }
 
 // seg002:0D1A
-void check_sword_hurting()
+__INLINE__ void  check_sword_hurting()
 {
   short kid_frame;
   kid_frame = gameState.Kid.frame;
@@ -2477,7 +2479,7 @@ void check_sword_hurting()
 }
 
 // seg002:0D56
-void check_hurting()
+__INLINE__ void  check_hurting()
 {
   short opp_frame, char_frame, distance, min_hurt_range;
   if (gameState.Char.sword != sword_2_drawn)
@@ -2534,7 +2536,7 @@ void check_hurting()
 }
 
 // seg002:0E1F
-void check_skel()
+__INLINE__ void  check_skel()
 {
   // Special event: skeleton wakes
   if (gameState.current_level == /*3*/ custom->skeleton_level &&
@@ -2572,7 +2574,7 @@ void check_skel()
 }
 
 // seg002:0F3F
-void do_auto_moves(const auto_move_type *moves_ptr)
+__INLINE__ void  do_auto_moves(const auto_move_type *moves_ptr)
 {
   short demoindex;
   short curr_move;
@@ -2622,7 +2624,7 @@ void do_auto_moves(const auto_move_type *moves_ptr)
 }
 
 // seg002:1000
-void autocontrol_shadow_level4()
+__INLINE__ void  autocontrol_shadow_level4()
 {
   if (gameState.Char.room == 4)
   {
@@ -2638,7 +2640,7 @@ void autocontrol_shadow_level4()
 }
 
 // seg002:101A
-void autocontrol_shadow_level5()
+__INLINE__ void  autocontrol_shadow_level5()
 {
   if (gameState.Char.room == 24)
   {
@@ -2659,7 +2661,7 @@ void autocontrol_shadow_level5()
 }
 
 // seg002:1064
-void autocontrol_shadow_level6()
+__INLINE__ void  autocontrol_shadow_level6()
 {
   if (gameState.Char.room == 1 &&
       gameState.Kid.frame == frame_43_running_jump_4 && // a frame in run-jump
@@ -2671,7 +2673,7 @@ void autocontrol_shadow_level6()
 }
 
 // seg002:1082
-void autocontrol_shadow_level12()
+__INLINE__ void  autocontrol_shadow_level12()
 {
   short opp_frame;
   short xdiff;
@@ -2748,7 +2750,7 @@ void autocontrol_shadow_level12()
 }
 
 // seg003:0000
-void init_game(int level)
+__INLINE__ void  init_game(int level)
 {
   load_kid_sprite();
   text_time_remaining = 0;
@@ -2766,7 +2768,7 @@ void init_game(int level)
 }
 
 // seg003:005C
-void play_level(int level_number)
+__INLINE__ void  play_level(int level_number)
 {
   if (level_number == custom->copyprot_level)
   {
@@ -2830,7 +2832,7 @@ void play_level(int level_number)
 }
 
 // seg003:01A3
-void do_startpos()
+__INLINE__ void  do_startpos()
 {
   word x;
   // Special event: start at gameState.checkpoint
@@ -2885,7 +2887,7 @@ void do_startpos()
 }
 
 // seg003:028A
-void set_start_pos()
+__INLINE__ void  set_start_pos()
 {
   gameState.Char.y = y_land[gameState.Char.curr_row + 1];
   gameState.Char.alive = -1;
@@ -2910,7 +2912,7 @@ void set_start_pos()
 }
 
 // seg003:02E6
-void find_start_level_door()
+__INLINE__ void  find_start_level_door()
 {
   short tilepos;
   get_room_address(gameState.Kid.room);
@@ -2924,7 +2926,7 @@ void find_start_level_door()
 }
 
 // seg003:0326
-void draw_level_first()
+__INLINE__ void  draw_level_first()
 {
   next_room = gameState.Kid.room;
   check_the_end();
@@ -2936,14 +2938,14 @@ void draw_level_first()
 }
 
 // seg003:037B
-void redraw_screen(int drawing_different_room)
+__INLINE__ void  redraw_screen(int drawing_different_room)
 {
   clear_kbd_buf();
   gameState.exit_room_timer = 2;
 }
 
 // seg003:04F8
-int play_level_2()
+__INLINE__ int play_level_2()
 {
   while (1)
   { // main loop
@@ -2974,7 +2976,7 @@ int play_level_2()
 }
 
 // seg003:0706
-void check_knock()
+__INLINE__ void  check_knock()
 {
   if (knock)
   {
@@ -2984,7 +2986,7 @@ void check_knock()
 }
 
 // seg003:0735
-void timers()
+__INLINE__ void  timers()
 {
   if (gameState.united_with_shadow > 0)
   {
@@ -3023,7 +3025,7 @@ void timers()
 }
 
 // seg003:0798
-void check_mirror()
+__INLINE__ void  check_mirror()
 {
   if (gameState.jumped_through_mirror == -1)
   {
@@ -3032,7 +3034,7 @@ void check_mirror()
 }
 
 // seg003:080A
-void jump_through_mirror()
+__INLINE__ void  jump_through_mirror()
 {
   gameState.jumped_through_mirror = 0;
   gameState.Char.charid = charid_1_shadow;
@@ -3041,7 +3043,7 @@ void jump_through_mirror()
 }
 
 // seg003:085B
-void check_mirror_image()
+__INLINE__ void  check_mirror_image()
 {
   short distance;
   short xpos;
@@ -3057,7 +3059,7 @@ void check_mirror_image()
 }
 
 // seg003:08AA
-void bump_into_opponent()
+__INLINE__ void  bump_into_opponent()
 {
   // This is called from play_kid_frame, so char=gameState.Kid, Opp=Guard
   short distance;
@@ -3080,7 +3082,7 @@ void bump_into_opponent()
 }
 
 // seg003:0913
-void pos_guards()
+__INLINE__ void  pos_guards()
 {
   short guard_tile;
   short room1;
@@ -3096,13 +3098,13 @@ void pos_guards()
 }
 
 // seg003:0A99
-byte get_tile_at_kid(int xpos)
+__INLINE__ byte get_tile_at_kid(int xpos)
 {
   return get_tile(gameState.Kid.room, get_tile_div_mod_m7(xpos), gameState.Kid.curr_row);
 }
 
 // seg003:0959
-void check_can_guard_see_kid()
+__INLINE__ void  check_can_guard_see_kid()
 {
   /*
 Possible results in gameState.can_guard_see_kid:
@@ -3178,7 +3180,7 @@ Possible results in gameState.can_guard_see_kid:
 }
 
 // seg003:0ABA
-void do_mouse()
+__INLINE__ void  do_mouse()
 {
   loadkid();
   gameState.Char.charid = /*charid_24_mouse*/ custom->mouse_object;
@@ -3194,7 +3196,7 @@ void do_mouse()
 }
 
 // seg006:0006
-int get_tile(const int room, const int col, const int row)
+__INLINE__ int get_tile(const int room, const int col, const int row)
 {
   curr_room = room;
   tile_col = col;
@@ -3238,7 +3240,7 @@ int get_tile(const int room, const int col, const int row)
 }
 
 // seg006:00EC
-int get_tilepos(int tile_col, int tile_row)
+__INLINE__ int get_tilepos(int tile_col, int tile_row)
 {
   if (tile_row < 0)
   {
@@ -3255,7 +3257,7 @@ int get_tilepos(int tile_col, int tile_row)
 }
 
 // seg006:01F5
-short dx_weight()
+__INLINE__ short dx_weight()
 {
   sbyte var_2;
   var_2 = cur_frame.dx - (cur_frame.flags & FRAME_WEIGHT_X);
@@ -3263,7 +3265,7 @@ short dx_weight()
 }
 
 // seg006:0124
-int get_tilepos_nominus(int tile_col, int tile_row)
+__INLINE__ int get_tilepos_nominus(int tile_col, int tile_row)
 {
   short var_2;
   var_2 = get_tilepos(tile_col, tile_row);
@@ -3274,19 +3276,19 @@ int get_tilepos_nominus(int tile_col, int tile_row)
 }
 
 // seg006:0144
-void load_fram_det_col()
+__INLINE__ void  load_fram_det_col()
 {
   load_frame();
   determine_col();
 }
 
 // seg006:014D
-void determine_col()
+__INLINE__ void  determine_col()
 {
   gameState.Char.curr_col = get_tile_div_mod_m7(dx_weight());
 }
 
-void get_frame_internal(const frame_type frame_table[], int frame, const char *frame_table_name, int count)
+__INLINE__ void  get_frame_internal(const frame_type frame_table[], int frame, const char *frame_table_name, int count)
 {
   if (frame >= 0 && frame < count)
   {
@@ -3301,7 +3303,7 @@ void get_frame_internal(const frame_type frame_table[], int frame, const char *f
 }
 
 // seg006:015A
-void load_frame()
+__INLINE__ void  load_frame()
 {
   short frame;
   short add_frame;
@@ -3334,7 +3336,7 @@ void load_frame()
 }
 
 // seg006:0213
-int char_dx_forward(int delta_x)
+__INLINE__ int char_dx_forward(int delta_x)
 {
   if (gameState.Char.direction < dir_0_right)
   {
@@ -3344,7 +3346,7 @@ int char_dx_forward(int delta_x)
 }
 
 // seg006:0234
-int obj_dx_forward(int delta_x)
+__INLINE__ int obj_dx_forward(int delta_x)
 {
   if (obj_direction < dir_0_right)
   {
@@ -3355,7 +3357,7 @@ int obj_dx_forward(int delta_x)
 }
 
 // seg006:0254
-void play_seq()
+__INLINE__ void  play_seq()
 {
   for (;;)
   {
@@ -3450,13 +3452,13 @@ void play_seq()
 }
 
 // seg006:03DE
-int get_tile_div_mod_m7(int xpos)
+__INLINE__ int get_tile_div_mod_m7(int xpos)
 {
   return get_tile_div_mod(xpos - 7);
 }
 
 // seg006:03F0
-int get_tile_div_mod(const int xpos)
+__INLINE__ int get_tile_div_mod(const int xpos)
 {
   // Determine tile column (xh) and the position within the tile (xl) from xpos.
 
@@ -3520,65 +3522,65 @@ int get_tile_div_mod(const int xpos)
 }
 
 // seg006:0433
-int y_to_row_mod4(int ypos)
+__INLINE__ int y_to_row_mod4(int ypos)
 {
   return (ypos + 60) / 63 % 4 - 1;
 }
 
 // seg006:044F
-void loadkid()
+__INLINE__ void  loadkid()
 {
   gameState.Char = gameState.Kid;
 }
 
 // seg006:0464
-void savekid()
+__INLINE__ void  savekid()
 {
   gameState.Kid = gameState.Char;
 }
 
 // seg006:0479
-void loadshad()
+__INLINE__ void  loadshad()
 {
   gameState.Char = gameState.Guard;
 }
 
 // seg006:048E
-void saveshad()
+__INLINE__ void  saveshad()
 {
   gameState.Guard = gameState.Char;
 }
 
 // seg006:04A3
-void loadkid_and_opp()
+__INLINE__ void  loadkid_and_opp()
 {
   loadkid();
   Opp = gameState.Guard;
 }
 
 // seg006:04BC
-void savekid_and_opp()
+__INLINE__ void  savekid_and_opp()
 {
   savekid();
   gameState.Guard = Opp;
 }
 
 // seg006:04D5
-void loadshad_and_opp()
+__INLINE__ void  loadshad_and_opp()
 {
   loadshad();
   Opp = gameState.Kid;
 }
 
 // seg006:04EE
-void saveshad_and_opp()
+__INLINE__ void  saveshad_and_opp()
 {
   saveshad();
   gameState.Kid = Opp;
 }
 
 // seg006:0507
-void reset_obj_clip()
+__INLINE__ void  reset_obj_clip()
 {
   obj_clip_left = 0;
   obj_clip_top = 0;
@@ -3587,7 +3589,7 @@ void reset_obj_clip()
 }
 
 // seg006:051C
-void x_to_xh_and_xl(int xpos, sbyte *xh_addr, sbyte *xl_addr)
+__INLINE__ void  x_to_xh_and_xl(int xpos, sbyte *xh_addr, sbyte *xl_addr)
 {
   if (xpos < 0)
   {
@@ -3602,7 +3604,7 @@ void x_to_xh_and_xl(int xpos, sbyte *xh_addr, sbyte *xl_addr)
 }
 
 // seg006:057C
-void fall_accel()
+__INLINE__ void  fall_accel()
 {
   if (gameState.Char.action == actions_4_in_freefall)
   {
@@ -3622,7 +3624,7 @@ void fall_accel()
 }
 
 // seg006:05AE
-void fall_speed()
+__INLINE__ void  fall_speed()
 {
   gameState.Char.y += gameState.Char.fall_y;
   if (gameState.Char.action == actions_4_in_freefall)
@@ -3633,7 +3635,7 @@ void fall_speed()
 }
 
 // seg006:05CD
-void check_action()
+__INLINE__ void  check_action()
 {
   short frame;
   short action;
@@ -3667,7 +3669,7 @@ void check_action()
 }
 
 // seg006:0628
-int tile_is_floor(int tiletype)
+__INLINE__ int tile_is_floor(int tiletype)
 {
   switch (tiletype)
   {
@@ -3686,7 +3688,7 @@ int tile_is_floor(int tiletype)
 }
 
 // seg006:0658
-void check_spiked()
+__INLINE__ void  check_spiked()
 {
   short harmful;
   short frame;
@@ -3708,7 +3710,7 @@ void check_spiked()
 }
 
 // seg006:06BD
-int take_hp(int count)
+__INLINE__ int take_hp(int count)
 {
   word dead;
   dead = 0;
@@ -3740,13 +3742,13 @@ int take_hp(int count)
 }
 
 // seg006:070D
-int get_tile_at_char()
+__INLINE__ int get_tile_at_char()
 {
   return get_tile(gameState.Char.room, gameState.Char.curr_col, gameState.Char.curr_row);
 }
 
 // Get an image, with index and NULL checks.
-image_type *get_image(short chtab_id, int id)
+__INLINE__ image_type *get_image(short chtab_id, int id)
 {
   if ((ssize_t)chtab_id < 0 || (ssize_t)chtab_id > (ssize_t)COUNT(chtab_addrs))
   {
@@ -3768,7 +3770,7 @@ image_type *get_image(short chtab_id, int id)
 }
 
 // seg006:0723
-void set_char_collision()
+__INLINE__ void  set_char_collision()
 {
   image_type *image = get_image(obj_chtab, obj_id);
   if (image == NULL)
@@ -3810,7 +3812,7 @@ void set_char_collision()
 }
 
 // seg006:0815
-void check_on_floor()
+__INLINE__ void  check_on_floor()
 {
   if (cur_frame.flags & FRAME_NEEDS_FLOOR)
   {
@@ -3838,7 +3840,7 @@ void check_on_floor()
 }
 
 // seg006:08B9
-void start_fall()
+__INLINE__ void  start_fall()
 {
   short frame;
   word seq_id;
@@ -3937,7 +3939,7 @@ void start_fall()
 }
 
 // seg006:0A19
-void check_grab()
+__INLINE__ void  check_grab()
 {
   word old_x;
 
@@ -3970,7 +3972,7 @@ void check_grab()
 }
 
 // seg006:0ABD
-int can_grab_front_above()
+__INLINE__ int can_grab_front_above()
 {
   through_tile = get_tile_above_char();
   get_tile_front_above_char();
@@ -3978,7 +3980,7 @@ int can_grab_front_above()
 }
 
 // seg006:0ACD
-void in_wall()
+__INLINE__ void  in_wall()
 {
   short delta_x;
   delta_x = distance_to_edge_weight();
@@ -3996,13 +3998,13 @@ void in_wall()
 }
 
 // seg006:0B0C
-int get_tile_infrontof_char()
+__INLINE__ int get_tile_infrontof_char()
 {
   return get_tile(gameState.Char.room, infrontx = dir_front[gameState.Char.direction + 1] + gameState.Char.curr_col, gameState.Char.curr_row);
 }
 
 // seg006:0B30
-int get_tile_infrontof2_char()
+__INLINE__ int get_tile_infrontof2_char()
 {
   short var_2;
   var_2 = dir_front[gameState.Char.direction + 1];
@@ -4010,19 +4012,19 @@ int get_tile_infrontof2_char()
 }
 
 // seg006:0B66
-int get_tile_behind_char()
+__INLINE__ int get_tile_behind_char()
 {
   return get_tile(gameState.Char.room, dir_behind[gameState.Char.direction + 1] + gameState.Char.curr_col, gameState.Char.curr_row);
 }
 
 // seg006:0B8A
-int distance_to_edge_weight()
+__INLINE__ int distance_to_edge_weight()
 {
   return distance_to_edge(dx_weight());
 }
 
 // seg006:0B94
-int distance_to_edge(int xpos)
+__INLINE__ int distance_to_edge(int xpos)
 {
   short distance;
   get_tile_div_mod_m7(xpos);
@@ -4035,7 +4037,7 @@ int distance_to_edge(int xpos)
 }
 
 // seg006:0BC4
-void fell_out()
+__INLINE__ void  fell_out()
 {
   if (gameState.Char.alive < 0 && gameState.Char.room == 0)
   {
@@ -4046,7 +4048,7 @@ void fell_out()
 }
 
 // seg006:0BEE
-void play_kid()
+__INLINE__ void  play_kid()
 {
   fell_out();
   control_kid();
@@ -4068,7 +4070,7 @@ void play_kid()
 }
 
 // seg006:0CD1
-void control_kid()
+__INLINE__ void  control_kid()
 {
   if (gameState.Char.alive < 0 && gameState.hitp_curr == 0)
   {
@@ -4086,7 +4088,7 @@ void control_kid()
 }
 
 // seg006:0D49
-void do_demo()
+__INLINE__ void  do_demo()
 {
   if (gameState.checkpoint)
   {
@@ -4106,7 +4108,7 @@ void do_demo()
 }
 
 // seg006:0D85
-void play_guard()
+__INLINE__ void  play_guard()
 {
   if (gameState.Char.charid == charid_24_mouse)
   {
@@ -4137,7 +4139,7 @@ void play_guard()
 }
 
 // seg006:0DC0
-void user_control()
+__INLINE__ void  user_control()
 {
   if (gameState.Char.direction >= dir_0_right)
   {
@@ -4152,7 +4154,7 @@ void user_control()
 }
 
 // seg006:0DDC
-void flip_control_x()
+__INLINE__ void  flip_control_x()
 {
   byte temp;
   control_x = -control_x;
@@ -4162,14 +4164,14 @@ void flip_control_x()
 }
 
 // seg006:0E00
-int release_arrows()
+__INLINE__ int release_arrows()
 {
   control_backward = control_forward = control_up = control_down = 0;
   return 1;
 }
 
 // seg006:0E12
-void save_ctrl_1()
+__INLINE__ void  save_ctrl_1()
 {
   gameState.ctrl1_forward = control_forward;
   gameState.ctrl1_backward = control_backward;
@@ -4179,7 +4181,7 @@ void save_ctrl_1()
 }
 
 // seg006:0E31
-void rest_ctrl_1()
+__INLINE__ void  rest_ctrl_1()
 {
   control_forward = gameState.ctrl1_forward;
   control_backward = gameState.ctrl1_backward;
@@ -4189,13 +4191,13 @@ void rest_ctrl_1()
 }
 
 // seg006:0E8E
-void clear_saved_ctrl()
+__INLINE__ void  clear_saved_ctrl()
 {
   gameState.ctrl1_forward = gameState.ctrl1_backward = gameState.ctrl1_up = gameState.ctrl1_down = gameState.ctrl1_shift2 = 0;
 }
 
 // seg006:0EAF
-void read_user_control()
+__INLINE__ void  read_user_control()
 {
   if (control_forward >= 0)
   {
@@ -4270,7 +4272,7 @@ void read_user_control()
 }
 
 // seg006:0F55
-int can_grab()
+__INLINE__ int can_grab()
 {
   // Can char grab curr_tile2 through through_tile?
   byte modifier;
@@ -4298,25 +4300,25 @@ int can_grab()
 }
 
 // seg006:1005
-int get_tile_above_char()
+__INLINE__ int get_tile_above_char()
 {
   return get_tile(gameState.Char.room, gameState.Char.curr_col, gameState.Char.curr_row - 1);
 }
 
 // seg006:1020
-int get_tile_behind_above_char()
+__INLINE__ int get_tile_behind_above_char()
 {
   return get_tile(gameState.Char.room, dir_behind[gameState.Char.direction + 1] + gameState.Char.curr_col, gameState.Char.curr_row - 1);
 }
 
 // seg006:1049
-int get_tile_front_above_char()
+__INLINE__ int get_tile_front_above_char()
 {
   return get_tile(gameState.Char.room, infrontx = dir_front[gameState.Char.direction + 1] + gameState.Char.curr_col, gameState.Char.curr_row - 1);
 }
 
 // seg006:1072
-int back_delta_x(int delta_x)
+__INLINE__ int back_delta_x(int delta_x)
 {
   if (gameState.Char.direction < dir_0_right)
   {
@@ -4331,7 +4333,7 @@ int back_delta_x(int delta_x)
 }
 
 // seg006:108A
-void do_pickup(int obj_type)
+__INLINE__ void  do_pickup(int obj_type)
 {
   gameState.pickup_obj_type = obj_type;
   control_shift2 = 1;
@@ -4342,7 +4344,7 @@ void do_pickup(int obj_type)
 }
 
 // seg006:10E6
-void check_press()
+__INLINE__ void  check_press()
 {
   short frame;
   short action;
@@ -4394,7 +4396,7 @@ void check_press()
 }
 
 // seg006:1199
-void check_spike_below()
+__INLINE__ void  check_spike_below()
 {
   short not_finished;
   short room;
@@ -4429,7 +4431,7 @@ void check_spike_below()
 }
 
 // seg006:1231
-void clip_char()
+__INLINE__ void  clip_char()
 {
   short frame;
   short room;
@@ -4505,7 +4507,7 @@ void clip_char()
 }
 
 // seg006:13E6
-void stuck_lower()
+__INLINE__ void  stuck_lower()
 {
   if (get_tile_at_char() == tiles_5_stuck)
   {
@@ -4514,7 +4516,7 @@ void stuck_lower()
 }
 
 // seg006:13F3
-void set_objtile_at_char()
+__INLINE__ void  set_objtile_at_char()
 {
   short char_frame;
   short char_action;
@@ -4544,7 +4546,7 @@ void set_objtile_at_char()
 }
 
 // seg006:1463
-void proc_get_object()
+__INLINE__ void  proc_get_object()
 {
   if (gameState.Char.charid != charid_0_kid || gameState.pickup_obj_type == 0)
     return;
@@ -4597,7 +4599,7 @@ void proc_get_object()
 }
 
 // seg006:1599
-int is_dead()
+__INLINE__ int is_dead()
 {
   // 177: spiked, 178: chomped, 185: dead
   // or maybe this was a switch-case?
@@ -4605,7 +4607,7 @@ int is_dead()
 }
 
 // seg006:15E8
-void on_guard_killed()
+__INLINE__ void  on_guard_killed()
 {
   if (gameState.current_level == 0)
   {
@@ -4627,7 +4629,7 @@ void on_guard_killed()
 }
 
 // seg006:1634
-void clear_char()
+__INLINE__ void  clear_char()
 {
   gameState.Char.direction = dir_56_none;
   gameState.Char.alive = 0;
@@ -4636,7 +4638,7 @@ void clear_char()
 }
 
 // seg006:1654
-void save_obj()
+__INLINE__ void  save_obj()
 {
   obj2_tilepos = obj_tilepos;
   obj2_x = obj_x;
@@ -4651,7 +4653,7 @@ void save_obj()
 }
 
 // seg006:1691
-void load_obj()
+__INLINE__ void  load_obj()
 {
   obj_tilepos = obj2_tilepos;
   obj_x = obj2_x;
@@ -4666,7 +4668,7 @@ void load_obj()
 }
 
 // seg006:16CE
-void draw_hurt_splash()
+__INLINE__ void  draw_hurt_splash()
 {
   short frame;
   frame = gameState.Char.frame;
@@ -4706,7 +4708,7 @@ void draw_hurt_splash()
 }
 
 // seg006:175D
-void check_killed_shadow()
+__INLINE__ void  check_killed_shadow()
 {
   // Special event: killed the shadow
   if (gameState.current_level == 12)
@@ -4722,7 +4724,7 @@ void check_killed_shadow()
 }
 
 // seg006:1827
-void control_guard_inactive()
+__INLINE__ void  control_guard_inactive()
 {
   if (gameState.Char.frame == frame_166_stand_inactive && control_down < 0)
   {
@@ -4739,7 +4741,7 @@ void control_guard_inactive()
 }
 
 // seg006:1852
-int char_opp_dist()
+__INLINE__ int char_opp_dist()
 {
   // >0 if Opp is in front of char
   // <0 if Opp is behind char
@@ -4761,13 +4763,13 @@ int char_opp_dist()
 }
 
 // seg006:189B
-void inc_curr_row()
+__INLINE__ void  inc_curr_row()
 {
   ++gameState.Char.curr_row;
 }
 
 // seg004:0004
-void check_collisions()
+__INLINE__ void  check_collisions()
 {
   short column;
   bump_col_left_of_wall = bump_col_right_of_wall = -1;
@@ -4805,7 +4807,7 @@ void check_collisions()
 }
 
 // seg004:00DF
-void move_coll_to_prev()
+__INLINE__ void  move_coll_to_prev()
 {
   sbyte *row_coll_room_ptr;
   byte *row_coll_flags_ptr;
@@ -4840,7 +4842,7 @@ void move_coll_to_prev()
 }
 
 // seg004:0185
-void get_row_collision_data(short row, sbyte *row_coll_room_ptr, byte *row_coll_flags_ptr)
+__INLINE__ void  get_row_collision_data(short row, sbyte *row_coll_room_ptr, byte *row_coll_flags_ptr)
 {
   short right_wall_xpos;
   byte curr_flags;
@@ -4864,7 +4866,7 @@ void get_row_collision_data(short row, sbyte *row_coll_room_ptr, byte *row_coll_
 }
 
 // seg004:0226
-int get_left_wall_xpos(int room, int column, int row)
+__INLINE__ int get_left_wall_xpos(int room, int column, int row)
 {
   short type;
   type = wall_type(get_tile(room, column, row));
@@ -4879,7 +4881,7 @@ int get_left_wall_xpos(int room, int column, int row)
 }
 
 // seg004:025F
-int get_right_wall_xpos(int room, int column, int row)
+__INLINE__ int get_right_wall_xpos(int room, int column, int row)
 {
   short type;
   type = wall_type(get_tile(room, column, row));
@@ -4894,7 +4896,7 @@ int get_right_wall_xpos(int room, int column, int row)
 }
 
 // seg004:029D
-void check_bumped()
+__INLINE__ void  check_bumped()
 {
   if (
     gameState.Char.action != actions_2_hang_climb &&
@@ -4914,7 +4916,7 @@ void check_bumped()
 }
 
 // seg004:02D2
-void check_bumped_look_left()
+__INLINE__ void  check_bumped_look_left()
 {
   if ((gameState.Char.sword == sword_2_drawn || gameState.Char.direction < dir_0_right) && // looking left
       is_obstacle_at_col(bump_col_right_of_wall))
@@ -4924,7 +4926,7 @@ void check_bumped_look_left()
 }
 
 // seg004:030A
-void check_bumped_look_right()
+__INLINE__ void  check_bumped_look_right()
 {
   if ((gameState.Char.sword == sword_2_drawn || gameState.Char.direction == dir_0_right) && // looking right
       is_obstacle_at_col(bump_col_left_of_wall))
@@ -4934,7 +4936,7 @@ void check_bumped_look_right()
 }
 
 // seg004:0343
-int is_obstacle_at_col(int tile_col)
+__INLINE__ int is_obstacle_at_col(int tile_col)
 {
   short tile_row;
   tile_row = gameState.Char.curr_row;
@@ -4951,7 +4953,7 @@ int is_obstacle_at_col(int tile_col)
 }
 
 // seg004:037E
-int is_obstacle()
+__INLINE__ int is_obstacle()
 {
   if (curr_tile2 == tiles_10_potion)
   {
@@ -4984,7 +4986,7 @@ int is_obstacle()
 }
 
 // seg004:0405
-int xpos_in_drawn_room(int xpos)
+__INLINE__ int xpos_in_drawn_room(int xpos)
 {
   if (curr_room != gameState.drawn_room)
   {
@@ -5001,7 +5003,7 @@ int xpos_in_drawn_room(int xpos)
 }
 
 // seg004:0448
-void bumped(sbyte delta_x, sbyte push_direction)
+__INLINE__ void  bumped(sbyte delta_x, sbyte push_direction)
 {
   // frame 177: spiked
   if (gameState.Char.alive < 0 && gameState.Char.frame != frame_177_spiked)
@@ -5043,7 +5045,7 @@ void bumped(sbyte delta_x, sbyte push_direction)
 }
 
 // seg004:0A10
-int dist_from_wall_forward(byte tiletype)
+__INLINE__ int dist_from_wall_forward(byte tiletype)
 {
   short type;
   if (tiletype == tiles_4_gate && !can_bump_into_gate())
@@ -5071,7 +5073,7 @@ int dist_from_wall_forward(byte tiletype)
 }
 
 // seg004:04E4
-void bumped_fall()
+__INLINE__ void  bumped_fall()
 {
   short action;
   action = gameState.Char.action;
@@ -5089,7 +5091,7 @@ void bumped_fall()
 }
 
 // seg004:0520
-void bumped_floor(sbyte push_direction)
+__INLINE__ void  bumped_floor(sbyte push_direction)
 {
   short frame;
   short seq_index;
@@ -5146,13 +5148,13 @@ void bumped_floor(sbyte push_direction)
 }
 
 // seg004:05F1
-void bumped_sound()
+__INLINE__ void  bumped_sound()
 {
   gameState.is_guard_notice = 1;
 }
 
 // seg004:0601
-void clear_coll_rooms()
+__INLINE__ void  clear_coll_rooms()
 {
   memset_near(gameState.prev_coll_room, -1, sizeof(gameState.prev_coll_room));
   memset_near(gameState.curr_row_coll_room, -1, sizeof(gameState.curr_row_coll_room));
@@ -5162,13 +5164,13 @@ void clear_coll_rooms()
 }
 
 // seg004:0657
-int can_bump_into_gate()
+__INLINE__ int can_bump_into_gate()
 {
   return (curr_room_modif[curr_tilepos] >> 2) + 6 < char_height;
 }
 
 // seg004:067C
-int get_edge_distance()
+__INLINE__ int get_edge_distance()
 {
   /*
 Possible results in edge_type:
@@ -5260,7 +5262,7 @@ Possible results in edge_type:
 }
 
 // seg004:076B
-void check_chomped_kid()
+__INLINE__ void  check_chomped_kid()
 {
   short tile_col;
   short tile_row;
@@ -5278,7 +5280,7 @@ void check_chomped_kid()
 }
 
 // seg004:07BF
-void chomped()
+__INLINE__ void  chomped()
 {
   curr_room_modif[curr_tilepos] |= 0x80; // put blood
   if (gameState.Char.frame != frame_178_chomped && gameState.Char.room == curr_room)
@@ -5293,7 +5295,7 @@ void chomped()
 }
 
 // seg004:0A7B
-int dist_from_wall_behind(byte tiletype)
+__INLINE__ int dist_from_wall_behind(byte tiletype)
 {
   short type;
   type = wall_type(tiletype);
@@ -5318,7 +5320,7 @@ int dist_from_wall_behind(byte tiletype)
 }
 
 // seg004:0833
-void check_gate_push()
+__INLINE__ void  check_gate_push()
 {
   // Closing gate pushes gameState.Kid
   short frame;
@@ -5346,7 +5348,7 @@ void check_gate_push()
 }
 
 // seg004:08C3
-void check_guard_bumped()
+__INLINE__ void  check_guard_bumped()
 {
   if (
     gameState.Char.action == actions_1_run_jump &&
@@ -5380,7 +5382,7 @@ void check_guard_bumped()
 }
 
 // seg004:0989
-void check_chomped_guard()
+__INLINE__ void  check_chomped_guard()
 {
   get_tile_at_char();
   if (!check_chomped_here())
@@ -5391,7 +5393,7 @@ void check_chomped_guard()
 }
 
 // seg004:09B0
-int check_chomped_here()
+__INLINE__ int check_chomped_here()
 {
   if (curr_tile2 == tiles_18_chomper &&
       (curr_room_modif[curr_tilepos] & 0x7F) == 2)
@@ -5415,7 +5417,7 @@ int check_chomped_here()
 }
 
 // seg007:0000
-void process_trobs()
+__INLINE__ void  process_trobs()
 {
   word need_delete;
   word index;
@@ -5447,7 +5449,7 @@ void process_trobs()
 }
 
 // seg007:00AF
-void animate_tile()
+__INLINE__ void  animate_tile()
 {
   get_room_address(trob.room);
   switch (get_curr_tile(trob.tilepos))
@@ -5492,7 +5494,7 @@ void animate_tile()
 }
 
 // seg007:0166
-short is_trob_in_drawn_room()
+__INLINE__ short is_trob_in_drawn_room()
 {
   if (trob.room != gameState.drawn_room)
   {
@@ -5506,7 +5508,7 @@ short is_trob_in_drawn_room()
 }
 
 // seg007:0258
-short get_trob_pos_in_drawn_room()
+__INLINE__ short get_trob_pos_in_drawn_room()
 {
   short tilepos;
   tilepos = trob.tilepos;
@@ -5533,7 +5535,7 @@ short get_trob_pos_in_drawn_room()
 }
 
 // seg007:029D
-short get_trob_right_pos_in_drawn_room()
+__INLINE__ short get_trob_right_pos_in_drawn_room()
 {
   word tilepos;
   tilepos = trob.tilepos;
@@ -5583,7 +5585,7 @@ short get_trob_right_pos_in_drawn_room()
 }
 
 // seg007:032C
-short get_trob_right_above_pos_in_drawn_room()
+__INLINE__ short get_trob_right_above_pos_in_drawn_room()
 {
   word tilepos;
   tilepos = trob.tilepos;
@@ -5647,7 +5649,7 @@ short get_trob_right_above_pos_in_drawn_room()
 }
 
 // seg007:06CD
-short get_torch_frame(short curr)
+__INLINE__ short get_torch_frame(short curr)
 {
   short next;
   next = prandom(255);
@@ -5669,7 +5671,7 @@ short get_torch_frame(short curr)
 }
 
 // seg007:03CF
-void animate_torch()
+__INLINE__ void  animate_torch()
 {
   // if (is_trob_in_drawn_room()) {
   //  Keep animating torches in the rightmost column of the left-side room as well, because they are visible in the current room.
@@ -5684,7 +5686,7 @@ void animate_torch()
 }
 
 // seg007:06AD
-short bubble_next_frame(short curr)
+__INLINE__ short bubble_next_frame(short curr)
 {
   short next;
   next = curr + 1;
@@ -5694,7 +5696,7 @@ short bubble_next_frame(short curr)
 }
 
 // seg007:03E9
-void animate_potion()
+__INLINE__ void  animate_potion()
 {
   word type;
   if (trob.type >= 0 && is_trob_in_drawn_room())
@@ -5705,7 +5707,7 @@ void animate_potion()
 }
 
 // seg007:0425
-void animate_sword()
+__INLINE__ void  animate_sword()
 {
   if (is_trob_in_drawn_room())
   {
@@ -5718,7 +5720,7 @@ void animate_sword()
 }
 
 // seg007:0448
-void animate_chomper()
+__INLINE__ void  animate_chomper()
 {
   word blood;
   word frame;
@@ -5750,7 +5752,7 @@ void animate_chomper()
 }
 
 // seg007:04D3
-void animate_spike()
+__INLINE__ void  animate_spike()
 {
   if (trob.type >= 0)
   {
@@ -5781,7 +5783,7 @@ void animate_spike()
 }
 
 // seg007:0522
-void animate_door()
+__INLINE__ void  animate_door()
 {
   /*
 Possible values of anim_type:
@@ -5871,13 +5873,13 @@ Possible values of anim_type:
 }
 
 // seg007:05E3
-void gate_stop()
+__INLINE__ void  gate_stop()
 {
   trob.type = -1;
 }
 
 // seg007:05F1
-void animate_leveldoor()
+__INLINE__ void  animate_leveldoor()
 {
   /*
 Possible values of trob_type:
@@ -5935,14 +5937,14 @@ Possible values of trob_type:
 }
 
 // seg007:081E
-void start_anim_torch(short room, short tilepos)
+__INLINE__ void  start_anim_torch(short room, short tilepos)
 {
   curr_room_modif[tilepos] = prandom(8);
   add_trob(room, tilepos, 1);
 }
 
 // seg007:0847
-void start_anim_potion(short room, short tilepos)
+__INLINE__ void  start_anim_potion(short room, short tilepos)
 {
   curr_room_modif[tilepos] &= 0xF8;
   curr_room_modif[tilepos] |= prandom(6) + 1;
@@ -5950,14 +5952,14 @@ void start_anim_potion(short room, short tilepos)
 }
 
 // seg007:087C
-void start_anim_sword(short room, short tilepos)
+__INLINE__ void  start_anim_sword(short room, short tilepos)
 {
   curr_room_modif[tilepos] = prandom(0xFF) & 0x1F;
   add_trob(room, tilepos, 1);
 }
 
 // seg007:08A7
-void start_anim_chomper(short room, short tilepos, byte modifier)
+__INLINE__ void  start_anim_chomper(short room, short tilepos, byte modifier)
 {
   short old_modifier;
   old_modifier = curr_room_modif[tilepos];
@@ -5969,7 +5971,7 @@ void start_anim_chomper(short room, short tilepos, byte modifier)
 }
 
 // seg007:08E3
-void start_anim_spike(short room, short tilepos)
+__INLINE__ void  start_anim_spike(short room, short tilepos)
 {
   sbyte old_modifier;
   old_modifier = curr_room_modif[tilepos];
@@ -5991,7 +5993,7 @@ void start_anim_spike(short room, short tilepos)
 }
 
 // seg007:092C
-short trigger_gate(short room, short tilepos, short button_type)
+__INLINE__ short trigger_gate(short room, short tilepos, short button_type)
 {
   byte modifier;
   modifier = curr_room_modif[tilepos];
@@ -6031,7 +6033,7 @@ short trigger_gate(short room, short tilepos, short button_type)
 }
 
 // seg007:0999
-short trigger_1(short target_type, short room, short tilepos, short button_type)
+__INLINE__ short trigger_1(short target_type, short room, short tilepos, short button_type)
 {
   short result;
   result = -1;
@@ -6058,26 +6060,26 @@ short trigger_1(short target_type, short room, short tilepos, short button_type)
 }
 
 // seg007:0BF2
-short get_doorlink_tile(short index)
+__INLINE__ short get_doorlink_tile(short index)
 {
   return doorlink1_ad[index] & 0x1F;
 }
 
 // seg007:0C09
-short get_doorlink_next(short index)
+__INLINE__ short get_doorlink_next(short index)
 {
   return !(doorlink1_ad[index] & 0x80);
 }
 
 // seg007:0C26
-short get_doorlink_room(short index)
+__INLINE__ short get_doorlink_room(short index)
 {
   return ((doorlink1_ad[index] & 0x60) >> 5) +
          ((doorlink2_ad[index] & 0xE0) >> 3);
 }
 
 // seg007:09E5
-void do_trigger_list(short index, short button_type)
+__INLINE__ void  do_trigger_list(short index, short button_type)
 {
   word room;
   word tilepos;
@@ -6101,7 +6103,7 @@ void do_trigger_list(short index, short button_type)
 }
 
 // seg007:0ACA
-short find_trob()
+__INLINE__ short find_trob()
 {
   short index;
   for (index = 0; index < gameState.trobs_count; ++index)
@@ -6114,7 +6116,7 @@ short find_trob()
 }
 
 // seg007:0A5A
-void add_trob(byte room, byte tilepos, sbyte type)
+__INLINE__ void  add_trob(byte room, byte tilepos, sbyte type)
 {
   short found;
   trob.room = room;
@@ -6136,13 +6138,13 @@ void add_trob(byte room, byte tilepos, sbyte type)
 }
 
 // seg007:0BB6
-short get_doorlink_timer(short index)
+__INLINE__ short get_doorlink_timer(short index)
 {
   return doorlink2_ad[index] & 0x1F;
 }
 
 // seg007:0BCD
-short set_doorlink_timer(short index, byte value)
+__INLINE__ short set_doorlink_timer(short index, byte value)
 {
   doorlink2_ad[index] &= 0xE0;
   doorlink2_ad[index] |= value & 0x1F;
@@ -6150,7 +6152,7 @@ short set_doorlink_timer(short index, byte value)
 }
 
 // seg007:0C53
-void trigger_button(int playsound, int button_type, int modifier)
+__INLINE__ void  trigger_button(int playsound, int button_type, int modifier)
 {
   sbyte link_timer;
   get_curr_tile(curr_tilepos);
@@ -6179,7 +6181,7 @@ void trigger_button(int playsound, int button_type, int modifier)
 }
 
 // seg007:0CD9
-void died_on_button()
+__INLINE__ void  died_on_button()
 {
   word button_type;
   word modifier;
@@ -6199,7 +6201,7 @@ void died_on_button()
 }
 
 // seg007:0D3A
-void animate_button()
+__INLINE__ void  animate_button()
 {
   word var_2;
   if (trob.type >= 0)
@@ -6213,20 +6215,20 @@ void animate_button()
 }
 
 // seg007:0D72
-void start_level_door(short room, short tilepos)
+__INLINE__ void  start_level_door(short room, short tilepos)
 {
   curr_room_modif[tilepos] = 43; // start fully open
   add_trob(room, tilepos, 3);
 }
 
 // seg007:0D93
-void animate_empty()
+__INLINE__ void  animate_empty()
 {
   trob.type = -1;
 }
 
 // seg007:0D9D
-void animate_loose()
+__INLINE__ void  animate_loose()
 {
   word room;
   word row;
@@ -6275,7 +6277,7 @@ void animate_loose()
 }
 
 // seg007:0E55
-void loose_shake(int arg_0)
+__INLINE__ void  loose_shake(int arg_0)
 {
   word sound_id;
   if (arg_0 || loose_sound[curr_modifier & 0x7F])
@@ -6293,7 +6295,7 @@ void loose_shake(int arg_0)
 }
 
 // seg007:0EB8
-int remove_loose(int room, int tilepos)
+__INLINE__ int remove_loose(int room, int tilepos)
 {
   curr_room_tiles[tilepos] = tiles_0_empty;
   // note: the level type is used to determine the modifier of the empty space left behind
@@ -6301,7 +6303,7 @@ int remove_loose(int room, int tilepos)
 }
 
 // seg007:0ED5
-void make_loose_fall(byte modifier)
+__INLINE__ void  make_loose_fall(byte modifier)
 {
   // is it a "solid" loose floor?
   if ((curr_room_tiles[curr_tilepos] & 0x20) == 0)
@@ -6315,7 +6317,7 @@ void make_loose_fall(byte modifier)
 }
 
 // seg007:0F9A
-int next_chomper_timing(byte timing)
+__INLINE__ int next_chomper_timing(byte timing)
 {
   // 15,12,9,6,13,10,7,14,11,8,repeat
   timing -= 3;
@@ -6327,7 +6329,7 @@ int next_chomper_timing(byte timing)
 }
 
 // seg007:0F13
-void start_chompers()
+__INLINE__ void  start_chompers()
 {
   short timing;
   short modifier;
@@ -6355,7 +6357,7 @@ void start_chompers()
 }
 
 // seg007:0FB4
-void loose_make_shake()
+__INLINE__ void  loose_make_shake()
 {
   // don't shake on level 13
   if (curr_room_modif[curr_tilepos] == 0 && gameState.current_level != 13)
@@ -6366,7 +6368,7 @@ void loose_make_shake()
 }
 
 // seg007:0FE0
-void do_knock(int room, int tile_row)
+__INLINE__ void  do_knock(int room, int tile_row)
 {
   short tile_col;
   for (tile_col = 0; tile_col < 10; ++tile_col)
@@ -6379,13 +6381,13 @@ void do_knock(int room, int tile_row)
 }
 
 // seg007:1010
-void add_mob()
+__INLINE__ void  add_mob()
 {
   gameState.mobs[gameState.mobs_count++] = curmob;
 }
 
 // seg007:1063
-void do_mobs()
+__INLINE__ void  do_mobs()
 {
   short n_mobs;
   short index;
@@ -6410,7 +6412,7 @@ void do_mobs()
 }
 
 // seg007:110F
-void move_mob()
+__INLINE__ void  move_mob()
 {
   if (curmob.type == 0)
   {
@@ -6423,7 +6425,7 @@ void move_mob()
 }
 
 // seg007:1126
-void move_loose()
+__INLINE__ void  move_loose()
 {
   if (curmob.speed < 0)
     return;
@@ -6464,7 +6466,7 @@ void move_loose()
 }
 
 // seg007:11E8
-void loose_land()
+__INLINE__ void  loose_land()
 {
   short button_type;
   short tiletype;
@@ -6498,7 +6500,7 @@ void loose_land()
 }
 
 // seg007:12CB
-void loose_fall()
+__INLINE__ void  loose_fall()
 {
   curr_room_modif[curr_tilepos] = remove_loose(curr_room, curr_tilepos);
   curmob.speed >>= 1;
@@ -6510,7 +6512,7 @@ void loose_fall()
 }
 
 // seg007:1387
-void mob_down_a_row()
+__INLINE__ void  mob_down_a_row()
 {
   ++curmob.row;
   if (curmob.row >= 3)
@@ -6522,7 +6524,7 @@ void mob_down_a_row()
 }
 
 // seg007:14DE
-void add_mob_to_objtable(int ypos)
+__INLINE__ void  add_mob_to_objtable(int ypos)
 {
   word index;
   objtable_type *curr_obj;
@@ -6540,7 +6542,7 @@ void add_mob_to_objtable(int ypos)
 }
 
 // seg007:1556
-int is_spike_harmful()
+__INLINE__ int is_spike_harmful()
 {
   sbyte modifier;
   modifier = curr_room_modif[curr_tilepos];
@@ -6563,7 +6565,7 @@ int is_spike_harmful()
 }
 
 // seg007:1591
-void check_loose_fall_on_kid()
+__INLINE__ void  check_loose_fall_on_kid()
 {
   loadkid();
   if (gameState.Char.room == curmob.room &&
@@ -6577,7 +6579,7 @@ void check_loose_fall_on_kid()
 }
 
 // seg007:15D3
-void fell_on_your_head()
+__INLINE__ void  fell_on_your_head()
 {
   short frame;
   short action;
@@ -6612,19 +6614,19 @@ void fell_on_your_head()
 }
 
 // seg005:000A
-void seqtbl_offset_char(short seq_index)
+__INLINE__ void  seqtbl_offset_char(short seq_index)
 {
   gameState.Char.curr_seq = seqtbl_offsets[seq_index];
 }
 
 // seg005:001D
-void seqtbl_offset_opp(int seq_index)
+__INLINE__ void  seqtbl_offset_opp(int seq_index)
 {
   Opp.curr_seq = seqtbl_offsets[seq_index];
 }
 
 // seg005:0030
-void do_fall()
+__INLINE__ void  do_fall()
 {
   if (gameState.is_screaming == 0 && gameState.Char.fall_y >= 31)
   {
@@ -6653,7 +6655,7 @@ void do_fall()
 }
 
 // seg005:0090
-void land()
+__INLINE__ void  land()
 {
   word seq_id;
   gameState.is_screaming = 0;
@@ -6744,7 +6746,7 @@ void land()
 }
 
 // seg005:01B7
-void spiked()
+__INLINE__ void  spiked()
 {
   // If someone falls into spikes, those spikes become harmless (to others).
   curr_room_modif[curr_tilepos] = 0xFF;
@@ -6758,7 +6760,7 @@ void spiked()
 }
 
 // seg005:0213
-void control()
+__INLINE__ void  control()
 {
   short char_frame;
   short char_action;
@@ -6824,7 +6826,7 @@ void control()
 }
 
 // seg005:02EB
-void control_crouched()
+__INLINE__ void  control_crouched()
 {
   if (gameState.need_level1_music != 0 && gameState.current_level == /*1*/ custom->intro_music_level)
   {
@@ -6850,7 +6852,7 @@ void control_crouched()
 }
 
 // seg005:0358
-void control_standing()
+__INLINE__ void  control_standing()
 {
   short var_2;
   if (control_shift2 < 0 && control_shift < 0 && check_get_item())
@@ -6955,7 +6957,7 @@ void control_standing()
 }
 
 // seg005:0482
-void up_pressed()
+__INLINE__ void  up_pressed()
 {
   int leveldoor_tilepos = -1;
   if (get_tile_at_char() == tiles_16_level_door_left)
@@ -6982,7 +6984,7 @@ void up_pressed()
 }
 
 // seg005:04C7
-void down_pressed()
+__INLINE__ void  down_pressed()
 {
   control_down = 1; // disable automatic repeat
   if (!tile_is_floor(get_tile_infrontof_char()) &&
@@ -7019,7 +7021,7 @@ void down_pressed()
 }
 
 // seg005:0574
-void go_up_leveldoor()
+__INLINE__ void  go_up_leveldoor()
 {
   gameState.Char.x = x_bump[tile_col + 5] + 10;
   gameState.Char.direction = dir_FF_left;         // right
@@ -7027,7 +7029,7 @@ void go_up_leveldoor()
 }
 
 // seg005:058F
-void control_turning()
+__INLINE__ void  control_turning()
 {
   if (control_shift >= 0 && control_x < 0 && control_y >= 0)
   {
@@ -7036,14 +7038,14 @@ void control_turning()
 }
 
 // seg005:05AD
-void crouch()
+__INLINE__ void  crouch()
 {
   seqtbl_offset_char(seq_50_crouch); // crouch
   control_down = release_arrows();
 }
 
 // seg005:05BE
-void back_pressed()
+__INLINE__ void  back_pressed()
 {
   word seq_id;
   control_backward = release_arrows();
@@ -7065,7 +7067,7 @@ void back_pressed()
 }
 
 // seg005:060F
-void forward_pressed()
+__INLINE__ void  forward_pressed()
 {
   short distance;
   distance = get_edge_distance();
@@ -7085,7 +7087,7 @@ void forward_pressed()
 }
 
 // seg005:0649
-void control_running()
+__INLINE__ void  control_running()
 {
   if (control_x == 0 && (gameState.Char.frame == frame_7_run || gameState.Char.frame == frame_11_run))
   {
@@ -7109,7 +7111,7 @@ void control_running()
 }
 
 // seg005:06A8
-void safe_step()
+__INLINE__ void  safe_step()
 {
   short distance;
   control_shift2 = 1;  // disable automatic repeat
@@ -7132,7 +7134,7 @@ void safe_step()
 }
 
 // seg005:06F0
-int check_get_item()
+__INLINE__ int check_get_item()
 {
   if (get_tile_at_char() == tiles_10_potion ||
       curr_tile2 == tiles_22_sword)
@@ -7154,7 +7156,7 @@ int check_get_item()
 }
 
 // seg005:073E
-void get_item()
+__INLINE__ void  get_item()
 {
   short distance;
   if (gameState.Char.frame != frame_109_crouch)
@@ -7197,7 +7199,7 @@ void get_item()
 }
 
 // seg005:07FF
-void control_startrun()
+__INLINE__ void  control_startrun()
 {
   if (control_y < 0 && control_x < 0)
   {
@@ -7206,7 +7208,7 @@ void control_startrun()
 }
 
 // seg005:0812
-void control_jumpup()
+__INLINE__ void  control_jumpup()
 {
   if (control_x < 0 || control_forward < 0)
   {
@@ -7215,14 +7217,14 @@ void control_jumpup()
 }
 
 // seg005:0825
-void standing_jump()
+__INLINE__ void  standing_jump()
 {
   control_up = control_forward = 1;        // disable automatic repeat
   seqtbl_offset_char(seq_3_standing_jump); // standing jump
 }
 
 // seg005:0836
-void check_jump_up()
+__INLINE__ void  check_jump_up()
 {
   control_up = release_arrows();
   through_tile = get_tile_above_char();
@@ -7247,7 +7249,7 @@ void check_jump_up()
 }
 
 // seg005:087B
-void jump_up_or_grab()
+__INLINE__ void  jump_up_or_grab()
 {
   short distance;
   distance = distance_to_edge_weight();
@@ -7270,7 +7272,7 @@ void jump_up_or_grab()
 }
 
 // seg005:08C7
-void grab_up_no_floor_behind()
+__INLINE__ void  grab_up_no_floor_behind()
 {
   get_tile_above_char();
   gameState.Char.x = char_dx_forward(distance_to_edge_weight() - 10);
@@ -7278,7 +7280,7 @@ void grab_up_no_floor_behind()
 }
 
 // seg005:08E6
-void jump_up()
+__INLINE__ void  jump_up()
 {
   short distance;
   control_up = release_arrows();
@@ -7299,7 +7301,7 @@ void jump_up()
 }
 
 // seg005:0968
-void control_hanging()
+__INLINE__ void  control_hanging()
 {
   if (gameState.Char.alive < 0)
   {
@@ -7341,7 +7343,7 @@ void control_hanging()
 }
 
 // seg005:09DF
-void can_climb_up()
+__INLINE__ void  can_climb_up()
 {
   short seq_id;
   seq_id = seq_10_climb_up; // climb up
@@ -7358,7 +7360,7 @@ void can_climb_up()
 }
 
 // seg005:0A46
-void hang_fall()
+__INLINE__ void  hang_fall()
 {
   control_down = release_arrows();
   if (!tile_is_floor(get_tile_behind_char()) &&
@@ -7380,7 +7382,7 @@ void hang_fall()
 }
 
 // seg005:0AA8
-void grab_up_with_floor_behind()
+__INLINE__ void  grab_up_with_floor_behind()
 {
   short distance;
   distance = distance_to_edge_weight();
@@ -7404,7 +7406,7 @@ void grab_up_with_floor_behind()
 }
 
 // seg005:0AF7
-void run_jump()
+__INLINE__ void  run_jump()
 {
   short var_2;
   short xpos;
@@ -7438,7 +7440,7 @@ void run_jump()
 }
 
 // sseg005:0BB5
-void back_with_sword()
+__INLINE__ void  back_with_sword()
 {
   short frame;
   frame = gameState.Char.frame;
@@ -7450,7 +7452,7 @@ void back_with_sword()
 }
 
 // seg005:0BE3
-void forward_with_sword()
+__INLINE__ void  forward_with_sword()
 {
   short frame;
   frame = gameState.Char.frame;
@@ -7469,7 +7471,7 @@ void forward_with_sword()
 }
 
 // seg005:0C1D
-void draw_sword()
+__INLINE__ void  draw_sword()
 {
   word seq_id;
   seq_id = seq_55_draw_sword; // draw sword
@@ -7487,7 +7489,7 @@ void draw_sword()
 }
 
 // seg005:0C67
-void control_with_sword()
+__INLINE__ void  control_with_sword()
 {
   short distance;
   if (gameState.Char.action < actions_2_hang_climb)
@@ -7537,7 +7539,7 @@ void control_with_sword()
 }
 
 // seg005:0CDB
-void swordfight()
+__INLINE__ void  swordfight()
 {
   short frame;
   short seq_id;
@@ -7599,7 +7601,7 @@ void swordfight()
 }
 
 // seg005:0DB0
-void sword_strike()
+__INLINE__ void  sword_strike()
 {
   short frame;
   short seq_id;
@@ -7633,7 +7635,7 @@ void sword_strike()
 }
 
 // seg005:0E0F
-void parry()
+__INLINE__ void  parry()
 {
   short opp_frame;
   short char_frame;
@@ -7698,7 +7700,7 @@ void parry()
 }
 
 // seg008:0006
-void redraw_room()
+__INLINE__ void  redraw_room()
 {
   memset_near(table_counts, 0, sizeof(table_counts));
   reset_obj_clip();
@@ -7706,7 +7708,7 @@ void redraw_room()
 }
 
 // seg008:0035
-void load_room_links()
+__INLINE__ void  load_room_links()
 {
   room_BR = 0;
   room_BL = 0;
@@ -7762,7 +7764,7 @@ void load_room_links()
 }
 
 // seg008:0125
-void draw_room()
+__INLINE__ void  draw_room()
 {
   word saved_room;
   saved_room = gameState.drawn_room;
@@ -7779,7 +7781,7 @@ void draw_room()
 }
 
 // seg008:1E0C
-void get_room_address(int room)
+__INLINE__ void  get_room_address(int room)
 {
   if (room)
   {
@@ -7789,7 +7791,7 @@ void get_room_address(int room)
 }
 
 // seg008:2448
-void load_frame_to_obj()
+__INLINE__ void  load_frame_to_obj()
 {
   word chtab_base;
   chtab_base = id_chtab_2_kid;
