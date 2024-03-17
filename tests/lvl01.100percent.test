@@ -10,7 +10,7 @@
   "Override Loose Tile Sound Value": 0,
   "Initialize Copy Protection": false,
   "Initial State File": "lvl01.state",
-  "Sequence File": "lvl01.anyPercent.sol", 
+  "Sequence File": "lvl01.100percent.sol", 
   "Differential Compression":
   {
     "Enabled": false,

@@ -1738,6 +1738,7 @@ void __pascal far proc_get_object() {
 		flash_time = 8;
 	} else {
 		switch (--pickup_obj_type) {
+			case 7: // life
 			case 0: // health
 				if (hitp_curr != hitp_max) {
 					stop_sounds();

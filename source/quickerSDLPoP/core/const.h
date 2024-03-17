@@ -23,6 +23,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 The authors of this program may be contacted at https://forum.princed.org
 */
 
+#pragma once
+
 #include "common.h"
 #include "types.h"
 
@@ -98,8 +100,8 @@ struct directory_listing_type
 #define stabbed 4 + ready_loop             // SEQTBL_BASE + 110   // 0x19DC
 #define strikeadv 29 + stabbed             // SEQTBL_BASE + 139   // 0x19F9
 #define strikeret 14 + strikeadv           // SEQTBL_BASE + 153   // 0x1A07
-#define advance 12 + strikeret             // SEQTBL_BASE + 165   // 0x1A13
-#define fastadvance 15 + advance           // SEQTBL_BASE + 180   // 0x1A22
+#define charAdvance 12 + strikeret             // SEQTBL_BASE + 165   // 0x1A13
+#define fastadvance 15 + charAdvance           // SEQTBL_BASE + 180   // 0x1A22
 #define retreat 12 + fastadvance           // SEQTBL_BASE + 192   // 0x1A2E
 #define strike 14 + retreat                // SEQTBL_BASE + 206   // 0x1A3C
 #define faststrike 6 + strike              // SEQTBL_BASE + 212   // 0x1A42
@@ -237,7 +239,7 @@ struct directory_listing_type
 #define Mclimb_loop 2 + Mclimb             // SEQTBL_BASE + 2306  // 0x2270
 
 const word seqtbl_offsets[] = {
-  0x0000, startrun, stand, standjump, runjump, turn, runturn, stepfall, jumphangMed, hang, climbup, hangdrop, freefall, runstop, jumpup, fallhang, jumpbackhang, softland, jumpfall, stepfall2, medland, rjumpfall, hardland, hangfall, jumphangLong, hangstraight, rdiveroll, sdiveroll, highjump, step1, step2, step3, step4, step5, step6, step7, step8, step9, step10, step11, step12, step13, step14, turnrun, testfoot, bumpfall, hardbump, bump, superhijump, standup, stoop, impale, crush, deadfall, halve, engarde, advance, retreat, strike, flee, turnengarde, striketoblock, readyblock, landengarde, bumpengfwd, bumpengback, blocktostrike, strikeadv, climbdown, blockedstrike, climbstairs, dropdead, stepback, climbfail, stabbed, faststrike, strikeret, alertstand, drinkpotion, crawl, alertturn, fightfall, efightfall, efightfallfwd, running, stabkill, fastadvance, goalertstand, arise, turndraw, guardengarde, pickupsword, resheathe, fastsheathe, Pstand, Vstand, Vwalk, Vstop, Palert, Pstepback, Vexit, Mclimb, Vraise, Plie, patchfall, Mscurry, Mstop, Mleave, Pembrace, Pwaiting, Pstroke, Prise, Pcrouch, Pslump, Mraise};
+  0x0000, startrun, stand, standjump, runjump, turn, runturn, stepfall, jumphangMed, hang, climbup, hangdrop, freefall, runstop, jumpup, fallhang, jumpbackhang, softland, jumpfall, stepfall2, medland, rjumpfall, hardland, hangfall, jumphangLong, hangstraight, rdiveroll, sdiveroll, highjump, step1, step2, step3, step4, step5, step6, step7, step8, step9, step10, step11, step12, step13, step14, turnrun, testfoot, bumpfall, hardbump, bump, superhijump, standup, stoop, impale, crush, deadfall, halve, engarde, charAdvance, retreat, strike, flee, turnengarde, striketoblock, readyblock, landengarde, bumpengfwd, bumpengback, blocktostrike, strikeadv, climbdown, blockedstrike, climbstairs, dropdead, stepback, climbfail, stabbed, faststrike, strikeret, alertstand, drinkpotion, crawl, alertturn, fightfall, efightfall, efightfallfwd, running, stabkill, fastadvance, goalertstand, arise, turndraw, guardengarde, pickupsword, resheathe, fastsheathe, Pstand, Vstand, Vwalk, Vstop, Palert, Pstepback, Vexit, Mclimb, Vraise, Plie, patchfall, Mscurry, Mstop, Mleave, Pembrace, Pwaiting, Pstroke, Prise, Pcrouch, Pslump, Mraise};
 
 // data:196E
 static const byte seqtbl[] = {
@@ -340,7 +342,7 @@ static const byte seqtbl[] = {
   dy(-4),
   jmp(guy8), // goto "guy8"
 
-  // strike - advance
+  // strike - charAdvance
   LABEL(strikeadv)
     act(actions_1_run_jump),
   set_fall(1, 0),
@@ -359,7 +361,7 @@ static const byte seqtbl[] = {
   frame_158_stand_with_sword,
   jmp(retreat), // goto "retreat"
 
-  LABEL(advance) // advance
+  LABEL(charAdvance) // charAdvance
   act(actions_1_run_jump),
   set_fall(1, 0),
   dx(2),
@@ -369,7 +371,7 @@ static const byte seqtbl[] = {
   frame_165_walk_with_sword,
   jmp(ready), // goto "ready"
 
-  LABEL(fastadvance) // fast advance
+  LABEL(fastadvance) // fast charAdvance
   act(actions_1_run_jump),
   set_fall(1, 0),
   dx(6),

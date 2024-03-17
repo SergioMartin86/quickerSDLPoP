@@ -191,14 +191,17 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
       need_level1_music = custom->intro_music_time_restart;
   }
   
-  __INLINE__ void printInfo() const override
-  {
-      jaffarCommon::logger::log("[]  + Kid Room: %u\n", Kid.room);
-      jaffarCommon::logger::log("[]  + Kid X: %u\n", Kid.x);
-      jaffarCommon::logger::log("[]  + Kid y: %u\n", Kid.y);
+    __INLINE__ void printInfo() const override
+    {
+jaffarCommon::logger::log("[Jaffar]  + Current/Next Level:   %2d / %2d\n", current_level, next_level);
+      jaffarCommon::logger::log("[Jaffar]  + [Kid]                 HP: %d/%d, Alive: %d\n", int(hitp_curr), int(hitp_max), int(Kid.alive));
+      jaffarCommon::logger::log("[Jaffar]  + [Kid]                 Room: %d, Pos.x: %3d, Pos.y: %3d, Frame: %3d, Action: %2d, Dir: %d\n", int(Kid.room), int(Kid.x), int(Kid.y), int(Kid.frame), int(Kid.action), int(Kid.direction));
+      jaffarCommon::logger::log("[Jaffar]  + [Guard]               Room: %d, Pos.x: %3d, Pos.y: %3d, Frame: %3d, Action: %2d, Color: %3u, Dir: %d, HP: %d/%d, Alive: %d\n", int(Guard.room), int(Guard.x), int(Guard.y), int(Guard.frame), int(Guard.action), int(curr_guard_color), int(Guard.direction), int(guardhp_curr), int(guardhp_max), int(Guard.alive));
+      jaffarCommon::logger::log("[Jaffar]  + Exit Room Timer:      %d\n", exit_room_timer);
+      jaffarCommon::logger::log("[Jaffar]  + Kid Has Sword:        %d\n", have_sword);
       jaffarCommon::logger::log("[]  + Last Tile Loost Sound: %u\n", last_loose_sound);
       jaffarCommon::logger::log("[]  + RNG: 0x%X\n", random_seed);
-  }
+    }
 
   char quick_control[9] = "........";
   float replay_curr_tick = 0.0;
@@ -246,7 +249,7 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
    AddItem(&dest, united_with_shadow,   HASHABLE);
    AddItem(&dest, have_sword,           HASHABLE);
    AddItem(&dest, kid_sword_strike,     HASHABLE);
-   AddItem(&dest, pickup_obj_type,      HASHABLE);
+   AddItem(&dest, pickup_obj_type,      NON_HASHABLE);
    AddItem(&dest, offguard,             HASHABLE);
    AddItem(&dest, Guard,                HASHABLE);
    AddItem(&dest, Char,                 NON_HASHABLE);
