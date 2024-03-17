@@ -2012,7 +2012,7 @@ static const byte loose_sound[] = {0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0};
 static const word y_loose_land[] = {2, 65, 128, 191, 254};
 static const byte leveldoor_close_speeds[] = {0, 5, 17, 99, 0};
 static const byte gate_close_speeds[] = {0, 0, 0, 20, 40, 60, 80, 100, 120};
-static const byte door_delta[] = {-1, 4, 4};
+static const int8_t door_delta[] = {-1, 4, 4};
 static const byte door_fram_slice[] = {67, 59, 58, 57, 56, 55, 54, 53, 52};
 static const word floor_left_overlay[] = {32, 151, 151, 150, 150, 151, 32, 32};
 static const byte spikes_fram_fore[] = {0, 139, 140, 141, 142, 143, 142, 140, 139, 0};
@@ -2682,7 +2682,7 @@ static const rect_type rect_top = {0, 0, 192, 320};
 static const rect_type rect_bottom_text = {193, 70, 202, 250};
 static const short y_land[] = {-8, 55, 118, 181, 244};
 static const word copyprot_tile[] = {1, 5, 7, 9, 11, 21, 1, 3, 7, 11, 17, 21, 25, 27};
-static const byte x_bump[] = {-12, 2, 16, 30, 44, 58, 72, 86, 100, 114, 128, 142, 156, 170, 184, 198, 212, 226, 240, 254};
+static const byte x_bump[] = {244, 2, 16, 30, 44, 58, 72, 86, 100, 114, 128, 142, 156, 170, 184, 198, 212, 226, 240, 254}; // 244 = -12
 static const short y_clip[] = {-60, 3, 66, 129, 192};
 static const sbyte dir_front[] = {-1, 1};
 static const sbyte dir_behind[] = {1, -1};

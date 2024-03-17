@@ -1,6 +1,6 @@
 # quickerSDLPoP Core sources
 
-quickerSDLPoPSrc = [ 'core/miniPoP.c' ]
+quickerSDLPoPSrc = [ 'core/miniPoP.cpp' ]
 
 # quickerSDLPoP Core Configuration
 

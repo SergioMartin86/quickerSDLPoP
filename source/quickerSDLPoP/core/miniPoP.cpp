@@ -317,11 +317,11 @@ void loose_land();
 void move_loose();
 void move_mob();
 void add_mob();
-void do_knock();
+void do_knock(int room, int tile_row);
 void start_chompers();
 void animate_loose();
 void make_loose_fall(byte);
-void loose_shake();
+void loose_shake(int arg_0);
 void animate_button();
 void died_on_button();
 void trigger_button(int, int, int);
@@ -550,7 +550,7 @@ const char *locate_file_(const char *filename, char *path_buffer, int buffer_siz
 
 directory_listing_type *create_directory_listing_and_find_first_file(const char *directory, const char *extension)
 {
-  directory_listing_type *data = calloc(1, sizeof(directory_listing_type));
+  directory_listing_type *data = (directory_listing_type*)calloc(1, sizeof(directory_listing_type));
   bool ok = false;
   data->dp = opendir(directory);
   if (data->dp != NULL)
@@ -1029,33 +1029,6 @@ Uint32 temp_shift_release_callback(Uint32 interval, void *param)
 // seg000:04CD
 int process_key()
 {
-  int key = 0;
-
-  // If the gameState.Kid died, Enter or Shift will restart the gameState.level.
-  if (gameState.Kid.alive > 6 && (control_shift || key == SDL_SCANCODE_RETURN))
-  {
-    key = SDL_SCANCODE_A | WITH_CTRL; // Ctrl+A
-  }
-  if (key == 0)
-    return 0;
-
-  switch (key)
-  {
-  case SDL_SCANCODE_ESCAPE:              // Esc
-  case SDL_SCANCODE_ESCAPE | WITH_SHIFT: // allow pause while grabbing
-    is_paused = 1;
-    break;
-  case SDL_SCANCODE_A | WITH_CTRL: // Ctrl+A
-    if (gameState.current_level != 15)
-    {
-      is_restart_level = 1;
-    }
-    break;
-  case SDL_SCANCODE_R | WITH_CTRL: // Ctrl+R
-    start_level = -1;
-    start_game();
-    break;
-  }
 
   return 1;
 }
@@ -3324,7 +3297,7 @@ void do_mouse()
 }
 
 // seg006:0006
-inline int get_tile(const int room, const int col, const int row)
+int get_tile(const int room, const int col, const int row)
 {
   curr_room = room;
   tile_col = col;
@@ -3431,7 +3404,7 @@ void get_frame_internal(const frame_type frame_table[], int frame, const char *f
 }
 
 // seg006:015A
-inline void load_frame()
+void load_frame()
 {
   short frame;
   short add_frame;
@@ -3586,7 +3559,7 @@ int get_tile_div_mod_m7(int xpos)
 }
 
 // seg006:03F0
-inline int get_tile_div_mod(const int xpos)
+int get_tile_div_mod(const int xpos)
 {
   // Determine tile column (xh) and the position within the tile (xl) from xpos.
 
@@ -3634,7 +3607,7 @@ inline int get_tile_div_mod(const int xpos)
     // Here we simulate these reads.
     // After tile_mod_tbl[] there are the following bytes:
     static const byte bogus[] = {0xF4, 0x02, 0x10, 0x1E, 0x2C, 0x3A, 0x48, 0x56, 0x64, 0x72, 0x80, 0x8E, 0x9C, 0xAA, 0xB8, 0xC6, 0xD4, 0xE2, 0xF0, 0xFE, 0x00, 0x0A, 0x00, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x0A, 0x0D, 0x00, 0x00, 0x00, 0x00};
-    if (xpos - tblSize < COUNT(bogus))
+    if ((int8_t)xpos - (int8_t)tblSize < (int8_t)COUNT(bogus))
     {
       xh = tile_mod_tbl[xpos - tblSize]; // simulating tile_div_tbl[xpos]
       xl = bogus[xpos - tblSize];        // simulating tile_mod_tbl[xpos]
@@ -3878,7 +3851,7 @@ int get_tile_at_char()
 // Get an image, with index and NULL checks.
 image_type *get_image(short chtab_id, int id)
 {
-  if (chtab_id < 0 || chtab_id > COUNT(chtab_addrs))
+  if ((ssize_t)chtab_id < 0 || (ssize_t)chtab_id > (ssize_t)COUNT(chtab_addrs))
   {
     //  printf("Tried to use chtab %d not in 0..%d\n", chtab_id, (int)COUNT(chtab_addrs));
     return NULL;
@@ -3898,7 +3871,7 @@ image_type *get_image(short chtab_id, int id)
 }
 
 // seg006:0723
-inline void set_char_collision()
+void set_char_collision()
 {
   image_type *image = get_image(obj_chtab, obj_id);
   if (image == NULL)
@@ -4970,7 +4943,7 @@ void move_coll_to_prev()
 }
 
 // seg004:0185
-inline void get_row_collision_data(short row, sbyte *row_coll_room_ptr, byte *row_coll_flags_ptr)
+void get_row_collision_data(short row, sbyte *row_coll_room_ptr, byte *row_coll_flags_ptr)
 {
   short right_wall_xpos;
   byte curr_flags;
@@ -7919,7 +7892,7 @@ void get_room_address(int room)
 }
 
 // seg008:2448
-inline void load_frame_to_obj()
+void load_frame_to_obj()
 {
   word chtab_base;
   chtab_base = id_chtab_2_kid;
