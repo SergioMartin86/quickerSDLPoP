@@ -1,5 +1,5 @@
 /*
-MiniPop, a barebones thread-safe version of SDLPop for routing
+quickerSDLPoP, a barebones thread-safe version of SDLPop for routing
 Copyright (C) 2021 Sergio Martin
 
 based on
@@ -25,12 +25,9 @@ The authors of this program may be contacted at https://forum.princed.org
 
 #pragma once
 
-#include "common.h"
 #include "const.h"
-#include <errno.h>
 #include <math.h>
 #include <string.h>
-#include <time.h>
 
 class quickerSDLPoP
 {
@@ -425,7 +422,7 @@ __INLINE__ void  find_exe_dir()
 {
   if (found_exe_dir)
     return;
-  snprintf_check(exe_dir, sizeof(exe_dir), "%s", "g_argv[0]");
+  snprintf(exe_dir, sizeof(exe_dir), "%s", "g_argv[0]");
   char *last_slash = NULL;
   char *pos = exe_dir;
   char c;
@@ -459,68 +456,9 @@ __INLINE__ const char *locate_file_(const char *filename, char *path_buffer, int
     // If failed, it may be that SDLPoP is being run from the wrong different working directory.
     // We can try to rescue the situation by loading from the directory of the executable.
     find_exe_dir();
-    snprintf_check(path_buffer, buffer_size, "%s/%s", exe_dir, filename);
+    snprintf(path_buffer, 8192, "%s/%s", exe_dir, filename);
     return (const char *)path_buffer;
   }
-}
-
-__INLINE__ directory_listing_type *create_directory_listing_and_find_first_file(const char *directory, const char *extension)
-{
-  directory_listing_type *data = (directory_listing_type*)calloc(1, sizeof(directory_listing_type));
-  bool ok = false;
-  data->dp = opendir(directory);
-  if (data->dp != NULL)
-  {
-    struct dirent *ep;
-    while ((ep = readdir(data->dp)))
-    {
-      char *ext = strrchr(ep->d_name, '.');
-      if (ext != NULL && strcasecmp(ext + 1, extension) == 0)
-      {
-        data->found_filename = ep->d_name;
-        data->extension = extension;
-        ok = true;
-        break;
-      }
-    }
-  }
-  if (ok)
-  {
-    return data;
-  }
-  else
-  {
-    free(data);
-    return NULL;
-  }
-}
-
-__INLINE__ char *get_current_filename_from_directory_listing(directory_listing_type *data)
-{
-  return data->found_filename;
-}
-
-__INLINE__ bool find_next_file(directory_listing_type *data)
-{
-  bool ok = false;
-  struct dirent *ep;
-  while ((ep = readdir(data->dp)))
-  {
-    char *ext = strrchr(ep->d_name, '.');
-    if (ext != NULL && strcasecmp(ext + 1, data->extension) == 0)
-    {
-      data->found_filename = ep->d_name;
-      ok = true;
-      break;
-    }
-  }
-  return ok;
-}
-
-__INLINE__ void  close_directory_listing(directory_listing_type *data)
-{
-  closedir(data->dp);
-  free(data);
 }
 
 // seg009:000D
@@ -561,13 +499,13 @@ __INLINE__ FILE *open_dat_from_root_or_data_dir(const char *filename)
   // if failed, try if the DAT file can be opened in the data/ directory, instead of the main folder
   if (fp == NULL)
   {
-    char data_path[POP_MAX_PATH];
-    snprintf_check(data_path, sizeof(data_path), "data/%s", filename);
+    char data_path[POP_MAX_PATH + 4096];
+    snprintf(data_path, sizeof(data_path), "data/%s", filename);
 
     if (!file_exists(data_path))
     {
       find_exe_dir();
-      snprintf_check(data_path, sizeof(data_path), "%s/data/%s", exe_dir, filename);
+      snprintf(data_path, sizeof(data_path), "%s/data/%s", exe_dir, filename);
     }
 
     // verify that this is a regular file and not a directory (otherwise, don't open)
@@ -585,7 +523,7 @@ __INLINE__ dat_type *__pascal open_dat(const char *filename, int drive)
   dat_table_type *dat_table = NULL;
 
   dat_type *pointer = (dat_type *)calloc(1, sizeof(dat_type));
-  snprintf_check(pointer->filename, sizeof(pointer->filename), "%s", filename);
+  snprintf(pointer->filename, sizeof(pointer->filename), "%s", filename);
   pointer->next_dat = dat_chain_ptr;
   dat_chain_ptr = pointer;
 
@@ -769,10 +707,12 @@ __INLINE__ void  load_from_opendats_metadata(int resource_id, const char *extens
       {
         filename_no_ext[len - 4] = '\0'; // terminate, so ".DAT" is deleted from the filename
       }
-      snprintf_check(image_filename, sizeof(image_filename), "data/%s/res%d.%s", filename_no_ext, resource_id, extension);
+      snprintf(image_filename, sizeof(image_filename), "data/%s/res%d.%s", filename_no_ext, resource_id, extension);
 
       // printf("loading (binary) %s",image_filename);
-      const char *filename = locate_file(image_filename);
+      
+      char newPath[8192];
+      const char *filename = locate_file_(image_filename, newPath, POP_MAX_PATH); 
       // printf("File: %s\n", filename);
       fp = fopen(filename, "rb");
       if (fp != NULL)
@@ -4856,9 +4796,9 @@ __INLINE__ void  get_row_collision_data(short row, sbyte *row_coll_room_ptr, byt
     left_wall_xpos = get_left_wall_xpos(room, column, row);
     right_wall_xpos = get_right_wall_xpos(room, column, row);
     // char bumps into left of wall
-    curr_flags = (left_wall_xpos < char_x_right_coll) * 0x0F;
+    curr_flags = left_wall_xpos < char_x_right_coll ? 0x0F : 0x00;
     // char bumps into right of wall
-    curr_flags |= (right_wall_xpos > char_x_left_coll) * 0xF0;
+    curr_flags |= right_wall_xpos > char_x_left_coll ? 0xF0 : 0x00;
     row_coll_flags_ptr[tile_col] = curr_flags;
     row_coll_room_ptr[tile_col] = curr_room;
     coll_tile_left_xpos += 14;

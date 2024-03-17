@@ -25,15 +25,8 @@ The authors of this program may be contacted at https://forum.princed.org
 
 #pragma once
 
-#include "common.h"
 #include "types.h"
-
-struct directory_listing_type
-{
-  DIR *dp;
-  char *found_filename;
-  const char *extension;
-};
+#include <dirent.h>
 
 #define VGA_PALETTE_DEFAULT \
   {                         \
