@@ -20,7 +20,7 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
       _emu.initialize(_sdlPopRootPath);
     }
 
-    static uint32_t advanceRNGState(const dword randomSeed)
+    static uint32_t advanceRNGState(const uint32_t randomSeed)
     {
       return randomSeed * 214013 + 2531011;
     }

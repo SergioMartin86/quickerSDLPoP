@@ -26,7 +26,6 @@ The authors of this program may be contacted at https://forum.princed.org
 #pragma once
 
 #include "types.h"
-#include <dirent.h>
 
 #define VGA_PALETTE_DEFAULT \
   {                         \
@@ -57,21 +56,21 @@ The authors of this program may be contacted at https://forum.princed.org
 #define SEQTBL_BASE 0x196E
 #define SEQTBL_0 (seqtbl - SEQTBL_BASE)
 
-// This expands a two-byte number into two comma-separated bytes, used for the JMP destinations
+// This expands a two-uint8_t number into two comma-separated bytes, used for the JMP destinations
 #define DW(data_word) (data_word) & 0x00FF, (((data_word)&0xFF00) >> 8)
 
 // Shorter notation for the sequence table instructions
 #define act(action) SEQ_ACTION, action
 #define jmp(dest) SEQ_JMP, DW(dest)
 #define jmp_if_feather(dest) SEQ_JMP_IF_FEATHER, DW(dest)
-#define dx(amount) SEQ_DX, (byte)amount
-#define dy(amount) SEQ_DY, (byte)amount
+#define dx(amount) SEQ_DX, (uint8_t)amount
+#define dy(amount) SEQ_DY, (uint8_t)amount
 #define snd(sound) SEQ_SOUND, sound
-#define set_fall(x, y) SEQ_SET_FALL, (byte)x, (byte)y
+#define set_fall(x, y) SEQ_SET_FALL, (uint8_t)x, (uint8_t)y
 
-// This splits the byte array into labeled "sections" that are packed tightly next to each other
+// This splits the uint8_t array into labeled "sections" that are packed tightly next to each other
 // However, it only seems to work correctly in the Debug configuration...
-//#define LABEL(label) }; const byte label##_eventual_ptr[] __attribute__ ((aligned(1))) = {
+//#define LABEL(label) }; const uint8_t label##_eventual_ptr[] __attribute__ ((aligned(1))) = {
 #define LABEL(label) // disable
 //#define OFFSET(label) label - seqtbl + SEQTBL_BASE
 
@@ -231,11 +230,11 @@ The authors of this program may be contacted at https://forum.princed.org
 #define Mclimb 19 + Mleave                 // SEQTBL_BASE + 2304  // 0x226E
 #define Mclimb_loop 2 + Mclimb             // SEQTBL_BASE + 2306  // 0x2270
 
-const word seqtbl_offsets[] = {
+const uint16_t seqtbl_offsets[] = {
   0x0000, startrun, stand, standjump, runjump, turn, runturn, stepfall, jumphangMed, hang, climbup, hangdrop, freefall, runstop, jumpup, fallhang, jumpbackhang, softland, jumpfall, stepfall2, medland, rjumpfall, hardland, hangfall, jumphangLong, hangstraight, rdiveroll, sdiveroll, highjump, step1, step2, step3, step4, step5, step6, step7, step8, step9, step10, step11, step12, step13, step14, turnrun, testfoot, bumpfall, hardbump, bump, superhijump, standup, stoop, impale, crush, deadfall, halve, engarde, charAdvance, retreat, strike, flee, turnengarde, striketoblock, readyblock, landengarde, bumpengfwd, bumpengback, blocktostrike, strikeadv, climbdown, blockedstrike, climbstairs, dropdead, stepback, climbfail, stabbed, faststrike, strikeret, alertstand, drinkpotion, crawl, alertturn, fightfall, efightfall, efightfallfwd, running, stabkill, fastadvance, goalertstand, arise, turndraw, guardengarde, pickupsword, resheathe, fastsheathe, Pstand, Vstand, Vwalk, Vstop, Palert, Pstepback, Vexit, Mclimb, Vraise, Plie, patchfall, Mscurry, Mstop, Mleave, Pembrace, Pwaiting, Pstroke, Prise, Pcrouch, Pslump, Mraise};
 
 // data:196E
-static const byte seqtbl[] = {
+static const uint8_t seqtbl[] = {
 
   LABEL(running) // running
   act(actions_1_run_jump),
@@ -1993,10 +1992,10 @@ static const byte seqtbl[] = {
   jmp(Mclimb_loop) // goto ":loop"
 
 };
-extern const byte seqtbl[]; // the sequence table is defined in seqtbl.c
-extern const word seqtbl_offsets[];
-static const byte optgraf_min[] = {0x01, 0x1E, 0x4B, 0x4E, 0x56, 0x65, 0x7F, 0x0A};
-static const byte optgraf_max[] = {0x09, 0x1F, 0x4D, 0x53, 0x5B, 0x7B, 0x8F, 0x0D};
+extern const uint8_t seqtbl[]; // the sequence table is defined in seqtbl.c
+extern const uint16_t seqtbl_offsets[];
+static const uint8_t optgraf_min[] = {0x01, 0x1E, 0x4B, 0x4E, 0x56, 0x65, 0x7F, 0x0A};
+static const uint8_t optgraf_max[] = {0x09, 0x1F, 0x4D, 0x53, 0x5B, 0x7B, 0x8F, 0x0D};
 
 static const char *const tbl_guard_dat[] = {"GUARD.DAT", "FAT.DAT", "SKEL.DAT", "VIZIER.DAT", "SHADOW.DAT"};
 static const char *const tbl_envir_gr[] = {"", "C", "C", "E", "E", "V"};
@@ -2004,34 +2003,34 @@ static const char *const tbl_envir_ki[] = {"DUNGEON", "PALACE"};
 static const rect_type rect_titles = {106, 24, 195, 296};
 
 static const short y_something[] = {-1, 62, 125, 188, 25};
-static const byte loose_sound[] = {0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0};
-static const word y_loose_land[] = {2, 65, 128, 191, 254};
-static const byte leveldoor_close_speeds[] = {0, 5, 17, 99, 0};
-static const byte gate_close_speeds[] = {0, 0, 0, 20, 40, 60, 80, 100, 120};
+static const uint8_t loose_sound[] = {0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0};
+static const uint16_t y_loose_land[] = {2, 65, 128, 191, 254};
+static const uint8_t leveldoor_close_speeds[] = {0, 5, 17, 99, 0};
+static const uint8_t gate_close_speeds[] = {0, 0, 0, 20, 40, 60, 80, 100, 120};
 static const int8_t door_delta[] = {-1, 4, 4};
-static const byte door_fram_slice[] = {67, 59, 58, 57, 56, 55, 54, 53, 52};
-static const word floor_left_overlay[] = {32, 151, 151, 150, 150, 151, 32, 32};
-static const byte spikes_fram_fore[] = {0, 139, 140, 141, 142, 143, 142, 140, 139, 0};
-static const byte chomper_fram_for[] = {106, 107, 108, 109, 110, 0};
-static const byte wall_fram_main[] = {8, 10, 6, 4};
-static const byte spikes_fram_left[] = {0, 128, 129, 130, 131, 132, 131, 129, 128, 0};
-static const byte potion_fram_bubb[] = {0, 16, 17, 18, 19, 20, 21, 22};
-static const byte chomper_fram1[] = {3, 2, 0, 1, 4, 3, 3, 0};
-static const byte chomper_fram_bot[] = {101, 102, 103, 104, 105, 0};
-static const byte chomper_fram_top[] = {0, 0, 111, 112, 113, 0};
-static const byte chomper_fram_y[] = {0, 0, 0x25, 0x2F, 0x32};
-static const byte loose_fram_left[] = {41, 69, 41, 70, 70, 41, 41, 41, 70, 70, 70, 0};
-static const byte loose_fram_bottom[] = {43, 73, 43, 74, 74, 43, 43, 43, 74, 74, 74, 0};
-static const byte wall_fram_bottom[] = {7, 9, 5, 3};
-static const byte spikes_fram_right[] = {0, 134, 135, 136, 137, 138, 137, 135, 134, 0};
-static const byte loose_fram_right[] = {42, 71, 42, 72, 72, 42, 42, 42, 72, 72, 72, 0};
-static const byte blueline_fram1[] = {0, 124, 125, 126};
-static const sbyte blueline_fram_y[] = {0, -20, -20, 0};
-static const byte blueline_fram3[] = {44, 44, 45, 45};
-static const byte doortop_fram_bot[] = {78, 80, 82, 0};
-static const byte door_fram_top[] = {60, 61, 62, 63, 64, 65, 66, 67};
-static const byte doortop_fram_top[] = {0, 81, 83, 0};
-static const word col_xh[] = {0, 4, 8, 12, 16, 20, 24, 28, 32, 36};
+static const uint8_t door_fram_slice[] = {67, 59, 58, 57, 56, 55, 54, 53, 52};
+static const uint16_t floor_left_overlay[] = {32, 151, 151, 150, 150, 151, 32, 32};
+static const uint8_t spikes_fram_fore[] = {0, 139, 140, 141, 142, 143, 142, 140, 139, 0};
+static const uint8_t chomper_fram_for[] = {106, 107, 108, 109, 110, 0};
+static const uint8_t wall_fram_main[] = {8, 10, 6, 4};
+static const uint8_t spikes_fram_left[] = {0, 128, 129, 130, 131, 132, 131, 129, 128, 0};
+static const uint8_t potion_fram_bubb[] = {0, 16, 17, 18, 19, 20, 21, 22};
+static const uint8_t chomper_fram1[] = {3, 2, 0, 1, 4, 3, 3, 0};
+static const uint8_t chomper_fram_bot[] = {101, 102, 103, 104, 105, 0};
+static const uint8_t chomper_fram_top[] = {0, 0, 111, 112, 113, 0};
+static const uint8_t chomper_fram_y[] = {0, 0, 0x25, 0x2F, 0x32};
+static const uint8_t loose_fram_left[] = {41, 69, 41, 70, 70, 41, 41, 41, 70, 70, 70, 0};
+static const uint8_t loose_fram_bottom[] = {43, 73, 43, 74, 74, 43, 43, 43, 74, 74, 74, 0};
+static const uint8_t wall_fram_bottom[] = {7, 9, 5, 3};
+static const uint8_t spikes_fram_right[] = {0, 134, 135, 136, 137, 138, 137, 135, 134, 0};
+static const uint8_t loose_fram_right[] = {42, 71, 42, 72, 72, 42, 42, 42, 72, 72, 72, 0};
+static const uint8_t blueline_fram1[] = {0, 124, 125, 126};
+static const int8_t blueline_fram_y[] = {0, -20, -20, 0};
+static const uint8_t blueline_fram3[] = {44, 44, 45, 45};
+static const uint8_t doortop_fram_bot[] = {78, 80, 82, 0};
+static const uint8_t door_fram_top[] = {60, 61, 62, 63, 64, 65, 66, 67};
+static const uint8_t doortop_fram_top[] = {0, 81, 83, 0};
+static const uint16_t col_xh[] = {0, 4, 8, 12, 16, 20, 24, 28, 32, 36};
 
 static const piece tile_table[31] = {
   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},        // 0x00 empty
@@ -2067,7 +2066,7 @@ static const piece tile_table[31] = {
   {97, 1, 0, 98, 1, 2, 0, 0, 43, 100, 0, 0},   // 0x1E debris with torch
 };
 
-static const byte sound_prio_table[] = {
+static const uint8_t sound_prio_table[] = {
   0x14, // sound_0_fell_to_death
   0x1E, // sound_1_falling
   0x23, // sound_2_tile_crashing
@@ -2127,7 +2126,7 @@ static const byte sound_prio_table[] = {
   0x01, // sound_56_ending_music
   0x00};
 
-static const byte sound_pcspeaker_exists[] = {
+static const uint8_t sound_pcspeaker_exists[] = {
   1, // sound_0_fell_to_death
   0, // sound_1_falling
   1, // sound_2_tile_crashing
@@ -2215,15 +2214,15 @@ static char const *const tbl_quotes[2] = {
 
 #ifdef USE_COPYPROT
 // data:017A
-static const word copyprot_word[] = {9, 1, 6, 4, 5, 3, 6, 3, 4, 4, 3, 2, 12, 5, 13, 1, 9, 2, 2, 4, 9, 4, 11, 8, 5, 4, 1, 6, 2, 4, 6, 8, 4, 2, 7, 11, 5, 4, 1, 2};
+static const uint16_t copyprot_word[] = {9, 1, 6, 4, 5, 3, 6, 3, 4, 4, 3, 2, 12, 5, 13, 1, 9, 2, 2, 4, 9, 4, 11, 8, 5, 4, 1, 6, 2, 4, 6, 8, 4, 2, 7, 11, 5, 4, 1, 2};
 // data:012A
-static const word copyprot_line[] = {2, 1, 5, 4, 3, 5, 1, 3, 7, 2, 2, 4, 6, 6, 2, 6, 3, 1, 2, 3, 2, 2, 3, 10, 5, 6, 5, 6, 3, 5, 7, 2, 2, 4, 5, 7, 2, 6, 5, 5};
+static const uint16_t copyprot_line[] = {2, 1, 5, 4, 3, 5, 1, 3, 7, 2, 2, 4, 6, 6, 2, 6, 3, 1, 2, 3, 2, 2, 3, 10, 5, 6, 5, 6, 3, 5, 7, 2, 2, 4, 5, 7, 2, 6, 5, 5};
 // data:00DA
-static const word copyprot_page[] = {5, 3, 7, 3, 3, 4, 1, 5, 12, 5, 11, 10, 1, 2, 8, 8, 2, 4, 6, 1, 4, 7, 3, 2, 1, 7, 10, 1, 4, 3, 4, 1, 4, 1, 8, 1, 1, 10, 3, 3};
+static const uint16_t copyprot_page[] = {5, 3, 7, 3, 3, 4, 1, 5, 12, 5, 11, 10, 1, 2, 8, 8, 2, 4, 6, 1, 4, 7, 3, 2, 1, 7, 10, 1, 4, 3, 4, 1, 4, 1, 8, 1, 1, 10, 3, 3};
 #endif
 
-static const sbyte wall_dist_from_left[] = {0, 10, 0, -1, 0, 0};
-static const sbyte wall_dist_from_right[] = {0, 0, 10, 13, 0, 0};
+static const int8_t wall_dist_from_left[] = {0, 10, 0, -1, 0, 0};
+static const int8_t wall_dist_from_right[] = {0, 0, 10, 13, 0, 0};
 
 // data:1712
 static const sword_table_type sword_tbl[] = {
@@ -2281,11 +2280,11 @@ static const sword_table_type sword_tbl[] = {
 };
 
 // data:22A6
-static const sbyte tile_div_tbl[256] = {
+static const int8_t tile_div_tbl[256] = {
   -5, -5, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -3, -3, -3, -3, -3, -3, -3, -3, -3, -3, -3, -3, -3, -3, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 14, 14};
 
 // data:23A6
-static const byte tile_mod_tbl[256] = {
+static const uint8_t tile_mod_tbl[256] = {
   12, 13, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 0, 1};
 
 // data:0FE0
@@ -2671,17 +2670,17 @@ static const frame_type frame_tbl_cuts[] = {
 static const rect_type screen_rect = {0, 0, 200, 320};
 // 1.0//static const char copyprot_letter[] = {'A', 'A', 'B', 'B', 'C', 'C', 'D', 'D', 'E', 'F', 'F', 'G', 'H', 'H', 'I', 'I', 'J', 'J', 'K', 'L', 'L', 'M', 'M', 'N', 'O', 'O', 'P', 'P', 'R', 'R', 'S', 'S', 'T', 'T', 'U', 'U', 'V', 'Y', 'W', 'Y'};
 static const char copyprot_letter[] = {'W', 'O', 'E', 'S', 'P', 'B', 'Y', 'S', 'K', 'J', 'T', 'B', 'C', 'F', 'E', 'S', 'K', 'M', 'M', 'T', 'P', 'Y', 'K', 'C', 'G', 'S', 'U', 'L', 'J', 'C', 'D', 'I', 'L', 'T', 'T', 'A', 'M', 'C', 'S', 'G'};
-static const word tbl_line[] = {0, 10, 20};
-static const byte chtab_flip_clip[10] = {1, 0, 1, 1, 1, 1, 0, 0, 0, 0};
-static const byte chtab_shift[10] = {0, 1, 0, 0, 0, 0, 1, 1, 1, 0};
+static const uint16_t tbl_line[] = {0, 10, 20};
+static const uint8_t chtab_flip_clip[10] = {1, 0, 1, 1, 1, 1, 0, 0, 0, 0};
+static const uint8_t chtab_shift[10] = {0, 1, 0, 0, 0, 0, 1, 1, 1, 0};
 static const rect_type rect_top = {0, 0, 192, 320};
 static const rect_type rect_bottom_text = {193, 70, 202, 250};
 static const short y_land[] = {-8, 55, 118, 181, 244};
-static const word copyprot_tile[] = {1, 5, 7, 9, 11, 21, 1, 3, 7, 11, 17, 21, 25, 27};
-static const byte x_bump[] = {244, 2, 16, 30, 44, 58, 72, 86, 100, 114, 128, 142, 156, 170, 184, 198, 212, 226, 240, 254}; // 244 = -12
+static const uint16_t copyprot_tile[] = {1, 5, 7, 9, 11, 21, 1, 3, 7, 11, 17, 21, 25, 27};
+static const uint8_t x_bump[] = {244, 2, 16, 30, 44, 58, 72, 86, 100, 114, 128, 142, 156, 170, 184, 198, 212, 226, 240, 254}; // 244 = -12
 static const short y_clip[] = {-60, 3, 66, 129, 192};
-static const sbyte dir_front[] = {-1, 1};
-static const sbyte dir_behind[] = {1, -1};
+static const int8_t dir_front[] = {-1, 1};
+static const int8_t dir_behind[] = {1, -1};
 
 static custom_options_type custom_defaults = {
   .start_minutes_left = 60,

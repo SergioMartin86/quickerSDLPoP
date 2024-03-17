@@ -25,17 +25,6 @@ The authors of this program may be contacted at https://forum.princed.org
 
 #pragma once
 
-  //#if !defined(_MSC_VER)
-  //# include <SDL2/SDL.h>
-  //# include <SDL2/SDL_image.h>
-  //#else
-  // These headers for SDL seem to be the pkgconfig/meson standard as per the
-  // latest versions. If the old ones should be used, the ifdef must be used
-  // to compare versions.
-  #include <SDL.h>
-  #include <SDL_image.h>
-//#endif
-
   #define MAX_CACHED_FILES 2048
   #define POP_MAX_PATH 1024
   #define POP_MAX_OPTIONS_SIZE 256
@@ -43,16 +32,6 @@ The authors of this program may be contacted at https://forum.princed.org
   #if SDL_BYTEORDER != SDL_LIL_ENDIAN
     #error This program is not (yet) prepared for big endian CPUs, please contact the author.
   #endif
-
-  // This macro is from SDL_types.h / SDL_stdinc.h .
-  // It used to be #undefined at the end of that file, but since some time in 2006 it's kept available.
-  // And SDL's definition changed in SDL 2.0.6, which caused a warning at this redefinition.
-  // So we should just use the macro from SDL and not define our own.
-  /* Make sure the types really have the right sizes */
-  /*
-  #define SDL_COMPILE_TIME_ASSERT(name, x)               \
-         typedef int SDL_dummy_ ## name[(x) * 2 - 1]
-  */
 
   // "far" and "near" makes sense only for 16-bit
   #define far
@@ -67,11 +46,6 @@ The authors of this program may be contacted at https://forum.princed.org
   #define memcpy_near memcpy
   #define memcpy_far memcpy
 
-typedef Uint8 byte;
-typedef Sint8 sbyte;
-typedef Uint16 word;
-typedef Uint32 dword;
-
 typedef struct rect_type
 {
   short top, left, bottom, right;
@@ -79,45 +53,45 @@ typedef struct rect_type
 
 typedef struct piece
 {
-  byte base_id;
-  byte floor_left;
-  sbyte base_y;
-  byte right_id;
-  byte floor_right;
-  sbyte right_y;
-  byte stripe_id;
-  byte topright_id;
-  byte bottom_id;
-  byte fore_id;
-  byte fore_x;
-  sbyte fore_y;
+  uint8_t base_id;
+  uint8_t floor_left;
+  int8_t base_y;
+  uint8_t right_id;
+  uint8_t floor_right;
+  int8_t right_y;
+  uint8_t stripe_id;
+  uint8_t topright_id;
+  uint8_t bottom_id;
+  uint8_t fore_id;
+  uint8_t fore_x;
+  int8_t fore_y;
 } piece;
 typedef struct tile_and_mod
 {
-  byte tiletype;
-  byte modifier;
+  uint8_t tiletype;
+  uint8_t modifier;
 } tile_and_mod;
 
-typedef int __pascal far (*add_table_type)(short chtab_id, int id, sbyte xh, sbyte xl, int ybottom, int blit, byte peel);
+typedef int __pascal far (*add_table_type)(short chtab_id, int id, int8_t xh, int8_t xl, int ybottom, int blit, uint8_t peel);
 
 typedef struct back_table_type
 {
-  sbyte xh;
-  sbyte xl;
+  int8_t xh;
+  int8_t xl;
   short y;
-  byte chtab_id;
-  byte id;
+  uint8_t chtab_id;
+  uint8_t id;
   int blit;
 } back_table_type;
 
 typedef struct midtable_type
 {
-  sbyte xh;
-  sbyte xl;
+  int8_t xh;
+  int8_t xl;
   short y;
-  byte chtab_id;
-  byte id;
-  byte peel;
+  uint8_t chtab_id;
+  uint8_t id;
+  uint8_t peel;
   rect_type clip;
   int blit;
 } midtable_type;
@@ -126,10 +100,10 @@ typedef struct wipetable_type
 {
   short left;
   short bottom;
-  sbyte height;
+  int8_t height;
   short width;
-  sbyte color;
-  sbyte layer;
+  int8_t color;
+  int8_t layer;
 } wipetable_type;
 
 enum soundflags
@@ -243,34 +217,34 @@ enum sound_modes
   #pragma pack(push, 1)
 typedef struct link_type
 {
-  byte left, right, up, down;
+  uint8_t left, right, up, down;
 } link_type;
 
 typedef struct level_type
 {
-  byte fg[720];
-  byte bg[720];
-  byte doorlinks1[256];
-  byte doorlinks2[256];
+  uint8_t fg[720];
+  uint8_t bg[720];
+  uint8_t doorlinks1[256];
+  uint8_t doorlinks2[256];
   link_type roomlinks[24];
-  byte used_rooms;
-  byte roomxs[24];
-  byte roomys[24];
-  byte fill_1[15];
-  byte start_room;
-  byte start_pos;
-  sbyte start_dir;
-  byte fill_2[4];
-  byte guards_tile[24];
-  byte guards_dir[24];
-  byte guards_x[24];
-  byte guards_seq_lo[24];
-  byte guards_skill[24];
-  byte guards_seq_hi[24];
-  byte guards_color[24];
-  byte fill_3[18];
+  uint8_t used_rooms;
+  uint8_t roomxs[24];
+  uint8_t roomys[24];
+  uint8_t fill_1[15];
+  uint8_t start_room;
+  uint8_t start_pos;
+  int8_t start_dir;
+  uint8_t fill_2[4];
+  uint8_t guards_tile[24];
+  uint8_t guards_dir[24];
+  uint8_t guards_x[24];
+  uint8_t guards_seq_lo[24];
+  uint8_t guards_skill[24];
+  uint8_t guards_seq_hi[24];
+  uint8_t guards_color[24];
+  uint8_t fill_3[18];
 } level_type;
-SDL_COMPILE_TIME_ASSERT(level_size, sizeof(level_type) == 2305);
+static_assert(sizeof(level_type) == 2305);
   #pragma pack(pop)
 
 typedef struct image_type
@@ -281,15 +255,14 @@ typedef struct image_type
 
 typedef struct peel_type
 {
-  SDL_Surface *peel;
   rect_type rect;
 } peel_type;
 
 typedef struct chtab_type
 {
-  word n_images;
-  word chtab_palette_bits;
-  word has_palette_bits;
+  uint16_t n_images;
+  uint16_t chtab_palette_bits;
+  uint16_t has_palette_bits;
   // This is a variable-size array, with n_images elements.
   image_type *far images[];
 } chtab_type;
@@ -305,41 +278,41 @@ typedef struct full_image_type
   #pragma pack(push, 1)
 typedef struct rgb_type
 {
-  byte r, g, b;
+  uint8_t r, g, b;
 } rgb_type;
 typedef struct dat_pal_type
 {
-  word row_bits;
-  byte n_colors;
+  uint16_t row_bits;
+  uint8_t n_colors;
   rgb_type vga[16];
-  byte cga[16];
-  byte ega[32];
+  uint8_t cga[16];
+  uint8_t ega[32];
 } dat_pal_type;
 typedef struct dat_shpl_type
 {
-  byte n_images;
+  uint8_t n_images;
   dat_pal_type palette;
 } dat_shpl_type;
-SDL_COMPILE_TIME_ASSERT(dat_shpl_size, sizeof(dat_shpl_type) == 100);
+static_assert(sizeof(dat_shpl_type) == 100);
   #pragma pack(pop)
 
 typedef struct char_type
 {
-  byte frame;
-  byte x;
-  byte y;
-  sbyte direction;
-  sbyte curr_col;
-  sbyte curr_row;
-  byte action;
-  sbyte fall_x;
-  sbyte fall_y;
-  byte room;
-  byte repeat;
-  byte charid;
-  byte sword;
-  sbyte alive;
-  word curr_seq;
+  uint8_t frame;
+  uint8_t x;
+  uint8_t y;
+  int8_t direction;
+  int8_t curr_col;
+  int8_t curr_row;
+  uint8_t action;
+  int8_t fall_x;
+  int8_t fall_y;
+  uint8_t room;
+  uint8_t repeat;
+  uint8_t charid;
+  uint8_t sword;
+  int8_t alive;
+  uint16_t curr_seq;
 } char_type;
 
 enum charids
@@ -376,33 +349,33 @@ typedef struct auto_move_type
 */
 typedef struct objtable_type
 {
-  sbyte xh;
-  sbyte xl;
+  int8_t xh;
+  int8_t xl;
   short y;
-  byte chtab_id;
-  byte id;
-  sbyte direction;
-  byte obj_type;
+  uint8_t chtab_id;
+  uint8_t id;
+  int8_t direction;
+  uint8_t obj_type;
   rect_type clip;
-  byte tilepos;
+  uint8_t tilepos;
 } objtable_type;
 
 typedef struct frame_type
 {
-  byte image;
+  uint8_t image;
 
   // 0x3F: sword image
   // 0xC0: chtab
-  byte sword;
+  uint8_t sword;
 
-  sbyte dx;
-  sbyte dy;
+  int8_t dx;
+  int8_t dy;
 
   // 0x1F: weight x
   // 0x20: thin
   // 0x40: needs floor
   // 0x80: even/odd pixel
-  byte flags;
+  uint8_t flags;
 } frame_type;
 
 enum frame_flags
@@ -415,19 +388,19 @@ enum frame_flags
 
 typedef struct trob_type
 {
-  byte tilepos;
-  byte room;
-  sbyte type;
+  uint8_t tilepos;
+  uint8_t room;
+  int8_t type;
 } trob_type;
 
 typedef struct mob_type
 {
-  byte xh;
-  byte y;
-  byte room;
-  sbyte speed;
-  byte type;
-  byte row;
+  uint8_t xh;
+  uint8_t y;
+  uint8_t room;
+  int8_t speed;
+  uint8_t type;
+  uint8_t row;
 } mob_type;
 
 enum directions
@@ -452,42 +425,42 @@ enum actions
 
 typedef struct sword_table_type
 {
-  byte id;
-  sbyte x;
-  sbyte y;
+  uint8_t id;
+  int8_t x;
+  int8_t y;
 } sword_table_type;
 
   #pragma pack(push, 1)
 typedef struct dat_header_type
 {
-  Uint32 table_offset;
-  Uint16 table_size;
+  uint32_t table_offset;
+  uint16_t table_size;
 } dat_header_type;
-SDL_COMPILE_TIME_ASSERT(dat_header_size, sizeof(dat_header_type) == 6);
+static_assert(sizeof(dat_header_type) == 6);
 
 typedef struct dat_res_type
 {
-  Uint16 id;
-  Uint32 offset;
-  Uint16 size;
+  uint16_t id;
+  uint32_t offset;
+  uint16_t size;
 } dat_res_type;
-SDL_COMPILE_TIME_ASSERT(dat_res_size, sizeof(dat_res_type) == 8);
+static_assert(sizeof(dat_res_type) == 8);
 
 typedef struct dat_table_type
 {
-  Uint16 res_count;
+  uint16_t res_count;
   dat_res_type entries[];
 } dat_table_type;
-SDL_COMPILE_TIME_ASSERT(dat_table_size, sizeof(dat_table_type) == 2);
+static_assert(sizeof(dat_table_type) == 2);
 
 typedef struct image_data_type
 {
-  Uint16 height;
-  Uint16 width;
-  Uint16 flags;
-  byte data[];
+  uint16_t height;
+  uint16_t width;
+  uint16_t flags;
+  uint8_t data[];
 } image_data_type;
-SDL_COMPILE_TIME_ASSERT(image_data_size, sizeof(image_data_type) == 6);
+static_assert(sizeof(image_data_type) == 6);
   #pragma pack(pop)
 
 typedef struct dat_type
@@ -500,60 +473,6 @@ typedef struct dat_type
 } dat_type;
 
 typedef void __pascal far (*cutscene_ptr_type)();
-
-  #ifdef USE_FADE
-typedef struct palette_fade_type
-{
-  word which_rows;
-  word wait_time;
-  word fade_pos;
-  rgb_type original_pal[256];
-  rgb_type faded_pal[256];
-  int __pascal far (*proc_fade_frame)(struct palette_fade_type far *palette_buffer);
-  void __pascal far (*proc_restore_free)(struct palette_fade_type far *palette_buffer);
-} palette_fade_type;
-  #endif
-
-  #ifndef O_BINARY
-    #define O_BINARY 0
-  #endif
-
-  #ifdef USE_TEXT
-typedef struct font_type
-{
-  byte first_char;
-  byte last_char;
-  short height_above_baseline;
-  short height_below_baseline;
-  short space_between_lines;
-  short space_between_chars;
-  chtab_type *chtab;
-} font_type;
-
-typedef struct textstate_type
-{
-  short current_x;
-  short current_y;
-  short textblit;
-  short textcolor;
-  font_type *ptr_font;
-} textstate_type;
-
-    #pragma pack(push, 1)
-typedef struct rawfont_type
-{
-  byte first_char;
-  byte last_char;
-  short height_above_baseline;
-  short height_below_baseline;
-  short space_between_lines;
-  short space_between_chars;
-  word offsets[];
-} rawfont_type;
-SDL_COMPILE_TIME_ASSERT(rawfont_type, sizeof(rawfont_type) == 10);
-    #pragma pack(pop)
-
-  #endif
 
 typedef enum data_location
 {
@@ -574,52 +493,52 @@ enum sound_type
   #pragma pack(push, 1)
 typedef struct note_type
 {
-  word frequency; // 0x00 or 0x01 = rest, 0x12 = end
-  byte length;
+  uint16_t frequency; // 0x00 or 0x01 = rest, 0x12 = end
+  uint8_t length;
 } note_type;
-SDL_COMPILE_TIME_ASSERT(note_type, sizeof(note_type) == 3);
+static_assert(sizeof(note_type) == 3);
 typedef struct speaker_type
 { // IBM
-  word tempo;
+  uint16_t tempo;
   note_type notes[];
 } speaker_type;
-SDL_COMPILE_TIME_ASSERT(speaker_type, sizeof(speaker_type) == 2);
+static_assert(sizeof(speaker_type) == 2);
 
 typedef struct digi_type
 { // wave in 1.0 and 1.1
-  word sample_rate;
-  word sample_count;
-  word unknown;
-  byte sample_size; // =8
-  byte samples[];
+  uint16_t sample_rate;
+  uint16_t sample_count;
+  uint16_t unknown;
+  uint8_t sample_size; // =8
+  uint8_t samples[];
 } digi_type;
-SDL_COMPILE_TIME_ASSERT(digi_type, sizeof(digi_type) == 7);
+static_assert(sizeof(digi_type) == 7);
 
 typedef struct digi_new_type
 { // wave in 1.3 and 1.4 (and PoP2)
-  word sample_rate;
-  byte sample_size; // =8
-  word sample_count;
-  word unknown;
-  word unknown2;
-  byte samples[];
+  uint16_t sample_rate;
+  uint8_t sample_size; // =8
+  uint16_t sample_count;
+  uint16_t unknown;
+  uint16_t unknown2;
+  uint8_t samples[];
 } digi_new_type;
-SDL_COMPILE_TIME_ASSERT(digi_new_type, sizeof(digi_new_type) == 9);
+static_assert(sizeof(digi_new_type) == 9);
 
 typedef struct midi_type
 {
   char chunk_type[4];
-  dword chunk_length;
+  uint32_t chunk_length;
   union
   {
     struct
     {
-      word format;
-      word num_tracks;
-      word delta;
-      byte tracks[0];
+      uint16_t format;
+      uint16_t num_tracks;
+      uint16_t delta;
+      uint8_t tracks[0];
     } header;
-    byte data[0];
+    uint8_t data[0];
   };
 
 } midi_type;
@@ -632,7 +551,7 @@ typedef struct converted_audio_type
 
 typedef struct sound_buffer_type
 {
-  byte type;
+  uint8_t type;
   union
   {
     speaker_type speaker;
@@ -646,43 +565,43 @@ typedef struct sound_buffer_type
 typedef struct midi_raw_chunk_type
 {
   char chunk_type[4];
-  dword chunk_length;
+  uint32_t chunk_length;
   union
   {
     struct
     {
-      word format;
-      word num_tracks;
-      word time_division;
-      byte tracks[0];
+      uint16_t format;
+      uint16_t num_tracks;
+      uint16_t time_division;
+      uint8_t tracks[0];
     } header;
-    byte data[0];
+    uint8_t data[0];
   };
 
 } midi_raw_chunk_type;
 
 typedef struct midi_event_type
 {
-  dword delta_time;
-  byte event_type;
+  uint32_t delta_time;
+  uint8_t event_type;
   union
   {
     struct
     {
-      byte channel;
-      byte param1;
-      byte param2;
+      uint8_t channel;
+      uint8_t param1;
+      uint8_t param2;
     } channel;
     struct
     {
-      dword length;
-      byte *data;
+      uint32_t length;
+      uint8_t *data;
     } sysex;
     struct
     {
-      byte type;
-      dword length;
-      byte *data;
+      uint8_t type;
+      uint32_t length;
+      uint8_t *data;
     } meta;
   };
 
@@ -690,7 +609,7 @@ typedef struct midi_event_type
 
 typedef struct midi_track_type
 {
-  dword size;
+  uint32_t size;
   int num_events;
   midi_event_type *events;
   int event_index;
@@ -701,27 +620,27 @@ typedef struct parsed_midi_type
 {
   int num_tracks;
   midi_track_type *tracks;
-  dword ticks_per_beat;
+  uint32_t ticks_per_beat;
 } parsed_midi_type;
 
   #pragma pack(push, 1)
 typedef struct operator_type
 {
-  byte mul;
-  byte ksl_tl;
-  byte a_d;
-  byte s_r;
-  byte waveform;
+  uint8_t mul;
+  uint8_t ksl_tl;
+  uint8_t a_d;
+  uint8_t s_r;
+  uint8_t waveform;
 } operator_type;
 
 typedef struct instrument_type
 {
-  byte blocknum_low;
-  byte blocknum_high;
-  byte FB_conn;
+  uint8_t blocknum_low;
+  uint8_t blocknum_high;
+  uint8_t FB_conn;
   operator_type operators[2];
-  byte percussion;
-  byte unknown[2];
+  uint8_t percussion;
+  uint8_t unknown[2];
 } instrument_type;
   #pragma pack(pop)
 
@@ -744,7 +663,7 @@ typedef struct dialog_type
   dialog_settings_type *settings;
   rect_type text_rect;
   rect_type peel_rect;
-  word has_peel;
+  uint16_t has_peel;
   peel_type *peel;
 } dialog_type;
 
@@ -1239,18 +1158,18 @@ typedef struct key_value_type
 
 typedef struct names_list_type
 {
-  byte type; // 0 = names list, 1 = key/value pair list
+  uint8_t type; // 0 = names list, 1 = key/value pair list
   union
   {
     struct
     {
       const char (*data)[][MAX_OPTION_VALUE_NAME_LENGTH];
-      word count;
+      uint16_t count;
     } names;
     struct
     {
       key_value_type *data;
-      word count;
+      uint16_t count;
     } kv_pairs;
   };
 } names_list_type;
@@ -1267,151 +1186,151 @@ typedef struct names_list_type
   #pragma pack(push, 1)
 typedef struct fixes_options_type
 {
-  byte enable_crouch_after_climbing;
-  byte enable_freeze_time_during_end_music;
-  byte enable_remember_guard_hp;
-  byte fix_gate_sounds;
-  byte fix_two_coll_bug;
-  byte fix_infinite_down_bug;
-  byte fix_gate_drawing_bug;
-  byte fix_bigpillar_climb;
-  byte fix_jump_distance_at_edge;
-  byte fix_edge_distance_check_when_climbing;
-  byte fix_painless_fall_on_guard;
-  byte fix_wall_bump_triggers_tile_below;
-  byte fix_stand_on_thin_air;
-  byte fix_press_through_closed_gates;
-  byte fix_grab_falling_speed;
-  byte fix_skeleton_chomper_blood;
-  byte fix_move_after_drink;
-  byte fix_loose_left_of_potion;
-  byte fix_guard_following_through_closed_gates;
-  byte fix_safe_landing_on_spikes;
-  byte fix_glide_through_wall;
-  byte fix_drop_through_tapestry;
-  byte fix_land_against_gate_or_tapestry;
-  byte fix_unintended_sword_strike;
-  byte fix_retreat_without_leaving_room;
-  byte fix_running_jump_through_tapestry;
-  byte fix_push_guard_into_wall;
-  byte fix_jump_through_wall_above_gate;
-  byte fix_chompers_not_starting;
-  byte fix_feather_interrupted_by_leveldoor;
-  byte fix_offscreen_guards_disappearing;
-  byte fix_move_after_sheathe;
-  byte fix_hidden_floors_during_flashing;
-  byte fix_hang_on_teleport;
-  byte fix_exit_door;
-  byte fix_quicksave_during_feather;
-  byte fix_quicksave_during_lvl1_music;
+  uint8_t enable_crouch_after_climbing;
+  uint8_t enable_freeze_time_during_end_music;
+  uint8_t enable_remember_guard_hp;
+  uint8_t fix_gate_sounds;
+  uint8_t fix_two_coll_bug;
+  uint8_t fix_infinite_down_bug;
+  uint8_t fix_gate_drawing_bug;
+  uint8_t fix_bigpillar_climb;
+  uint8_t fix_jump_distance_at_edge;
+  uint8_t fix_edge_distance_check_when_climbing;
+  uint8_t fix_painless_fall_on_guard;
+  uint8_t fix_wall_bump_triggers_tile_below;
+  uint8_t fix_stand_on_thin_air;
+  uint8_t fix_press_through_closed_gates;
+  uint8_t fix_grab_falling_speed;
+  uint8_t fix_skeleton_chomper_blood;
+  uint8_t fix_move_after_drink;
+  uint8_t fix_loose_left_of_potion;
+  uint8_t fix_guard_following_through_closed_gates;
+  uint8_t fix_safe_landing_on_spikes;
+  uint8_t fix_glide_through_wall;
+  uint8_t fix_drop_through_tapestry;
+  uint8_t fix_land_against_gate_or_tapestry;
+  uint8_t fix_unintended_sword_strike;
+  uint8_t fix_retreat_without_leaving_room;
+  uint8_t fix_running_jump_through_tapestry;
+  uint8_t fix_push_guard_into_wall;
+  uint8_t fix_jump_through_wall_above_gate;
+  uint8_t fix_chompers_not_starting;
+  uint8_t fix_feather_interrupted_by_leveldoor;
+  uint8_t fix_offscreen_guards_disappearing;
+  uint8_t fix_move_after_sheathe;
+  uint8_t fix_hidden_floors_during_flashing;
+  uint8_t fix_hang_on_teleport;
+  uint8_t fix_exit_door;
+  uint8_t fix_quicksave_during_feather;
+  uint8_t fix_quicksave_during_lvl1_music;
 } fixes_options_type;
 
   #define NUM_GUARD_SKILLS 12
 
 typedef struct custom_options_type
 {
-  word start_minutes_left;
-  word start_ticks_left;
-  word start_hitp;
-  word max_hitp_allowed;
-  word saving_allowed_first_level;
-  word saving_allowed_last_level;
-  byte start_upside_down;
-  byte start_in_blind_mode;
-  word copyprot_level;
-  byte drawn_tile_top_level_edge;
-  byte drawn_tile_left_level_edge;
-  byte level_edge_hit_tile;
-  byte allow_triggering_any_tile;
-  byte enable_wda_in_palace;
+  uint16_t start_minutes_left;
+  uint16_t start_ticks_left;
+  uint16_t start_hitp;
+  uint16_t max_hitp_allowed;
+  uint16_t saving_allowed_first_level;
+  uint16_t saving_allowed_last_level;
+  uint8_t start_upside_down;
+  uint8_t start_in_blind_mode;
+  uint16_t copyprot_level;
+  uint8_t drawn_tile_top_level_edge;
+  uint8_t drawn_tile_left_level_edge;
+  uint8_t level_edge_hit_tile;
+  uint8_t allow_triggering_any_tile;
+  uint8_t enable_wda_in_palace;
   rgb_type vga_palette[16];
-  word first_level;
-  byte skip_title;
-  word shift_L_allowed_until_level;
-  word shift_L_reduced_minutes;
-  word shift_L_reduced_ticks;
-  word demo_hitp;
-  word demo_end_room;
-  word intro_music_level;
-  word intro_music_time_initial;
-  word intro_music_time_restart;
-  word have_sword_from_level;
-  word checkpoint_level;
-  sbyte checkpoint_respawn_dir;
-  byte checkpoint_respawn_room;
-  byte checkpoint_respawn_tilepos;
-  byte checkpoint_clear_tile_room;
-  byte checkpoint_clear_tile_col;
-  byte checkpoint_clear_tile_row;
-  word skeleton_level;
-  byte skeleton_room;
-  byte skeleton_trigger_column_1;
-  byte skeleton_trigger_column_2;
-  byte skeleton_column;
-  byte skeleton_row;
-  byte skeleton_require_open_level_door;
-  byte skeleton_skill;
-  byte skeleton_reappear_room;
-  byte skeleton_reappear_x;
-  byte skeleton_reappear_row;
-  byte skeleton_reappear_dir;
-  word mirror_level;
-  byte mirror_room;
-  byte mirror_column;
-  byte mirror_row;
-  byte mirror_tile;
-  byte show_mirror_image;
-  word falling_exit_level;
-  byte falling_exit_room;
-  word falling_entry_level;
-  byte falling_entry_room;
-  word mouse_level;
-  byte mouse_room;
-  word mouse_delay;
-  byte mouse_object;
-  byte mouse_start_x;
-  word loose_tiles_level;
-  byte loose_tiles_room_1;
-  byte loose_tiles_room_2;
-  byte loose_tiles_first_tile;
-  byte loose_tiles_last_tile;
-  word jaffar_victory_level;
-  byte jaffar_victory_flash_time;
-  word hide_level_number_from_level;
-  byte level_13_level_number;
-  word victory_stops_time_level;
-  word win_level;
-  byte win_room;
-  byte loose_floor_delay;
-  byte tbl_level_type[16];
-  word tbl_level_color[16];
+  uint16_t first_level;
+  uint8_t skip_title;
+  uint16_t shift_L_allowed_until_level;
+  uint16_t shift_L_reduced_minutes;
+  uint16_t shift_L_reduced_ticks;
+  uint16_t demo_hitp;
+  uint16_t demo_end_room;
+  uint16_t intro_music_level;
+  uint16_t intro_music_time_initial;
+  uint16_t intro_music_time_restart;
+  uint16_t have_sword_from_level;
+  uint16_t checkpoint_level;
+  int8_t checkpoint_respawn_dir;
+  uint8_t checkpoint_respawn_room;
+  uint8_t checkpoint_respawn_tilepos;
+  uint8_t checkpoint_clear_tile_room;
+  uint8_t checkpoint_clear_tile_col;
+  uint8_t checkpoint_clear_tile_row;
+  uint16_t skeleton_level;
+  uint8_t skeleton_room;
+  uint8_t skeleton_trigger_column_1;
+  uint8_t skeleton_trigger_column_2;
+  uint8_t skeleton_column;
+  uint8_t skeleton_row;
+  uint8_t skeleton_require_open_level_door;
+  uint8_t skeleton_skill;
+  uint8_t skeleton_reappear_room;
+  uint8_t skeleton_reappear_x;
+  uint8_t skeleton_reappear_row;
+  uint8_t skeleton_reappear_dir;
+  uint16_t mirror_level;
+  uint8_t mirror_room;
+  uint8_t mirror_column;
+  uint8_t mirror_row;
+  uint8_t mirror_tile;
+  uint8_t show_mirror_image;
+  uint16_t falling_exit_level;
+  uint8_t falling_exit_room;
+  uint16_t falling_entry_level;
+  uint8_t falling_entry_room;
+  uint16_t mouse_level;
+  uint8_t mouse_room;
+  uint16_t mouse_delay;
+  uint8_t mouse_object;
+  uint8_t mouse_start_x;
+  uint16_t loose_tiles_level;
+  uint8_t loose_tiles_room_1;
+  uint8_t loose_tiles_room_2;
+  uint8_t loose_tiles_first_tile;
+  uint8_t loose_tiles_last_tile;
+  uint16_t jaffar_victory_level;
+  uint8_t jaffar_victory_flash_time;
+  uint16_t hide_level_number_from_level;
+  uint8_t level_13_level_number;
+  uint16_t victory_stops_time_level;
+  uint16_t win_level;
+  uint8_t win_room;
+  uint8_t loose_floor_delay;
+  uint8_t tbl_level_type[16];
+  uint16_t tbl_level_color[16];
   short tbl_guard_type[16];
-  byte tbl_guard_hp[16];
-  byte tbl_cutscenes_by_index[16];
-  byte tbl_entry_pose[16];
-  sbyte tbl_seamless_exit[16];
+  uint8_t tbl_guard_hp[16];
+  uint8_t tbl_cutscenes_by_index[16];
+  uint8_t tbl_entry_pose[16];
+  int8_t tbl_seamless_exit[16];
 
   // guard skills
-  word strikeprob[NUM_GUARD_SKILLS];
-  word restrikeprob[NUM_GUARD_SKILLS];
-  word blockprob[NUM_GUARD_SKILLS];
-  word impblockprob[NUM_GUARD_SKILLS];
-  word advprob[NUM_GUARD_SKILLS];
-  word refractimer[NUM_GUARD_SKILLS];
-  word extrastrength[NUM_GUARD_SKILLS];
+  uint16_t strikeprob[NUM_GUARD_SKILLS];
+  uint16_t restrikeprob[NUM_GUARD_SKILLS];
+  uint16_t blockprob[NUM_GUARD_SKILLS];
+  uint16_t impblockprob[NUM_GUARD_SKILLS];
+  uint16_t advprob[NUM_GUARD_SKILLS];
+  uint16_t refractimer[NUM_GUARD_SKILLS];
+  uint16_t extrastrength[NUM_GUARD_SKILLS];
 
   // shadow's starting positions
-  byte init_shad_6[8];
-  byte init_shad_5[8];
-  byte init_shad_12[8];
+  uint8_t init_shad_6[8];
+  uint8_t init_shad_5[8];
+  uint8_t init_shad_12[8];
   // automatic moves
   auto_move_type demo_moves[25];     // prince on demo level
   auto_move_type shad_drink_move[8]; // shadow on level 5
 
   // speeds
-  byte base_speed;
-  byte fight_speed;
-  byte chomper_speed;
+  uint8_t base_speed;
+  uint8_t fight_speed;
+  uint8_t chomper_speed;
 
 } custom_options_type;
   #pragma pack(pop)
@@ -1429,77 +1348,77 @@ struct sdlPopState_t
 {
   char quick_control[9];
   level_type level;
-  word checkpoint;
-  word upside_down;
-  word drawn_room;
-  word current_level;
-  word next_level;
+  uint16_t checkpoint;
+  uint16_t upside_down;
+  uint16_t drawn_room;
+  uint16_t current_level;
+  uint16_t next_level;
   short mobs_count;
   mob_type mobs[14];
   short trobs_count;
   trob_type trobs[30];
-  word leveldoor_open;
+  uint16_t leveldoor_open;
   char_type Kid;
-  word hitp_curr;
-  word hitp_max;
-  word hitp_beg_lev;
-  word grab_timer;
-  word holding_sword;
+  uint16_t hitp_curr;
+  uint16_t hitp_max;
+  uint16_t hitp_beg_lev;
+  uint16_t grab_timer;
+  uint16_t holding_sword;
   short united_with_shadow;
-  word have_sword;
-  word kid_sword_strike;
+  uint16_t have_sword;
+  uint16_t kid_sword_strike;
   short pickup_obj_type;
-  word offguard; // name from Apple II source
+  uint16_t offguard; // name from Apple II source
   char_type Guard;
   char_type Char;
   char_type Opp;
-  word guardhp_curr;
-  word guardhp_max;
-  word demo_index;
+  uint16_t guardhp_curr;
+  uint16_t guardhp_max;
+  uint16_t demo_index;
   short demo_time;
-  word curr_guard_color;
+  uint16_t curr_guard_color;
   short guard_notice_timer;
-  word guard_skill;
-  word shadow_initialized;
-  word guard_refrac;
-  word justblocked; // name from Apple II source
-  word droppedout;  // name from Apple II source
-  sbyte curr_row_coll_room[10];
-  byte curr_row_coll_flags[10];
-  sbyte below_row_coll_room[10];
-  byte below_row_coll_flags[10];
-  sbyte above_row_coll_room[10];
-  byte above_row_coll_flags[10];
-  sbyte prev_collision_row;
-  word flash_color;
-  word flash_time;
-  word need_level1_music;
-  word is_screaming;
-  word is_feather_fall;
-  word last_loose_sound;
-  dword random_seed;
+  uint16_t guard_skill;
+  uint16_t shadow_initialized;
+  uint16_t guard_refrac;
+  uint16_t justblocked; // name from Apple II source
+  uint16_t droppedout;  // name from Apple II source
+  int8_t curr_row_coll_room[10];
+  uint8_t curr_row_coll_flags[10];
+  int8_t below_row_coll_room[10];
+  uint8_t below_row_coll_flags[10];
+  int8_t above_row_coll_room[10];
+  uint8_t above_row_coll_flags[10];
+  int8_t prev_collision_row;
+  uint16_t flash_color;
+  uint16_t flash_time;
+  uint16_t need_level1_music;
+  uint16_t is_screaming;
+  uint16_t is_feather_fall;
+  uint16_t last_loose_sound;
+  uint32_t random_seed;
   short rem_min;
-  word rem_tick;
-  sbyte control_x;
-  sbyte control_y;
-  sbyte control_shift;
-  sbyte control_forward;
-  sbyte control_backward;
-  sbyte control_up;
-  sbyte control_down;
-  sbyte control_shift2;
-  sbyte ctrl1_forward;
-  sbyte ctrl1_backward;
-  sbyte ctrl1_up;
-  sbyte ctrl1_down;
-  sbyte ctrl1_shift2;
-  word exit_room_timer;
+  uint16_t rem_tick;
+  int8_t control_x;
+  int8_t control_y;
+  int8_t control_shift;
+  int8_t control_forward;
+  int8_t control_backward;
+  int8_t control_up;
+  int8_t control_down;
+  int8_t control_shift2;
+  int8_t ctrl1_forward;
+  int8_t ctrl1_backward;
+  int8_t ctrl1_up;
+  int8_t ctrl1_down;
+  int8_t ctrl1_shift2;
+  uint16_t exit_room_timer;
   float replay_curr_tick;
-  word is_guard_notice;
+  uint16_t is_guard_notice;
   short can_guard_see_kid;
-  sbyte collision_row;
-  sbyte prev_coll_room[10];
-  byte prev_coll_flags[10];
+  int8_t collision_row;
+  int8_t prev_coll_room[10];
+  uint8_t prev_coll_flags[10];
   short jumped_through_mirror;
 };
 #pragma pack(pop)

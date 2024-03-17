@@ -28,6 +28,8 @@ The authors of this program may be contacted at https://forum.princed.org
 #include "const.h"
 #include <math.h>
 #include <string.h>
+  #include <SDL.h>
+  #include <SDL_image.h>
 
 class quickerSDLPoP
 {
@@ -38,52 +40,52 @@ __attribute__((aligned(1024)))
 sdlPopState_t gameState;
 
 // Extracted values
-sbyte control_x;
-sbyte control_y;
-sbyte control_shift;
-sbyte control_forward;
-sbyte control_backward;
-sbyte control_up;
-sbyte control_down;
-sbyte control_shift2;
+int8_t control_x;
+int8_t control_y;
+int8_t control_shift;
+int8_t control_forward;
+int8_t control_backward;
+int8_t control_up;
+int8_t control_down;
+int8_t control_shift2;
 char_type Opp;
-word flash_color;
-word flash_time;
-word upside_down;
+uint16_t flash_color;
+uint16_t flash_time;
+uint16_t upside_down;
 custom_options_type *custom = &custom_defaults;
-byte is_validate_mode;
-word text_time_remaining;
-word text_time_total;
-word is_show_time;
-word resurrect_time;
-word dont_reset_time;
-byte sound_flags = 0;
-word draw_mode;
+uint8_t is_validate_mode;
+uint16_t text_time_remaining;
+uint16_t text_time_total;
+uint16_t is_show_time;
+uint16_t resurrect_time;
+uint16_t dont_reset_time;
+uint8_t sound_flags = 0;
+uint16_t draw_mode;
 short start_level = -1;
-byte *guard_palettes;
+uint8_t *guard_palettes;
 chtab_type *chtab_addrs[10];
-word copyprot_plac;
-word copyprot_idx;
-word cplevel_entr[14];
+uint16_t copyprot_plac;
+uint16_t copyprot_idx;
+uint16_t cplevel_entr[14];
 dialog_type *copyprot_dialog;
 rect_type dialog_rect_1 = {60, 56, 124, 264};
 rect_type dialog_rect_2 = {61, 56, 120, 264};
-byte curr_tile;
-byte curr_modifier;
+uint8_t curr_tile;
+uint8_t curr_modifier;
 tile_and_mod leftroom_[3];
 tile_and_mod row_below_left_[10];
-byte *curr_room_tiles;
-byte *curr_room_modif;
-word draw_xh;
-byte graphics_mode = 0;
-word room_L;
-word room_R;
-word room_A;
-word room_B;
-word room_BR;
-word room_BL;
-word room_AR;
-word room_AL;
+uint8_t *curr_room_tiles;
+uint8_t *curr_room_modif;
+uint16_t draw_xh;
+uint8_t graphics_mode = 0;
+uint16_t room_L;
+uint16_t room_R;
+uint16_t room_A;
+uint16_t room_B;
+uint16_t room_BR;
+uint16_t room_BL;
+uint16_t room_AR;
+uint16_t room_AL;
 short table_counts[5];
 short drects_count;
 short peels_count;
@@ -92,60 +94,60 @@ back_table_type backtable[200];
 midtable_type midtable[50];
 peel_type *peels_table[50];
 rect_type drects[30];
-sbyte obj_direction;
+int8_t obj_direction;
 short obj_clip_left;
 short obj_clip_top;
 short obj_clip_right;
 short obj_clip_bottom;
 wipetable_type wipetable[300];
-word need_drects;
-word leveldoor_right;
-word leveldoor_ybottom;
-byte palace_wall_colors[44 * 3];
-word seed_was_init = 0;
-byte *doorlink2_ad;
-byte *doorlink1_ad;
-word is_paused;
-word is_restart_level;
-byte sound_mode = 0;
-byte is_sound_on = 0x0F;
+uint16_t need_drects;
+uint16_t leveldoor_right;
+uint16_t leveldoor_ybottom;
+uint8_t palace_wall_colors[44 * 3];
+uint16_t seed_was_init = 0;
+uint8_t *doorlink2_ad;
+uint8_t *doorlink1_ad;
+uint16_t is_paused;
+uint16_t is_restart_level;
+uint8_t sound_mode = 0;
+uint8_t is_sound_on = 0x0F;
 short guardhp_delta;
-word next_room;
+uint16_t next_room;
 short hitp_delta;
-word need_quotes;
+uint16_t need_quotes;
 short roomleave_result;
 sound_buffer_type *sound_pointers[58];
 chtab_type *chtab_title40;
 chtab_type *chtab_title50;
 short hof_count;
-word demo_mode = 0;
+uint16_t demo_mode = 0;
 short next_sound;
 short knock;
-byte wipe_frames[30];
-sbyte wipe_heights[30];
-byte redraw_frames_anim[30];
-byte redraw_frames2[30];
-byte redraw_frames_floor_overlay[30];
-byte redraw_frames_full[30];
-byte redraw_frames_fore[30];
-byte tile_object_redraw[30];
-byte redraw_frames_above[10];
-word need_full_redraw;
+uint8_t wipe_frames[30];
+int8_t wipe_heights[30];
+uint8_t redraw_frames_anim[30];
+uint8_t redraw_frames2[30];
+uint8_t redraw_frames_floor_overlay[30];
+uint8_t redraw_frames_full[30];
+uint8_t redraw_frames_fore[30];
+uint8_t tile_object_redraw[30];
+uint8_t redraw_frames_above[10];
+uint16_t need_full_redraw;
 short n_curr_objs;
 objtable_type objtable[50];
 short curr_objs[50];
-byte obj_xh;
-byte obj_xl;
-byte obj_y;
-byte obj_chtab;
-byte obj_id;
-byte obj_tilepos;
+uint8_t obj_xh;
+uint8_t obj_xl;
+uint8_t obj_y;
+uint8_t obj_chtab;
+uint8_t obj_id;
+uint8_t obj_tilepos;
 short obj_x;
 frame_type cur_frame;
-word seamless;
+uint16_t seamless;
 trob_type trob;
 short redraw_height;
-byte curr_tilepos;
+uint8_t curr_tilepos;
 short curr_room;
 mob_type curmob;
 short tile_col;
@@ -163,60 +165,59 @@ short prev_char_top_row;
 short prev_char_col_right;
 short prev_char_col_left;
 short char_bottom_row;
-byte curr_tile2;
+uint8_t curr_tile2;
 short tile_row;
-word char_width_half;
-word char_height;
+uint16_t char_width_half;
+uint16_t char_height;
 short char_x_left;
 short char_x_left_coll;
 short char_x_right_coll;
 short char_x_right;
 short char_top_y;
-byte fall_frame;
-byte through_tile;
-sbyte infrontx; // name from Apple II source
-word current_sound;
-byte edge_type;
+uint8_t fall_frame;
+uint8_t through_tile;
+int8_t infrontx; // name from Apple II source
+uint16_t current_sound;
+uint8_t edge_type;
 char **sound_names;
 int g_argc;
 int last_key_scancode;
-word curmob_index;
+uint16_t curmob_index;
 dat_type *dathandle;
-word need_redraw_because_flipped;
-byte *level_var_palettes;
-word first_start = 1;
-sbyte distance_mirror;
-Uint64 last_transition_counter;
-sbyte bump_col_left_of_wall;
-sbyte bump_col_right_of_wall;
-sbyte right_checked_col;
-sbyte left_checked_col;
+uint16_t need_redraw_because_flipped;
+uint8_t *level_var_palettes;
+uint16_t first_start = 1;
+int8_t distance_mirror;
+int8_t bump_col_left_of_wall;
+int8_t bump_col_right_of_wall;
+int8_t right_checked_col;
+int8_t left_checked_col;
 short coll_tile_left_xpos;
-word curr_tile_temp;
+uint16_t curr_tile_temp;
 char exe_dir[POP_MAX_PATH] = ".";
 bool found_exe_dir = false;
-word which_quote;
+uint16_t which_quote;
 dat_type *dat_chain_ptr = NULL;
 char last_text_input;
 short drawn_row;
 short draw_bottom_y;
 short draw_main_y;
 short drawn_col;
-byte tile_left;
-byte modifier_left;
+uint8_t tile_left;
+uint8_t modifier_left;
 char levels_file[POP_MAX_PATH];
-byte obj2_tilepos;
-word obj2_x;
-byte obj2_y;
-sbyte obj2_direction;
-byte obj2_id;
-byte obj2_chtab;
+uint8_t obj2_tilepos;
+uint16_t obj2_x;
+uint8_t obj2_y;
+int8_t obj2_direction;
+uint8_t obj2_id;
+uint8_t obj2_chtab;
 short obj2_clip_top;
 short obj2_clip_bottom;
 short obj2_clip_left;
 short obj2_clip_right;
-word copyprot_room[14] = {3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4};
-byte sound_interruptible[58] = {
+uint16_t copyprot_room[14] = {3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4};
+uint8_t sound_interruptible[58] = {
   0, // sound_0_fell_to_death
   1, // sound_1_falling
   1, // sound_2_tile_crashing
@@ -309,10 +310,10 @@ byte sound_interruptible[58] = {
 
       doorlink1_ad = /*&*/ gameState.level.doorlinks1;
       doorlink2_ad = /*&*/ gameState.level.doorlinks2;
-      guard_palettes = (byte *)load_from_opendats_alloc(10, "bin", NULL, NULL);
+      guard_palettes = (uint8_t *)load_from_opendats_alloc(10, "bin", NULL, NULL);
       
       // Level color variations (1.3)
-      level_var_palettes = reinterpret_cast<byte *>(load_from_opendats_alloc(20, "bin", NULL, NULL));
+      level_var_palettes = reinterpret_cast<uint8_t *>(load_from_opendats_alloc(20, "bin", NULL, NULL));
 
       // PRINCE.DAT: sword
       chtab_addrs[id_chtab_0_sword] = load_sprites_from_file(700, 1 << 2, 1);
@@ -380,7 +381,7 @@ byte sound_interruptible[58] = {
     }
   }
 
-__INLINE__ void  startLevel(const word level)
+__INLINE__ void  startLevel(const uint16_t level)
  {
    ///////////////////////////////////////////////////////////////
    // play_level
@@ -479,7 +480,7 @@ __INLINE__ void  clear_kbd_buf()
 }
 
 // seg009:040A
-__INLINE__ word prandom(word max)
+__INLINE__ uint16_t prandom(uint16_t max)
 {
   if (!seed_was_init)
   {
@@ -571,7 +572,7 @@ __INLINE__ void  far *__pascal load_from_opendats_alloc(int resource, const char
   // printf("id = %d\n",resource);
   dat_type *pointer;
   data_location result;
-  byte checksum;
+  uint8_t checksum;
   int size;
   FILE *fp = NULL;
   load_from_opendats_metadata(resource, extension, &fp, &result, &checksum, &size, &pointer);
@@ -655,7 +656,7 @@ __INLINE__ chtab_type *__pascal load_sprites_from_file(int resource, int palette
   return chtab;
 }
 
-__INLINE__ void  load_from_opendats_metadata(int resource_id, const char *extension, FILE **out_fp, data_location *result, byte *checksum, int *size, dat_type **out_pointer)
+__INLINE__ void  load_from_opendats_metadata(int resource_id, const char *extension, FILE **out_fp, data_location *result, uint8_t *checksum, int *size, dat_type **out_pointer)
 {
   char image_filename[POP_MAX_PATH];
   FILE *fp = NULL;
@@ -770,7 +771,7 @@ __INLINE__ int load_from_opendats_to_area(int resource, void  far *area, int len
   // return 0;
   dat_type *pointer;
   data_location result;
-  byte checksum;
+  uint8_t checksum;
   int size;
   FILE *fp = NULL;
   load_from_opendats_metadata(resource, extension, &fp, &result, &checksum, &size, &pointer);
@@ -804,10 +805,10 @@ __INLINE__ void  init_game_main()
 
 __INLINE__ void  init_copyprot()
 {
-  word which_entry;
-  word pos;
-  word entry_used[40];
-  byte letts_used[27];
+  uint16_t which_entry;
+  uint16_t pos;
+  uint16_t entry_used[40];
+  uint8_t letts_used[27];
 
   copyprot_plac = prandom(13);
   memset(&entry_used, 0, sizeof(entry_used));
@@ -870,11 +871,6 @@ __INLINE__ void  restore_room_after_quick_load()
   loadkid_and_opp();
   // Get rid of "press button" message if kid was dead before quickload.
   text_time_total = text_time_remaining = 0;
-}
-
-__INLINE__ Uint32 temp_shift_release_callback(Uint32 interval, void  *param)
-{
-  return 0; // causes the timer to be removed
 }
 
 // seg000:04CD
@@ -946,7 +942,7 @@ __INLINE__ short get_curr_tile(short tilepos)
 // seg000:0B12
 __INLINE__ void  anim_tile_modif()
 {
-  word tilepos;
+  uint16_t tilepos;
   for (tilepos = 0; tilepos < 30; ++tilepos)
   {
     switch (get_curr_tile(tilepos))
@@ -1251,7 +1247,7 @@ __INLINE__ void  load_more_opt_graf(const char *filename)
 // seg000:148D
 __INLINE__ int do_paused()
 {
-  word key;
+  uint16_t key;
   key = 0;
   next_room = 0;
   control_shift = 0;
@@ -1290,13 +1286,13 @@ __INLINE__ void  feather_fall()
 // seg000:172C
 __INLINE__ void  gen_palace_wall_colors()
 {
-  dword old_randseed;
-  word prev_color;
+  uint32_t old_randseed;
+  uint16_t prev_color;
   short row;
   short subrow;
-  word color_base;
+  uint16_t color_base;
   short column;
-  word color;
+  uint16_t color;
 
   old_randseed = gameState.random_seed;
   gameState.random_seed = gameState.drawn_room;
@@ -1345,7 +1341,7 @@ __INLINE__ void  parse_cmdline_sound()
 }
 
 // seg002:0000
-__INLINE__ void  do_init_shad(const byte *source, int seq_index)
+__INLINE__ void  do_init_shad(const uint8_t *source, int seq_index)
 {
   memcpy_near(&gameState.Char, source, 7);
   seqtbl_offset_char(seq_index);
@@ -1415,10 +1411,10 @@ __INLINE__ void  check_shadow()
 // seg002:0112
 __INLINE__ void  enter_guard()
 {
-  word room_minus_1;
-  word guard_tile;
-  word frame;
-  byte seq_hi;
+  uint16_t room_minus_1;
+  uint16_t guard_tile;
+  uint16_t frame;
+  uint8_t seq_hi;
   // arrays are indexed 0..23 instead of 1..24
   room_minus_1 = gameState.drawn_room - 1;
   frame = gameState.Char.frame; // hm?
@@ -1533,7 +1529,7 @@ __INLINE__ void  check_guard_fallout()
 // seg002:02F5
 __INLINE__ void  leave_guard()
 {
-  word room_minus_1;
+  uint16_t room_minus_1;
   if (gameState.Guard.direction == dir_56_none || gameState.Guard.charid == charid_1_shadow || gameState.Guard.charid == charid_24_mouse)
   {
     return;
@@ -1564,7 +1560,7 @@ __INLINE__ int goto_other_room(short direction)
 {
   // printf("goto_other_room: direction = %d, gameState.Char.room = %d\n", direction, gameState.Char.room);
   short opposite_dir;
-  byte other_room = ((byte *)&gameState.level.roomlinks[gameState.Char.room - 1])[direction];
+  uint8_t other_room = ((uint8_t *)&gameState.level.roomlinks[gameState.Char.room - 1])[direction];
   gameState.Char.room = other_room;
   if (direction == 0)
   {
@@ -1609,7 +1605,7 @@ __INLINE__ void  follow_guard()
 __INLINE__ short leave_room()
 {
   short frame;
-  word action;
+  uint16_t action;
   short chary;
   short leave_dir;
   chary = gameState.Char.y;
@@ -1618,7 +1614,7 @@ __INLINE__ short leave_room()
   if (action != actions_5_bumped &&
       action != actions_4_in_freefall &&
       action != actions_3_in_midair &&
-      (sbyte)chary < 10 && (sbyte)chary > -16)
+      (int8_t)chary < 10 && (int8_t)chary > -16)
   {
     leave_dir = 2; // up
   }
@@ -1706,8 +1702,8 @@ __INLINE__ short leave_room()
 // seg002:03C7
 __INLINE__ void  exit_room()
 {
-  word leave;
-  word kid_room_m1;
+  uint16_t leave;
+  uint16_t kid_room_m1;
   leave = 0;
   if (gameState.exit_room_timer != 0)
   {
@@ -1916,7 +1912,7 @@ __INLINE__ void  move_7()
 // seg002:0776
 __INLINE__ void  autocontrol_opponent()
 {
-  word charid;
+  uint16_t charid;
   move_0_nothing();
   charid = gameState.Char.charid;
   if (charid == charid_0_kid)
@@ -2038,7 +2034,7 @@ __INLINE__ void  autocontrol_guard_inactive()
   if (gameState.Kid.alive >= 0)
     return;
   distance = char_opp_dist();
-  if (Opp.curr_row != gameState.Char.curr_row || (word)distance < (word)-8)
+  if (Opp.curr_row != gameState.Char.curr_row || (uint16_t)distance < (uint16_t)-8)
   {
     // If gameState.Kid made a sound ...
     if (gameState.is_guard_notice)
@@ -2047,7 +2043,7 @@ __INLINE__ void  autocontrol_guard_inactive()
       if (distance < 0)
       {
         // ... and gameState.Kid is behind Guard, Guard turns around.
-        if ((word)distance < (word)-4)
+        if ((uint16_t)distance < (uint16_t)-4)
         {
           move_4_down();
         }
@@ -2155,7 +2151,7 @@ __INLINE__ void  autocontrol_guard_active()
 }
 
 // seg006:0FC3
-__INLINE__ int wall_type(byte tiletype)
+__INLINE__ int wall_type(uint8_t tiletype)
 {
   switch (tiletype)
   {
@@ -2192,7 +2188,7 @@ __INLINE__ void  autocontrol_guard_kid_far()
 __INLINE__ void  guard_follows_kid_down()
 {
   // This is called from autocontrol_guard_active, so char=Guard, Opp=gameState.Kid
-  word opp_action;
+  uint16_t opp_action;
   opp_action = Opp.action;
   if (opp_action == actions_2_hang_climb || opp_action == actions_6_hang_straight)
   {
@@ -2280,7 +2276,7 @@ __INLINE__ void  guard_advance()
 // seg002:0B1D
 __INLINE__ void  guard_block()
 {
-  word opp_frame;
+  uint16_t opp_frame;
   opp_frame = Opp.frame;
   if (opp_frame == frame_152_strike_2 || opp_frame == frame_153_strike_3 || opp_frame == frame_162_block_to_strike)
   {
@@ -2304,8 +2300,8 @@ __INLINE__ void  guard_block()
 // seg002:0B73
 __INLINE__ void  guard_strike()
 {
-  word opp_frame;
-  word char_frame;
+  uint16_t opp_frame;
+  uint16_t char_frame;
   opp_frame = Opp.frame;
   if (opp_frame == frame_169_begin_block || opp_frame == frame_151_strike_1)
     return;
@@ -2774,7 +2770,7 @@ __INLINE__ void  play_level(int level_number)
 // seg003:01A3
 __INLINE__ void  do_startpos()
 {
-  word x;
+  uint16_t x;
   // Special event: start at gameState.checkpoint
   if (gameState.current_level == /*3*/ custom->checkpoint_level && gameState.checkpoint)
   {
@@ -3038,7 +3034,7 @@ __INLINE__ void  pos_guards()
 }
 
 // seg003:0A99
-__INLINE__ byte get_tile_at_kid(int xpos)
+__INLINE__ uint8_t get_tile_at_kid(int xpos)
 {
   return get_tile(gameState.Kid.room, get_tile_div_mod_m7(xpos), gameState.Kid.curr_row);
 }
@@ -3199,7 +3195,7 @@ __INLINE__ int get_tilepos(int tile_col, int tile_row)
 // seg006:01F5
 __INLINE__ short dx_weight()
 {
-  sbyte var_2;
+  int8_t var_2;
   var_2 = cur_frame.dx - (cur_frame.flags & FRAME_WEIGHT_X);
   return char_dx_forward(var_2);
 }
@@ -3301,7 +3297,7 @@ __INLINE__ void  play_seq()
 {
   for (;;)
   {
-    byte item = *(SEQTBL_0 + gameState.Char.curr_seq++);
+    uint8_t item = *(SEQTBL_0 + gameState.Char.curr_seq++);
     switch (item)
     {
     case SEQ_DX: // dx
@@ -3322,7 +3318,7 @@ __INLINE__ void  play_seq()
       }
       // fallthrough!
     case SEQ_JMP: // jump
-      gameState.Char.curr_seq = *(const word *)(SEQTBL_0 + gameState.Char.curr_seq);
+      gameState.Char.curr_seq = *(const uint16_t *)(SEQTBL_0 + gameState.Char.curr_seq);
       break;
     case SEQ_UP: // up
       --gameState.Char.curr_row;
@@ -3425,7 +3421,7 @@ __INLINE__ int get_tile_div_mod(const int xpos)
     // In this case DOS PoP reads the bytes directly before tile_div_tbl[] and tile_mod_tbl[] in the memory.
     // Here we simulate these reads.
     // Before tile_mod_tbl[] is tile_div_tbl[], and before tile_div_tbl[] are the following bytes:
-    static const byte bogus[] = {0x02, 0x00, 0x41, 0x00, 0x80, 0x00, 0xBF, 0x00, 0xFE, 0x00, 0xFF, 0x01, 0x01, 0xFF, 0xC4, 0xFF, 0x03, 0x00, 0x42, 0x00, 0x81, 0x00, 0xC0, 0x00, 0xF8, 0xFF, 0x37, 0x00, 0x76, 0x00, 0xB5, 0x00, 0xF4, 0x00};
+    static const uint8_t bogus[] = {0x02, 0x00, 0x41, 0x00, 0x80, 0x00, 0xBF, 0x00, 0xFE, 0x00, 0xFF, 0x01, 0x01, 0xFF, 0xC4, 0xFF, 0x03, 0x00, 0x42, 0x00, 0x81, 0x00, 0xC0, 0x00, 0xF8, 0xFF, 0x37, 0x00, 0x76, 0x00, 0xB5, 0x00, 0xF4, 0x00};
     if (COUNT(bogus) + xpos >= 0)
     {
       xh = bogus[COUNT(bogus) + xpos];               // simulating tile_div_tbl[xpos]
@@ -3445,7 +3441,7 @@ __INLINE__ int get_tile_div_mod(const int xpos)
     // In this case DOS PoP reads the bytes directly after tile_div_tbl[], that is: and tile_mod_tbl[]
     // Here we simulate these reads.
     // After tile_mod_tbl[] there are the following bytes:
-    static const byte bogus[] = {0xF4, 0x02, 0x10, 0x1E, 0x2C, 0x3A, 0x48, 0x56, 0x64, 0x72, 0x80, 0x8E, 0x9C, 0xAA, 0xB8, 0xC6, 0xD4, 0xE2, 0xF0, 0xFE, 0x00, 0x0A, 0x00, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x0A, 0x0D, 0x00, 0x00, 0x00, 0x00};
+    static const uint8_t bogus[] = {0xF4, 0x02, 0x10, 0x1E, 0x2C, 0x3A, 0x48, 0x56, 0x64, 0x72, 0x80, 0x8E, 0x9C, 0xAA, 0xB8, 0xC6, 0xD4, 0xE2, 0xF0, 0xFE, 0x00, 0x0A, 0x00, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x0A, 0x0D, 0x00, 0x00, 0x00, 0x00};
     if ((int8_t)xpos - (int8_t)tblSize < (int8_t)COUNT(bogus))
     {
       xh = tile_mod_tbl[xpos - tblSize]; // simulating tile_div_tbl[xpos]
@@ -3529,7 +3525,7 @@ __INLINE__ void  reset_obj_clip()
 }
 
 // seg006:051C
-__INLINE__ void  x_to_xh_and_xl(int xpos, sbyte *xh_addr, sbyte *xl_addr)
+__INLINE__ void  x_to_xh_and_xl(int xpos, int8_t *xh_addr, int8_t *xl_addr)
 {
   if (xpos < 0)
   {
@@ -3652,7 +3648,7 @@ __INLINE__ void  check_spiked()
 // seg006:06BD
 __INLINE__ int take_hp(int count)
 {
-  word dead;
+  uint16_t dead;
   dead = 0;
   if (gameState.Char.charid == charid_0_kid)
   {
@@ -3783,7 +3779,7 @@ __INLINE__ void  check_on_floor()
 __INLINE__ void  start_fall()
 {
   short frame;
-  word seq_id;
+  uint16_t seq_id;
   frame = gameState.Char.frame;
   gameState.Char.sword = sword_0_sheathed;
   inc_curr_row();
@@ -3881,14 +3877,14 @@ __INLINE__ void  start_fall()
 // seg006:0A19
 __INLINE__ void  check_grab()
 {
-  word old_x;
+  uint16_t old_x;
 
 #define MAX_GRAB_FALLING_SPEED 32
 
   if (control_shift < 0 &&                              // press Shift to grab
       gameState.Char.fall_y < MAX_GRAB_FALLING_SPEED && // you can't grab if you're falling too fast ...
       gameState.Char.alive < 0 &&                       // ... or dead
-      (word)y_land[gameState.Char.curr_row + 1] <= (word)(gameState.Char.y + 25))
+      (uint16_t)y_land[gameState.Char.curr_row + 1] <= (uint16_t)(gameState.Char.y + 25))
   {
     // printf("Falling speed: %d\t x: %d\n", gameState.Char.fall_y, gameState.Char.x);
     old_x = gameState.Char.x;
@@ -4096,7 +4092,7 @@ __INLINE__ void  user_control()
 // seg006:0DDC
 __INLINE__ void  flip_control_x()
 {
-  byte temp;
+  uint8_t temp;
   control_x = -control_x;
   temp = control_forward;
   control_forward = control_backward;
@@ -4215,7 +4211,7 @@ __INLINE__ void  read_user_control()
 __INLINE__ int can_grab()
 {
   // Can char grab curr_tile2 through through_tile?
-  byte modifier;
+  uint8_t modifier;
   modifier = curr_room_modif[curr_tilepos];
   // can't grab through wall
   if (through_tile == tiles_20_wall)
@@ -4749,8 +4745,8 @@ __INLINE__ void  check_collisions()
 // seg004:00DF
 __INLINE__ void  move_coll_to_prev()
 {
-  sbyte *row_coll_room_ptr;
-  byte *row_coll_flags_ptr;
+  int8_t *row_coll_room_ptr;
+  uint8_t *row_coll_flags_ptr;
   short column;
   if (gameState.collision_row == gameState.prev_collision_row ||
       gameState.collision_row + 3 == gameState.prev_collision_row ||
@@ -4782,10 +4778,10 @@ __INLINE__ void  move_coll_to_prev()
 }
 
 // seg004:0185
-__INLINE__ void  get_row_collision_data(short row, sbyte *row_coll_room_ptr, byte *row_coll_flags_ptr)
+__INLINE__ void  get_row_collision_data(short row, int8_t *row_coll_room_ptr, uint8_t *row_coll_flags_ptr)
 {
   short right_wall_xpos;
-  byte curr_flags;
+  uint8_t curr_flags;
   short room;
   short column;
   short left_wall_xpos;
@@ -4943,7 +4939,7 @@ __INLINE__ int xpos_in_drawn_room(int xpos)
 }
 
 // seg004:0448
-__INLINE__ void  bumped(sbyte delta_x, sbyte push_direction)
+__INLINE__ void  bumped(int8_t delta_x, int8_t push_direction)
 {
   // frame 177: spiked
   if (gameState.Char.alive < 0 && gameState.Char.frame != frame_177_spiked)
@@ -4985,7 +4981,7 @@ __INLINE__ void  bumped(sbyte delta_x, sbyte push_direction)
 }
 
 // seg004:0A10
-__INLINE__ int dist_from_wall_forward(byte tiletype)
+__INLINE__ int dist_from_wall_forward(uint8_t tiletype)
 {
   short type;
   if (tiletype == tiles_4_gate && !can_bump_into_gate())
@@ -5031,11 +5027,11 @@ __INLINE__ void  bumped_fall()
 }
 
 // seg004:0520
-__INLINE__ void  bumped_floor(sbyte push_direction)
+__INLINE__ void  bumped_floor(int8_t push_direction)
 {
   short frame;
   short seq_index;
-  if (gameState.Char.sword != sword_2_drawn && (word)(y_land[gameState.Char.curr_row + 1] - gameState.Char.y) >= (word)15)
+  if (gameState.Char.sword != sword_2_drawn && (uint16_t)(y_land[gameState.Char.curr_row + 1] - gameState.Char.y) >= (uint16_t)15)
   {
     bumped_fall();
   }
@@ -5119,7 +5115,7 @@ Possible results in edge_type:
 2: floor (nothing near char)
 */
   short distance;
-  byte tiletype;
+  uint8_t tiletype;
   determine_col();
   load_frame_to_obj();
   set_char_collision();
@@ -5235,7 +5231,7 @@ __INLINE__ void  chomped()
 }
 
 // seg004:0A7B
-__INLINE__ int dist_from_wall_behind(byte tiletype)
+__INLINE__ int dist_from_wall_behind(uint8_t tiletype)
 {
   short type;
   type = wall_type(tiletype);
@@ -5359,9 +5355,9 @@ __INLINE__ int check_chomped_here()
 // seg007:0000
 __INLINE__ void  process_trobs()
 {
-  word need_delete;
-  word index;
-  word new_index;
+  uint16_t need_delete;
+  uint16_t index;
+  uint16_t new_index;
   need_delete = 0;
   if (gameState.trobs_count == 0)
     return;
@@ -5477,7 +5473,7 @@ __INLINE__ short get_trob_pos_in_drawn_room()
 // seg007:029D
 __INLINE__ short get_trob_right_pos_in_drawn_room()
 {
-  word tilepos;
+  uint16_t tilepos;
   tilepos = trob.tilepos;
   if (trob.room == gameState.drawn_room)
   {
@@ -5527,7 +5523,7 @@ __INLINE__ short get_trob_right_pos_in_drawn_room()
 // seg007:032C
 __INLINE__ short get_trob_right_above_pos_in_drawn_room()
 {
-  word tilepos;
+  uint16_t tilepos;
   tilepos = trob.tilepos;
   if (trob.room == gameState.drawn_room)
   {
@@ -5638,7 +5634,7 @@ __INLINE__ short bubble_next_frame(short curr)
 // seg007:03E9
 __INLINE__ void  animate_potion()
 {
-  word type;
+  uint16_t type;
   if (trob.type >= 0 && is_trob_in_drawn_room())
   {
     type = curr_modifier & 0xF8;
@@ -5662,8 +5658,8 @@ __INLINE__ void  animate_sword()
 // seg007:0448
 __INLINE__ void  animate_chomper()
 {
-  word blood;
-  word frame;
+  uint16_t blood;
+  uint16_t frame;
   if (trob.type >= 0)
   {
     blood = curr_modifier & 0x80;
@@ -5732,7 +5728,7 @@ Possible values of anim_type:
 2: permanent open
 3,4,5,6,7,8: fast closing with speeds 20,40,60,80,100,120 /4 pixel/frame
 */
-  sbyte anim_type;
+  int8_t anim_type;
   anim_type = trob.type;
   if (anim_type >= 0)
   {
@@ -5746,7 +5742,7 @@ Possible values of anim_type:
       }
       short new_mod = curr_modifier - gate_close_speeds[anim_type];
       curr_modifier = new_mod;
-      // if ((sbyte)curr_modifier < 0) {
+      // if ((int8_t)curr_modifier < 0) {
       if (new_mod < 0)
       {
         // if ((curr_modifier -= gate_close_speeds[anim_type]) < 0) {
@@ -5828,7 +5824,7 @@ Possible values of trob_type:
 2: open
 3,4,5,6: fast closing with speeds 0,5,17,99 pixel/frame
 */
-  word trob_type;
+  uint16_t trob_type;
   trob_type = trob.type;
   if (trob.type >= 0)
   {
@@ -5837,7 +5833,7 @@ Possible values of trob_type:
       // closing
       ++trob.type;
       curr_modifier -= leveldoor_close_speeds[trob.type - 3];
-      if ((sbyte)curr_modifier < 0)
+      if ((int8_t)curr_modifier < 0)
       {
         curr_modifier = 0;
         trob.type = -1;
@@ -5899,7 +5895,7 @@ __INLINE__ void  start_anim_sword(short room, short tilepos)
 }
 
 // seg007:08A7
-__INLINE__ void  start_anim_chomper(short room, short tilepos, byte modifier)
+__INLINE__ void  start_anim_chomper(short room, short tilepos, uint8_t modifier)
 {
   short old_modifier;
   old_modifier = curr_room_modif[tilepos];
@@ -5913,7 +5909,7 @@ __INLINE__ void  start_anim_chomper(short room, short tilepos, byte modifier)
 // seg007:08E3
 __INLINE__ void  start_anim_spike(short room, short tilepos)
 {
-  sbyte old_modifier;
+  int8_t old_modifier;
   old_modifier = curr_room_modif[tilepos];
   if (old_modifier <= 0)
   {
@@ -5924,7 +5920,7 @@ __INLINE__ void  start_anim_spike(short room, short tilepos)
     else
     {
       // 0xFF means a disabled spike.
-      if (old_modifier != (sbyte)0xFF)
+      if (old_modifier != (int8_t)0xFF)
       {
         curr_room_modif[tilepos] = 0x8F;
       }
@@ -5935,7 +5931,7 @@ __INLINE__ void  start_anim_spike(short room, short tilepos)
 // seg007:092C
 __INLINE__ short trigger_gate(short room, short tilepos, short button_type)
 {
-  byte modifier;
+  uint8_t modifier;
   modifier = curr_room_modif[tilepos];
   if (button_type == tiles_15_opener)
   {
@@ -6021,10 +6017,10 @@ __INLINE__ short get_doorlink_room(short index)
 // seg007:09E5
 __INLINE__ void  do_trigger_list(short index, short button_type)
 {
-  word room;
-  word tilepos;
-  byte target_type;
-  sbyte trigger_result;
+  uint16_t room;
+  uint16_t tilepos;
+  uint8_t target_type;
+  int8_t trigger_result;
   // while (doorlink1_ad[index] != -1) { // these can't be equal!
   while (1)
   { // Same as the above but just a little faster and no compiler warning.
@@ -6056,7 +6052,7 @@ __INLINE__ short find_trob()
 }
 
 // seg007:0A5A
-__INLINE__ void  add_trob(byte room, byte tilepos, sbyte type)
+__INLINE__ void  add_trob(uint8_t room, uint8_t tilepos, int8_t type)
 {
   short found;
   trob.room = room;
@@ -6084,7 +6080,7 @@ __INLINE__ short get_doorlink_timer(short index)
 }
 
 // seg007:0BCD
-__INLINE__ short set_doorlink_timer(short index, byte value)
+__INLINE__ short set_doorlink_timer(short index, uint8_t value)
 {
   doorlink2_ad[index] &= 0xE0;
   doorlink2_ad[index] |= value & 0x1F;
@@ -6094,7 +6090,7 @@ __INLINE__ short set_doorlink_timer(short index, byte value)
 // seg007:0C53
 __INLINE__ void  trigger_button(int playsound, int button_type, int modifier)
 {
-  sbyte link_timer;
+  int8_t link_timer;
   get_curr_tile(curr_tilepos);
   if (button_type == 0)
   {
@@ -6123,8 +6119,8 @@ __INLINE__ void  trigger_button(int playsound, int button_type, int modifier)
 // seg007:0CD9
 __INLINE__ void  died_on_button()
 {
-  word button_type;
-  word modifier;
+  uint16_t button_type;
+  uint16_t modifier;
   button_type = get_curr_tile(curr_tilepos);
   modifier = curr_modifier;
   if (curr_tile == tiles_15_opener)
@@ -6143,7 +6139,7 @@ __INLINE__ void  died_on_button()
 // seg007:0D3A
 __INLINE__ void  animate_button()
 {
-  word var_2;
+  uint16_t var_2;
   if (trob.type >= 0)
   {
     set_doorlink_timer(curr_modifier, var_2 = get_doorlink_timer(curr_modifier) - 1);
@@ -6170,9 +6166,9 @@ __INLINE__ void  animate_empty()
 // seg007:0D9D
 __INLINE__ void  animate_loose()
 {
-  word room;
-  word row;
-  word tilepos;
+  uint16_t room;
+  uint16_t row;
+  uint16_t tilepos;
   short anim_type;
   anim_type = trob.type;
   if (anim_type >= 0)
@@ -6219,7 +6215,7 @@ __INLINE__ void  animate_loose()
 // seg007:0E55
 __INLINE__ void  loose_shake(int arg_0)
 {
-  word sound_id;
+  uint16_t sound_id;
   if (arg_0 || loose_sound[curr_modifier & 0x7F])
   {
     do
@@ -6243,12 +6239,12 @@ __INLINE__ int remove_loose(int room, int tilepos)
 }
 
 // seg007:0ED5
-__INLINE__ void  make_loose_fall(byte modifier)
+__INLINE__ void  make_loose_fall(uint8_t modifier)
 {
   // is it a "solid" loose floor?
   if ((curr_room_tiles[curr_tilepos] & 0x20) == 0)
   {
-    if ((sbyte)curr_room_modif[curr_tilepos] <= 0)
+    if ((int8_t)curr_room_modif[curr_tilepos] <= 0)
     {
       curr_room_modif[curr_tilepos] = modifier;
       add_trob(curr_room, curr_tilepos, 0);
@@ -6257,7 +6253,7 @@ __INLINE__ void  make_loose_fall(byte modifier)
 }
 
 // seg007:0F9A
-__INLINE__ int next_chomper_timing(byte timing)
+__INLINE__ int next_chomper_timing(uint8_t timing)
 {
   // 15,12,9,6,13,10,7,14,11,8,repeat
   timing -= 3;
@@ -6276,7 +6272,7 @@ __INLINE__ void  start_chompers()
   short tilepos;
   short column;
   timing = 15;
-  if ((byte)gameState.Char.curr_row < 3)
+  if ((uint8_t)gameState.Char.curr_row < 3)
   {
     get_room_address(gameState.Char.room);
     for (column = 0, tilepos = tbl_line[gameState.Char.curr_row];
@@ -6466,7 +6462,7 @@ __INLINE__ void  mob_down_a_row()
 // seg007:14DE
 __INLINE__ void  add_mob_to_objtable(int ypos)
 {
-  word index;
+  uint16_t index;
   objtable_type *curr_obj;
   index = objtable_count++;
   curr_obj = &objtable[index];
@@ -6484,7 +6480,7 @@ __INLINE__ void  add_mob_to_objtable(int ypos)
 // seg007:1556
 __INLINE__ int is_spike_harmful()
 {
-  sbyte modifier;
+  int8_t modifier;
   modifier = curr_room_modif[curr_tilepos];
   if (modifier == 0 || modifier == -1)
   {
@@ -6572,7 +6568,7 @@ __INLINE__ void  do_fall()
   {
     gameState.is_screaming = 1;
   }
-  if ((word)y_land[gameState.Char.curr_row + 1] > (word)gameState.Char.y)
+  if ((uint16_t)y_land[gameState.Char.curr_row + 1] > (uint16_t)gameState.Char.y)
   {
     check_grab();
   }
@@ -6597,7 +6593,7 @@ __INLINE__ void  do_fall()
 // seg005:0090
 __INLINE__ void  land()
 {
-  word seq_id;
+  uint16_t seq_id;
   gameState.is_screaming = 0;
   gameState.Char.y = y_land[gameState.Char.curr_row + 1];
   if (get_tile_at_char() != tiles_2_spike)
@@ -6814,7 +6810,7 @@ __INLINE__ void  control_standing()
       if (var_2 >= -10 && var_2 < 90)
       {
         gameState.holding_sword = 1;
-        if ((word)var_2 < (word)-6)
+        if ((uint16_t)var_2 < (uint16_t)-6)
         {
           if (Opp.charid == charid_1_shadow &&
               (Opp.action == actions_3_in_midair || (Opp.frame >= frame_107_fall_land_1 && Opp.frame < 118)))
@@ -6987,7 +6983,7 @@ __INLINE__ void  crouch()
 // seg005:05BE
 __INLINE__ void  back_pressed()
 {
-  word seq_id;
+  uint16_t seq_id;
   control_backward = release_arrows();
   // After turn, gameState.Kid will draw sword if ...
   if (gameState.have_sword == 0 ||       // if gameState.Kid has sword
@@ -7364,7 +7360,7 @@ __INLINE__ void  run_jump()
       if (curr_tile2 == tiles_2_spike || !tile_is_floor(curr_tile2))
       {
         var_8 = distance_to_edge(xpos) + 14 * var_2 - 14;
-        if ((word)var_8 < (word)-8 || var_8 >= 2)
+        if ((uint16_t)var_8 < (uint16_t)-8 || var_8 >= 2)
         {
           if (var_8 < 128)
             return;
@@ -7413,7 +7409,7 @@ __INLINE__ void  forward_with_sword()
 // seg005:0C1D
 __INLINE__ void  draw_sword()
 {
-  word seq_id;
+  uint16_t seq_id;
   seq_id = seq_55_draw_sword; // draw sword
   control_forward = control_shift2 = release_arrows();
   if (gameState.Char.charid == charid_0_kid)
@@ -7437,14 +7433,14 @@ __INLINE__ void  control_with_sword()
     if (get_tile_at_char() == tiles_11_loose || gameState.can_guard_see_kid >= 2)
     {
       distance = char_opp_dist();
-      if ((word)distance < (word)90)
+      if ((uint16_t)distance < (uint16_t)90)
       {
         swordfight();
         return;
       }
       else if (distance < 0)
       {
-        if ((word)distance < (word)-4)
+        if ((uint16_t)distance < (uint16_t)-4)
         {
           seqtbl_offset_char(seq_60_turn_with_sword); // turn with sword (after switching places)
           return;
@@ -7706,7 +7702,7 @@ __INLINE__ void  load_room_links()
 // seg008:0125
 __INLINE__ void  draw_room()
 {
-  word saved_room;
+  uint16_t saved_room;
   saved_room = gameState.drawn_room;
   gameState.drawn_room = room_A;
   load_room_links();
@@ -7733,7 +7729,7 @@ __INLINE__ void  get_room_address(int room)
 // seg008:2448
 __INLINE__ void  load_frame_to_obj()
 {
-  word chtab_base;
+  uint16_t chtab_base;
   chtab_base = id_chtab_2_kid;
   reset_obj_clip();
   load_frame();
@@ -7743,7 +7739,7 @@ __INLINE__ void  load_frame_to_obj()
   obj_chtab = chtab_base + (cur_frame.sword >> 6);
   obj_x = (char_dx_forward(cur_frame.dx) << 1) - 116;
   obj_y = cur_frame.dy + gameState.Char.y;
-  if ((sbyte)(cur_frame.flags ^ obj_direction) >= 0)
+  if ((int8_t)(cur_frame.flags ^ obj_direction) >= 0)
   {
     // 0x80: even/odd pixel
     ++obj_x;
