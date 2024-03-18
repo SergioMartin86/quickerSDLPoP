@@ -66,7 +66,7 @@ extern bool enableSDL2Rendering;
 std::vector<__SDLPoP_Item> GenerateItemsMap()
  {
    std::vector<__SDLPoP_Item> dest;
-   __SDLPoP_AddItem(&dest, __SDLPoP_quick_control,        HASHABLE);
+   __SDLPoP_AddItem(&dest, __SDLPoP_quick_control,        HASHABLE); 
    __SDLPoP_AddItem(&dest, level,                NON_HASHABLE);
    __SDLPoP_AddItem(&dest, checkpoint,           HASHABLE);
    __SDLPoP_AddItem(&dest, upside_down,          HASHABLE);
@@ -301,11 +301,22 @@ std::vector<__SDLPoP_Item> GenerateItemsMap()
 		need_level1_music = custom->intro_music_time_initial;
 	}
 
-	void __SDLPoP_updateRenderer() 
+	void __SDLPoP_updateRenderer(uint32_t currentStep) 
 	{
 		 auto tmp = curr_guard_color;
 		 if (current_level != 3) curr_guard_color = 1;
 			restore_room_after_quick_load();
+
+		 // Calculating timing
+			size_t curMins = currentStep / 720;
+			size_t curSecs = (currentStep % 720) / 12;
+			size_t curMilliSecs = floor((double)(currentStep % 12) / 0.012);
+
+			char IGTText[512];
+			sprintf(IGTText, "IGT %2lu:%02lu.%03lu", curMins, curSecs, curMilliSecs);
+	  //  sprintf(IGTText, "Cutscene: %02u / %04u", gameState.currentCutsceneDelay, gameState.cumulativeCutsceneDelay);
+			display_text_bottom(IGTText);
+
 			draw_game_frame();
 			update_screen();
 

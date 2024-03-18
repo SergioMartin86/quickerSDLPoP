@@ -382,6 +382,8 @@ uint8_t sound_interruptible[58] = {
       if (gameState.jumped_through_mirror == -1) gameState.Guard.x = 245;
       check_mirror();
     }
+
+    gameState.currentStep++;
   }
 
 __INLINE__ void  startLevel(const uint16_t level)

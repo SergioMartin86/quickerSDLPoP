@@ -8,7 +8,7 @@
 
 extern void __SDLPoP_initialize(const char* sdlPopRootPath, const char* levelsFilePath);
 extern void __SDLPoP_startLevel(const uint16_t level);
-extern void __SDLPoP_updateRenderer();
+extern void __SDLPoP_updateRenderer(uint32_t currentStep);
 extern void __SDLPoP_advanceState(const Controller::input_t input);
 extern void __SDLPoP_enableRendering();
 extern void __SDLPoP_disableRendering();
@@ -31,7 +31,7 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
    void initialize() override { __SDLPoP_initialize(_sdlPopRootPath.c_str(), _levelsFilePath.c_str()); }
    void printInfo() const override { __SDLPoP_printInfo();  }
    void advanceStateImpl(const Controller::input_t input) override { __SDLPoP_advanceState(input); }
-   void updateRenderer() override { __SDLPoP_updateRenderer(); }
+   void updateRenderer() override { __SDLPoP_updateRenderer(0); }
    void setRNGValue(const uint32_t rngValue) override { __SDLPoP_setRNGValue(rngValue); }
    void initializeCopyProtection() override { __SDLPoP_initializeCopyProtection(); }
    void serializeState(jaffarCommon::serializer::Base& serializer) const override { __SDLPoP_serializeState(serializer); }
