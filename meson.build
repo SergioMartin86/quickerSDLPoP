@@ -32,7 +32,7 @@ jaffarCommonDependency = jaffarCommonSubproject.get_variable('jaffarCommonDepend
     quickerSDLPoPPlayer = executable('quickerSDLPoPPlayer',
       'source/player.cpp',
       cpp_args            : [ commonCompileArgs, '-DNCURSES' ],
-      dependencies        : [ jaffarCommonDependency, quickerSDLPoPDependency, toolDependency],
+      dependencies        : [ jaffarCommonDependency, quickerSDLPoPDependency, SDLPoPDependency, toolDependency],
       link_with           : [ SDLPoPLib ],
       link_args           : [ '-lncurses' ]
     )

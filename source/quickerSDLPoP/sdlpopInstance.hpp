@@ -45,8 +45,6 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
       _emu.init_copyprot();
     }
 
-    
-
     __INLINE__ void serializeState(jaffarCommon::serializer::Base& serializer) const override
     {
       serializer.push(&_emu.gameState, sizeof(_emu.gameState));
@@ -207,6 +205,6 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
 
   private: 
 
-  quickerSDLPoP _emu;
+  quicker::QuickerSDLPoP _emu;
   std::vector<Item> _items;
 };

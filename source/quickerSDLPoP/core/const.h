@@ -1,5 +1,5 @@
 /*
-MiniPop, a barebones thread-safe version of SDLPop for routing
+quickerSDLPoP, a barebones thread-safe version of SDLPop for routing
 Copyright (C) 2021 Sergio Martin
 
 based on
@@ -26,6 +26,9 @@ The authors of this program may be contacted at https://forum.princed.org
 #pragma once
 
 #include "types.h"
+
+namespace quicker
+{
 
 #define VGA_PALETTE_DEFAULT \
   {                         \
@@ -2801,3 +2804,5 @@ static custom_options_type custom_defaults = {
   .chomper_speed = 15,
 };
 char *g_argv[] = {(char *)"prince"};
+
+} // namespace quicker

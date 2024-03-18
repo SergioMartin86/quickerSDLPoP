@@ -1,5 +1,5 @@
 /*
-MiniPop, a barebones thread-safe version of SDLPop for routing
+quickerSDLPoP, a barebones thread-safe version of SDLPop for routing
 Copyright (C) 2021 Sergio Martin
 
 based on
@@ -24,6 +24,9 @@ The authors of this program may be contacted at https://forum.princed.org
 */
 
 #pragma once
+
+namespace quicker
+{
 
   #define MAX_CACHED_FILES 2048
   #define POP_MAX_PATH 1024
@@ -1422,3 +1425,5 @@ struct sdlPopState_t
   short jumped_through_mirror;
 };
 #pragma pack(pop)
+
+} // namespace quicker

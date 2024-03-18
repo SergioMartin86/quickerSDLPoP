@@ -28,10 +28,13 @@ The authors of this program may be contacted at https://forum.princed.org
 #include "const.h"
 #include <math.h>
 #include <string.h>
-  #include <SDL.h>
-  #include <SDL_image.h>
+#include <SDL.h>
+#include <SDL_image.h>
 
-class quickerSDLPoP
+namespace quicker
+{
+
+class QuickerSDLPoP
 {
 
 public:
@@ -7747,3 +7750,5 @@ __INLINE__ void  load_frame_to_obj()
 }
 
 }; // class quickerSDLPoP
+
+} // namespace quicker
