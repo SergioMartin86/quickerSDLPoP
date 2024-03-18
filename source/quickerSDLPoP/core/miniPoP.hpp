@@ -3882,10 +3882,8 @@ __INLINE__ void  check_grab()
 {
   uint16_t old_x;
 
-#define MAX_GRAB_FALLING_SPEED 32
-
   if (control_shift < 0 &&                              // press Shift to grab
-      gameState.Char.fall_y < MAX_GRAB_FALLING_SPEED && // you can't grab if you're falling too fast ...
+      gameState.Char.fall_y < __QS__MAX_GRAB_FALLING_SPEED && // you can't grab if you're falling too fast ...
       gameState.Char.alive < 0 &&                       // ... or dead
       (uint16_t)y_land[gameState.Char.curr_row + 1] <= (uint16_t)(gameState.Char.y + 25))
   {
@@ -7330,9 +7328,7 @@ __INLINE__ void  grab_up_with_floor_behind()
   short edge_distance = get_edge_distance();
   // printf("Distance to edge weight: %d\tedge type: %d\tedge distance: %d\n", distance, edge_type, edge_distance);
 
-#define JUMP_STRAIGHT_CONDITION distance < 4 && edge_distance < 4 && edge_type != 1
-
-  if (JUMP_STRAIGHT_CONDITION)
+  if (__QS_JUMP_STRAIGHT_CONDITION)
   {
     gameState.Char.x = char_dx_forward(distance);
     seqtbl_offset_char(seq_8_jump_up_and_grab_straight); // jump up and grab (when?)

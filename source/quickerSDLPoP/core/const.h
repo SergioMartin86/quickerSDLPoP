@@ -43,6 +43,8 @@ namespace quicker
 #define __QS_SND(sound) SEQ_SOUND, sound
 #define __QS_SET_FALL(x, y) SEQ_SET_FALL, (uint8_t)x, (uint8_t)y
 #define __QS_LABEL(label) // disable
+#define __QS__MAX_GRAB_FALLING_SPEED 32
+#define __QS_JUMP_STRAIGHT_CONDITION distance < 4 && edge_distance < 4 && edge_type != 1
 
 // Labels
 enum sequence_t

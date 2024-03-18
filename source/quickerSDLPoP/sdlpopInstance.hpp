@@ -4,10 +4,35 @@
 #include "core/miniPoP.hpp"
 #include "../sdlpopInstanceBase.hpp"
 #include <jaffarCommon/logger.hpp>
+#include <jaffarCommon/serializers/contiguous.hpp>
+#include <jaffarCommon/deserializers/contiguous.hpp>
+
+extern void __SDLPoP_initialize(const char* sdlPopRootPath, const char* levelsFilePath);
+extern void __SDLPoP_startLevel(const uint16_t level);
+extern void __SDLPoP_updateRenderer();
+extern void __SDLPoP_advanceState(const Controller::input_t input);
+extern void __SDLPoP_enableRendering();
+extern void __SDLPoP_disableRendering();
+extern void __SDLPoP_printInfo();
+extern void __SDLPoP_setRNGValue(const uint32_t rngValue);
+extern void __SDLPoP_initializeCopyProtection();
+extern void __SDLPoP_serializeState(jaffarCommon::serializer::Base& serializer);
+extern void __SDLPoP_deserializeState(jaffarCommon::deserializer::Base& deserializer);
+extern size_t __SDLPoP_getFullStateSize();
+extern jaffarCommon::hash::hash_t __SDLPoP_getStateHash();
+extern void __SDLPoP_setLooseTileSound(const uint16_t looseTileSound);
 
 class SDLPoPInstance final : public SDLPoPInstanceBase
 {
   public:
+
+   void enableRendering() override
+   {
+     __SDLPoP_enableRendering(); 
+     __SDLPoP_initialize(_sdlPopRootPath.c_str(), _levelsFilePath.c_str()); 
+   };
+
+   void disableRendering() override { };
 
    SDLPoPInstance(const nlohmann::json& config) : SDLPoPInstanceBase(config)
    {
@@ -181,6 +206,13 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
 
    void updateRenderer() override
   {
+    auto stateSize = getFullStateSize();
+    uint8_t buffer[stateSize];
+    jaffarCommon::serializer::Contiguous s(buffer, stateSize);
+    serializeState(s);
+    jaffarCommon::deserializer::Contiguous d(buffer, stateSize);
+    __SDLPoP_deserializeState(d);
+    __SDLPoP_updateRenderer();
   }
 
   jaffarCommon::hash::hash_t getStateHash() const override

@@ -30,8 +30,6 @@ class SDLPoPInstanceBase
     advanceStateImpl(_controller.getParsedInput());
   }
 
-  inline void enableRendering() { _doRendering = true; };
-  inline void disableRendering() { _doRendering = false; };
 
   virtual size_t getFullStateSize() const = 0;
   virtual size_t getDifferentialStateSize() const = 0;
@@ -47,9 +45,11 @@ class SDLPoPInstanceBase
   virtual void setLooseTileSound(const uint16_t looseTileSound) = 0;
   virtual void initializeCopyProtection() = 0;
   virtual void updateRenderer() = 0;
-  
+
   protected:
 
+  virtual void enableRendering() = 0;
+  virtual void disableRendering() = 0;
   virtual jaffarCommon::hash::hash_t getStateHash() const = 0;
   virtual void printInfo() const = 0;
   virtual void advanceStateImpl(const Controller::input_t input) = 0;
