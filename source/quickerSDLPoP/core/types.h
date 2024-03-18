@@ -28,26 +28,12 @@ The authors of this program may be contacted at https://forum.princed.org
 namespace quicker
 {
 
-  #define MAX_CACHED_FILES 2048
-  #define POP_MAX_PATH 1024
-  #define POP_MAX_OPTIONS_SIZE 256
-
-  #if SDL_BYTEORDER != SDL_LIL_ENDIAN
-    #error This program is not (yet) prepared for big endian CPUs, please contact the author.
-  #endif
-
-  // "far" and "near" makes sense only for 16-bit
-  #define far
-  #define near
-  #define __pascal
-  #define malloc_near malloc
-  #define malloc_far malloc
-  #define free_near free
-  #define free_far free
-  #define memset_near memset
-  #define memset_far memset
-  #define memcpy_near memcpy
-  #define memcpy_far memcpy
+  #define __QS_BASE_FPS 60
+  #define __QS_FEATHER_FALL_LENGTH 18.75
+  #define __QS_MAX_CACHED_FILES 2048
+  #define __QS_POP_MAX_PATH 1024
+  #define __QS__COUNT(array) (sizeof(array) / sizeof(array[0]))
+  #define __QS_NUM_GUARD_SKILLS 12
 
 typedef struct rect_type
 {
@@ -75,7 +61,7 @@ typedef struct tile_and_mod
   uint8_t modifier;
 } tile_and_mod;
 
-typedef int __pascal far (*add_table_type)(short chtab_id, int id, int8_t xh, int8_t xl, int ybottom, int blit, uint8_t peel);
+typedef int   (*add_table_type)(short chtab_id, int id, int8_t xh, int8_t xl, int ybottom, int blit, uint8_t peel);
 
 typedef struct back_table_type
 {
@@ -267,7 +253,7 @@ typedef struct chtab_type
   uint16_t chtab_palette_bits;
   uint16_t has_palette_bits;
   // This is a variable-size array, with n_images elements.
-  image_type *far images[];
+  image_type * images[];
 } chtab_type;
 
 typedef struct full_image_type
@@ -470,12 +456,12 @@ typedef struct dat_type
 {
   struct dat_type *next_dat;
   FILE *handle;
-  char filename[POP_MAX_PATH];
+  char filename[__QS_POP_MAX_PATH];
   dat_table_type *dat_table;
   // handle and dat_table are NULL if the DAT is a directory.
 } dat_type;
 
-typedef void __pascal far (*cutscene_ptr_type)();
+typedef void   (*cutscene_ptr_type)();
 
 typedef enum data_location
 {
@@ -733,7 +719,6 @@ enum soundids
   sound_56_ending_music = 56,
 };
 
-  #define NUM_TIMERS 3
 enum timerids
 {
   timer_0 = 0,
@@ -1142,8 +1127,6 @@ enum replay_seek_targets
 };
   #endif
 
-  #define COUNT(array) (sizeof(array) / sizeof(array[0]))
-
 // These are or'ed with SDL_SCANCODE_* constants in last_key_scancode.
 enum key_modifiers
 {
@@ -1152,39 +1135,6 @@ enum key_modifiers
   WITH_ALT = 0x2000,
 };
 
-  #define MAX_OPTION_VALUE_NAME_LENGTH 20
-typedef struct key_value_type
-{
-  char key[MAX_OPTION_VALUE_NAME_LENGTH];
-  int value;
-} key_value_type;
-
-typedef struct names_list_type
-{
-  uint8_t type; // 0 = names list, 1 = key/value pair list
-  union
-  {
-    struct
-    {
-      const char (*data)[][MAX_OPTION_VALUE_NAME_LENGTH];
-      uint16_t count;
-    } names;
-    struct
-    {
-      key_value_type *data;
-      uint16_t count;
-    } kv_pairs;
-  };
-} names_list_type;
-
-  // Macros for declaring and initializing a names_list_type (for names lists and key/value pair lists).
-  #define NAMES_LIST(listname, ...)                                    \
-    const char listname[][MAX_OPTION_VALUE_NAME_LENGTH] = __VA_ARGS__; \
-    names_list_type listname##_list = {.type = 0, .names = {&listname, COUNT(listname)}}
-
-  #define KEY_VALUE_LIST(listname, ...)            \
-    const key_value_type listname[] = __VA_ARGS__; \
-    names_list_type listname##_list = {.type = 1, .kv_pairs = {(key_value_type *)&listname, COUNT(listname)}}
 
   #pragma pack(push, 1)
 typedef struct fixes_options_type
@@ -1228,8 +1178,6 @@ typedef struct fixes_options_type
   uint8_t fix_quicksave_during_lvl1_music;
 } fixes_options_type;
 
-  #define NUM_GUARD_SKILLS 12
-
 typedef struct custom_options_type
 {
   uint16_t start_minutes_left;
@@ -1246,7 +1194,6 @@ typedef struct custom_options_type
   uint8_t level_edge_hit_tile;
   uint8_t allow_triggering_any_tile;
   uint8_t enable_wda_in_palace;
-  rgb_type vga_palette[16];
   uint16_t first_level;
   uint8_t skip_title;
   uint16_t shift_L_allowed_until_level;
@@ -1314,13 +1261,13 @@ typedef struct custom_options_type
   int8_t tbl_seamless_exit[16];
 
   // guard skills
-  uint16_t strikeprob[NUM_GUARD_SKILLS];
-  uint16_t restrikeprob[NUM_GUARD_SKILLS];
-  uint16_t blockprob[NUM_GUARD_SKILLS];
-  uint16_t impblockprob[NUM_GUARD_SKILLS];
-  uint16_t advprob[NUM_GUARD_SKILLS];
-  uint16_t refractimer[NUM_GUARD_SKILLS];
-  uint16_t extrastrength[NUM_GUARD_SKILLS];
+  uint16_t strikeprob[__QS_NUM_GUARD_SKILLS];
+  uint16_t restrikeprob[__QS_NUM_GUARD_SKILLS];
+  uint16_t blockprob[__QS_NUM_GUARD_SKILLS];
+  uint16_t impblockprob[__QS_NUM_GUARD_SKILLS];
+  uint16_t advprob[__QS_NUM_GUARD_SKILLS];
+  uint16_t refractimer[__QS_NUM_GUARD_SKILLS];
+  uint16_t extrastrength[__QS_NUM_GUARD_SKILLS];
 
   // shadow's starting positions
   uint8_t init_shad_6[8];
@@ -1339,10 +1286,6 @@ typedef struct custom_options_type
   #pragma pack(pop)
 
 typedef struct directory_listing_type directory_listing_type;
-
-  #define BASE_FPS 60
-
-  #define FEATHER_FALL_LENGTH 18.75
 
 
 // SDLPop state to miniPop State conversion

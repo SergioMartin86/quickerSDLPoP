@@ -197,7 +197,7 @@ int8_t right_checked_col;
 int8_t left_checked_col;
 short coll_tile_left_xpos;
 uint16_t curr_tile_temp;
-char exe_dir[POP_MAX_PATH] = ".";
+char exe_dir[__QS_POP_MAX_PATH] = ".";
 bool found_exe_dir = false;
 uint16_t which_quote;
 dat_type *dat_chain_ptr = NULL;
@@ -208,7 +208,7 @@ short draw_main_y;
 short drawn_col;
 uint8_t tile_left;
 uint8_t modifier_left;
-char levels_file[POP_MAX_PATH];
+char levels_file[__QS_POP_MAX_PATH];
 uint8_t obj2_tilepos;
 uint16_t obj2_x;
 uint8_t obj2_y;
@@ -503,7 +503,7 @@ __INLINE__ FILE *open_dat_from_root_or_data_dir(const char *filename)
   // if failed, try if the DAT file can be opened in the data/ directory, instead of the main folder
   if (fp == NULL)
   {
-    char data_path[POP_MAX_PATH + 4096];
+    char data_path[__QS_POP_MAX_PATH + 4096];
     snprintf(data_path, sizeof(data_path), "data/%s", filename);
 
     if (!file_exists(data_path))
@@ -519,7 +519,7 @@ __INLINE__ FILE *open_dat_from_root_or_data_dir(const char *filename)
 }
 
 // seg009:0F58
-__INLINE__ dat_type *__pascal open_dat(const char *filename, int drive)
+__INLINE__ dat_type *open_dat(const char *filename, int drive)
 {
   FILE *fp = NULL;
   fp = open_dat_from_root_or_data_dir(filename);
@@ -556,7 +556,7 @@ failed:
 }
 
 // seg000:0000
-__INLINE__ void  far pop_main()
+__INLINE__ void pop_main()
 {
   // Fix bug: with start_in_blind_mode enabled, moving objects are not displayed until blind mode is toggled off+on??
   need_drects = 1;
@@ -569,7 +569,7 @@ __INLINE__ void  far pop_main()
 }
 
 // seg009:9F80
-__INLINE__ void  far *__pascal load_from_opendats_alloc(int resource, const char *extension, data_location *out_result, int *out_size)
+__INLINE__ void *load_from_opendats_alloc(int resource, const char *extension, data_location *out_result, int *out_size)
 {
   // stub
   // printf("id = %d\n",resource);
@@ -603,7 +603,7 @@ __INLINE__ void  far *__pascal load_from_opendats_alloc(int resource, const char
 }
 
 // seg009:121A
-__INLINE__ image_type *far load_image(int resource_id, dat_pal_type *palette)
+__INLINE__ image_type * load_image(int resource_id, dat_pal_type *palette)
 {
   // stub
   data_location result;
@@ -636,7 +636,7 @@ __INLINE__ image_type *far load_image(int resource_id, dat_pal_type *palette)
 }
 
 // seg009:104E
-__INLINE__ chtab_type *__pascal load_sprites_from_file(int resource, int palette_bits, int quit_on_error)
+__INLINE__ chtab_type *load_sprites_from_file(int resource, int palette_bits, int quit_on_error)
 {
   int i;
   int n_images = 0;
@@ -647,7 +647,7 @@ __INLINE__ chtab_type *__pascal load_sprites_from_file(int resource, int palette
   dat_pal_type *pal_ptr = &shpl->palette;
 
   n_images = shpl->n_images;
-  size_t alloc_size = sizeof(chtab_type) + sizeof(void  far *) * n_images;
+  size_t alloc_size = sizeof(chtab_type) + sizeof(void *) * n_images;
   chtab = (chtab_type *)malloc(alloc_size);
   memset(chtab, 0, alloc_size);
   chtab->n_images = n_images;
@@ -661,7 +661,7 @@ __INLINE__ chtab_type *__pascal load_sprites_from_file(int resource, int palette
 
 __INLINE__ void  load_from_opendats_metadata(int resource_id, const char *extension, FILE **out_fp, data_location *result, uint8_t *checksum, int *size, dat_type **out_pointer)
 {
-  char image_filename[POP_MAX_PATH];
+  char image_filename[__QS_POP_MAX_PATH];
   FILE *fp = NULL;
   dat_type *pointer;
   *result = data_none;
@@ -703,7 +703,7 @@ __INLINE__ void  load_from_opendats_metadata(int resource_id, const char *extens
     else
     {
       // If it's a directory:
-      char filename_no_ext[POP_MAX_PATH];
+      char filename_no_ext[__QS_POP_MAX_PATH];
       // strip the .DAT file extension from the filename (use folders simply named TITLE, KID, VPALACE, etc.)
       strncpy(filename_no_ext, pointer->filename, sizeof(filename_no_ext));
       size_t len = strlen(filename_no_ext);
@@ -716,7 +716,7 @@ __INLINE__ void  load_from_opendats_metadata(int resource_id, const char *extens
       // printf("loading (binary) %s",image_filename);
       
       char newPath[8192];
-      const char *filename = locate_file_(image_filename, newPath, POP_MAX_PATH); 
+      const char *filename = locate_file_(image_filename, newPath, __QS_POP_MAX_PATH); 
       // printf("File: %s\n", filename);
       fp = fopen(filename, "rb");
       if (fp != NULL)
@@ -745,7 +745,7 @@ __INLINE__ void  load_from_opendats_metadata(int resource_id, const char *extens
 }
 
 // seg009:9F34
-__INLINE__ void  close_dat(dat_type far *pointer)
+__INLINE__ void  close_dat(dat_type*pointer)
 {
   dat_type **prev = &dat_chain_ptr;
   dat_type *curr = dat_chain_ptr;
@@ -768,7 +768,7 @@ __INLINE__ void  close_dat(dat_type far *pointer)
 }
 
 // seg009:A172
-__INLINE__ int load_from_opendats_to_area(int resource, void  far *area, int length, const char *extension)
+__INLINE__ int load_from_opendats_to_area(int resource, void *area, int length, const char *extension)
 {
   // stub
   // return 0;
@@ -1198,7 +1198,7 @@ __INLINE__ void  check_sword_vs_sword()
 }
 
 // seg000:136A
-__INLINE__ void  load_chtab_from_file(int chtab_id, int resource, const char near *filename, int palette_bits)
+__INLINE__ void  load_chtab_from_file(int chtab_id, int resource, const char  *filename, int palette_bits)
 {
   // printf("Loading chtab %d, id %d from %s\n",chtab_id,resource,filename);
   dat_type *dathandle;
@@ -1210,7 +1210,7 @@ __INLINE__ void  load_chtab_from_file(int chtab_id, int resource, const char nea
 }
 
 // seg009:12EF
-__INLINE__ void  load_one_optgraf(chtab_type *chtab_ptr, dat_pal_type far *pal_ptr, int base_id, int min_index, int max_index)
+__INLINE__ void  load_one_optgraf(chtab_type *chtab_ptr, dat_pal_type*pal_ptr, int base_id, int min_index, int max_index)
 {
   short index;
   for (index = min_index; index <= max_index; ++index)
@@ -1346,7 +1346,7 @@ __INLINE__ void  parse_cmdline_sound()
 // seg002:0000
 __INLINE__ void  do_init_shad(const uint8_t *source, int seq_index)
 {
-  memcpy_near(&gameState.Char, source, 7);
+  memcpy(&gameState.Char, source, 7);
   seqtbl_offset_char(seq_index);
   gameState.Char.charid = charid_1_shadow;
   gameState.demo_time = 0;
@@ -1469,7 +1469,7 @@ __INLINE__ void  enter_guard()
   }
   play_seq();
   gameState.guard_skill = gameState.level.guards_skill[room_minus_1];
-  if (gameState.guard_skill >= NUM_GUARD_SKILLS)
+  if (gameState.guard_skill >= __QS_NUM_GUARD_SKILLS)
   {
     gameState.guard_skill = 3;
   }
@@ -3058,7 +3058,7 @@ Possible results in gameState.can_guard_see_kid:
   kid_frame = gameState.Kid.frame;
   if (gameState.Guard.charid == charid_24_mouse)
   {
-    // If the prince is fighting a guard, and the player does a quickload to a state where the prince is near the mouse, the prince would draw the sword.
+    // If the prince is fighting a guard, and the player does a quickload to a state where the prince is  the mouse, the prince would draw the sword.
     // The following line prevents this.
     gameState.can_guard_see_kid = 0;
     return;
@@ -3253,7 +3253,7 @@ __INLINE__ void  load_frame()
   case charid_0_kid:
   case charid_24_mouse:
   use_table_kid:
-    get_frame_internal(frame_table_kid, frame, "frame_table_kid", COUNT(frame_table_kid));
+    get_frame_internal(frame_table_kid, frame, "frame_table_kid", __QS__COUNT(frame_table_kid));
     break;
   case charid_2_guard:
   case charid_4_skeleton:
@@ -3264,12 +3264,12 @@ __INLINE__ void  load_frame()
     if (frame < 150 || frame >= 190)
       goto use_table_kid;
   use_table_guard:
-    get_frame_internal(frame_tbl_guard, frame + add_frame - 149, "frame_tbl_guard", COUNT(frame_tbl_guard));
+    get_frame_internal(frame_tbl_guard, frame + add_frame - 149, "frame_tbl_guard", __QS__COUNT(frame_tbl_guard));
     break;
   case charid_5_princess:
   case charid_6_vizier:
     //  use_table_cutscene:
-    get_frame_internal(frame_tbl_cuts, frame, "frame_tbl_cuts", COUNT(frame_tbl_cuts));
+    get_frame_internal(frame_tbl_cuts, frame, "frame_tbl_cuts", __QS__COUNT(frame_tbl_cuts));
     break;
   }
 }
@@ -3300,14 +3300,14 @@ __INLINE__ void  play_seq()
 {
   for (;;)
   {
-    uint8_t item = *(SEQTBL_0 + gameState.Char.curr_seq++);
+    uint8_t item = *(__QS_SEQTBL_0 + gameState.Char.curr_seq++);
     switch (item)
     {
     case SEQ_DX: // dx
-      gameState.Char.x = char_dx_forward(*(SEQTBL_0 + gameState.Char.curr_seq++));
+      gameState.Char.x = char_dx_forward(*(__QS_SEQTBL_0 + gameState.Char.curr_seq++));
       break;
     case SEQ_DY: // dy
-      gameState.Char.y += *(SEQTBL_0 + gameState.Char.curr_seq++);
+      gameState.Char.y += *(__QS_SEQTBL_0 + gameState.Char.curr_seq++);
       break;
     case SEQ_FLIP: // flip
       gameState.Char.direction = ~gameState.Char.direction;
@@ -3321,7 +3321,7 @@ __INLINE__ void  play_seq()
       }
       // fallthrough!
     case SEQ_JMP: // jump
-      gameState.Char.curr_seq = *(const uint16_t *)(SEQTBL_0 + gameState.Char.curr_seq);
+      gameState.Char.curr_seq = *(const uint16_t *)(__QS_SEQTBL_0 + gameState.Char.curr_seq);
       break;
     case SEQ_UP: // up
       --gameState.Char.curr_row;
@@ -3332,11 +3332,11 @@ __INLINE__ void  play_seq()
       start_chompers();
       break;
     case SEQ_ACTION: // action
-      gameState.Char.action = *(SEQTBL_0 + gameState.Char.curr_seq++);
+      gameState.Char.action = *(__QS_SEQTBL_0 + gameState.Char.curr_seq++);
       break;
     case SEQ_SET_FALL: // set fall
-      gameState.Char.fall_x = *(SEQTBL_0 + gameState.Char.curr_seq++);
-      gameState.Char.fall_y = *(SEQTBL_0 + gameState.Char.curr_seq++);
+      gameState.Char.fall_x = *(__QS_SEQTBL_0 + gameState.Char.curr_seq++);
+      gameState.Char.fall_y = *(__QS_SEQTBL_0 + gameState.Char.curr_seq++);
       break;
     case SEQ_KNOCK_UP: // knock up
       knock = 1;
@@ -3345,7 +3345,7 @@ __INLINE__ void  play_seq()
       knock = -1;
       break;
     case SEQ_SOUND: // sound
-      switch (*(SEQTBL_0 + gameState.Char.curr_seq++))
+      switch (*(__QS_SEQTBL_0 + gameState.Char.curr_seq++))
       {
       case SND_SILENT: // no sound actually played, but guards still notice the kid
         gameState.is_guard_notice = 1;
@@ -3375,7 +3375,7 @@ __INLINE__ void  play_seq()
       ++gameState.next_level;
       break;
     case SEQ_GET_ITEM: // get item
-      if (*(SEQTBL_0 + gameState.Char.curr_seq++) == 1)
+      if (*(__QS_SEQTBL_0 + gameState.Char.curr_seq++) == 1)
       {
         proc_get_object();
       }
@@ -3425,14 +3425,14 @@ __INLINE__ int get_tile_div_mod(const int xpos)
     // Here we simulate these reads.
     // Before tile_mod_tbl[] is tile_div_tbl[], and before tile_div_tbl[] are the following bytes:
     static const uint8_t bogus[] = {0x02, 0x00, 0x41, 0x00, 0x80, 0x00, 0xBF, 0x00, 0xFE, 0x00, 0xFF, 0x01, 0x01, 0xFF, 0xC4, 0xFF, 0x03, 0x00, 0x42, 0x00, 0x81, 0x00, 0xC0, 0x00, 0xF8, 0xFF, 0x37, 0x00, 0x76, 0x00, 0xB5, 0x00, 0xF4, 0x00};
-    if (COUNT(bogus) + xpos >= 0)
+    if (__QS__COUNT(bogus) + xpos >= 0)
     {
-      xh = bogus[COUNT(bogus) + xpos];               // simulating tile_div_tbl[xpos]
-      xl = tile_div_tbl[COUNT(tile_div_tbl) + xpos]; // simulating tile_mod_tbl[xpos]
+      xh = bogus[__QS__COUNT(bogus) + xpos];               // simulating tile_div_tbl[xpos]
+      xl = tile_div_tbl[__QS__COUNT(tile_div_tbl) + xpos]; // simulating tile_mod_tbl[xpos]
     }
     else
     {
-      printf("xpos = %d (< %d) out of range for simulation of index overflow!\n", xpos, -(int)COUNT(bogus));
+      printf("xpos = %d (< %d) out of range for simulation of index overflow!\n", xpos, -(int)__QS__COUNT(bogus));
     }
   }
 
@@ -3445,14 +3445,14 @@ __INLINE__ int get_tile_div_mod(const int xpos)
     // Here we simulate these reads.
     // After tile_mod_tbl[] there are the following bytes:
     static const uint8_t bogus[] = {0xF4, 0x02, 0x10, 0x1E, 0x2C, 0x3A, 0x48, 0x56, 0x64, 0x72, 0x80, 0x8E, 0x9C, 0xAA, 0xB8, 0xC6, 0xD4, 0xE2, 0xF0, 0xFE, 0x00, 0x0A, 0x00, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x0A, 0x0D, 0x00, 0x00, 0x00, 0x00};
-    if ((int8_t)xpos - (int8_t)tblSize < (int8_t)COUNT(bogus))
+    if ((int8_t)xpos - (int8_t)tblSize < (int8_t)__QS__COUNT(bogus))
     {
       xh = tile_mod_tbl[xpos - tblSize]; // simulating tile_div_tbl[xpos]
       xl = bogus[xpos - tblSize];        // simulating tile_mod_tbl[xpos]
     }
     else
     {
-      printf("xpos = %d (> %d) out of range for simulation of index overflow!\n", xpos, (int)COUNT(bogus) + tblSize);
+      printf("xpos = %d (> %d) out of range for simulation of index overflow!\n", xpos, (int)__QS__COUNT(bogus) + tblSize);
     }
   }
 
@@ -3689,9 +3689,9 @@ __INLINE__ int get_tile_at_char()
 // Get an image, with index and NULL checks.
 __INLINE__ image_type *get_image(short chtab_id, int id)
 {
-  if ((ssize_t)chtab_id < 0 || (ssize_t)chtab_id > (ssize_t)COUNT(chtab_addrs))
+  if ((ssize_t)chtab_id < 0 || (ssize_t)chtab_id > (ssize_t)__QS__COUNT(chtab_addrs))
   {
-    //  printf("Tried to use chtab %d not in 0..%d\n", chtab_id, (int)COUNT(chtab_addrs));
+    //  printf("Tried to use chtab %d not in 0..%d\n", chtab_id, (int)__QS__COUNT(chtab_addrs));
     return NULL;
   }
   chtab_type *chtab = chtab_addrs[chtab_id];
@@ -5095,10 +5095,10 @@ __INLINE__ void  bumped_sound()
 // seg004:0601
 __INLINE__ void  clear_coll_rooms()
 {
-  memset_near(gameState.prev_coll_room, -1, sizeof(gameState.prev_coll_room));
-  memset_near(gameState.curr_row_coll_room, -1, sizeof(gameState.curr_row_coll_room));
-  memset_near(gameState.below_row_coll_room, -1, sizeof(gameState.below_row_coll_room));
-  memset_near(gameState.above_row_coll_room, -1, sizeof(gameState.above_row_coll_room));
+  memset(gameState.prev_coll_room, -1, sizeof(gameState.prev_coll_room));
+  memset(gameState.curr_row_coll_room, -1, sizeof(gameState.curr_row_coll_room));
+  memset(gameState.below_row_coll_room, -1, sizeof(gameState.below_row_coll_room));
+  memset(gameState.above_row_coll_room, -1, sizeof(gameState.above_row_coll_room));
   gameState.prev_collision_row = -1;
 }
 
@@ -5115,7 +5115,7 @@ __INLINE__ int get_edge_distance()
 Possible results in edge_type:
 0: closer/sword/potion
 1: edge
-2: floor (nothing near char)
+2: floor (nothing  char)
 */
   short distance;
   uint8_t tiletype;
@@ -6467,7 +6467,7 @@ __INLINE__ void  add_mob_to_objtable(int ypos)
 {
   uint16_t index;
   objtable_type *curr_obj;
-  index = objtable_count++;
+  index = __QS_objtable_count++;
   curr_obj = &objtable[index];
   curr_obj->obj_type = curmob.type | 0x80;
   curr_obj->xh = curmob.xh;
@@ -7013,7 +7013,7 @@ __INLINE__ void  forward_pressed()
 
   if (edge_type == 1 && curr_tile2 != tiles_18_chomper && distance < 8)
   {
-    // If char is near a wall, step instead of run.
+    // If char is  a wall, step instead of run.
     if (control_forward < 0)
     {
       safe_step();
@@ -7641,7 +7641,7 @@ __INLINE__ void  parry()
 // seg008:0006
 __INLINE__ void  redraw_room()
 {
-  memset_near(table_counts, 0, sizeof(table_counts));
+  memset(table_counts, 0, sizeof(table_counts));
   reset_obj_clip();
   draw_room();
 }
