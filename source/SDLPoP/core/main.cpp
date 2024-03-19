@@ -43,11 +43,13 @@ SDL_Surface* _upSurface;
 SDL_Surface* _leftSurface;
 SDL_Surface* _rightSurface;
 SDL_Surface* _shiftSurface;
+SDL_Surface* _restartSurface;
 SDL_Surface* _down2Surface;
 SDL_Surface* _up2Surface;
 SDL_Surface* _left2Surface;
 SDL_Surface* _right2Surface;
 SDL_Surface* _shift2Surface;
+SDL_Surface* _restart2Surface;
 
 	enum __SDLPoP_ItemType
 	{
@@ -227,6 +229,9 @@ std::vector<__SDLPoP_Item> GenerateItemsMap()
     imagePath = overlayPath + std::string("/shift.png");
     _shiftSurface = IMG_Load(imagePath.c_str());
 
+    imagePath = overlayPath + std::string("/restart.png");
+    _restartSurface = IMG_Load(imagePath.c_str());
+
     imagePath = overlayPath + std::string("/down2.png");
     _down2Surface = IMG_Load(imagePath.c_str());
 
@@ -241,6 +246,9 @@ std::vector<__SDLPoP_Item> GenerateItemsMap()
 
     imagePath = overlayPath + std::string("/shift2.png");
     _shift2Surface = IMG_Load(imagePath.c_str());
+
+    imagePath = overlayPath + std::string("/restart2.png");
+    _restart2Surface = IMG_Load(imagePath.c_str());
 
 		// Setting levels.dat path
 		sprintf(levels_file, "%s", levelsFilePath);
@@ -370,18 +378,21 @@ std::vector<__SDLPoP_Item> GenerateItemsMap()
       SDL_Surface* leftSurface = _leftSurface;
       SDL_Surface* rightSurface = _rightSurface;
       SDL_Surface* shiftSurface = _shiftSurface;
+      SDL_Surface* restartSurface = _restartSurface;
 
       if (input.down == true)  downSurface = _down2Surface;
       if (input.up == true) upSurface = _up2Surface;
       if (input.left == true) leftSurface = _left2Surface;
       if (input.right == true)  rightSurface = _right2Surface;
       if (input.shift == true) shiftSurface = _shift2Surface;
+      if (input.restart == true) restartSurface = _restart2Surface;
 
       draw_image_transp_vga(downSurface, 280, 170);
       draw_image_transp_vga(upSurface, 280, 150);
       draw_image_transp_vga(leftSurface, 260, 170);
       draw_image_transp_vga(rightSurface, 300, 170);
       draw_image_transp_vga(shiftSurface, 260, 150);
+      draw_image_transp_vga(restartSurface, 300, 150);
 
 			update_screen();
 
