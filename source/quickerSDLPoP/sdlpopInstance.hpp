@@ -42,7 +42,7 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
 
     __INLINE__ void initialize() override
     {
-      _emu.initialize(_sdlPopRootPath);
+      _emu.initialize(_sdlPopRootPath, _levelsFilePath, _gameVersion);
     }
 
     static uint32_t advanceRNGState(const uint32_t randomSeed)

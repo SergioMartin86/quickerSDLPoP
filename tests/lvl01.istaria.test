@@ -2,16 +2,16 @@
   "SDLPoP Configuration":
   {
     "SDLPoP Root Path": "../SDLPoPData",
-    "Levels File Path": "",
-    "Game Version": "1.4"
+    "Levels File Path": "../SDLPoPData/levels/istaria.dat",
+    "Game Version": "1.0"
   },
-  "Override RNG Enabled": true,
-  "Override RNG Value": 300979521,
+  "Override RNG Enabled": false,
+  "Override RNG Value": 0,
   "Override Loose Tile Sound Enabled": false,
   "Override Loose Tile Sound Value": 0,
   "Initialize Copy Protection": false,
-  "Initial State File": "lvl01.state",
-  "Sequence File": "lvl01.100percent.sol", 
+  "Initial State File": "lvl01.istaria.state",
+  "Sequence File": "lvl01.istaria.sol", 
   "Differential Compression":
   {
     "Enabled": false,

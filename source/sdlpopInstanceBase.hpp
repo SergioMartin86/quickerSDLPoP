@@ -16,6 +16,7 @@ class SDLPoPInstanceBase
   {
     _sdlPopRootPath = jaffarCommon::json::getString(config, "SDLPoP Root Path");
     _levelsFilePath = jaffarCommon::json::getString(config, "Levels File Path");
+    _gameVersion = jaffarCommon::json::getString(config, "Game Version");
   }
 
   virtual ~SDLPoPInstanceBase() = default;
@@ -63,6 +64,7 @@ class SDLPoPInstanceBase
 
   std::string _sdlPopRootPath;
   std::string _levelsFilePath;
+  std::string _gameVersion;
 
   private:
 

@@ -1261,13 +1261,21 @@ typedef struct custom_options_type
   int8_t tbl_seamless_exit[16];
 
   // guard skills
-  uint16_t strikeprob[__QS_NUM_GUARD_SKILLS];
-  uint16_t restrikeprob[__QS_NUM_GUARD_SKILLS];
-  uint16_t blockprob[__QS_NUM_GUARD_SKILLS];
-  uint16_t impblockprob[__QS_NUM_GUARD_SKILLS];
-  uint16_t advprob[__QS_NUM_GUARD_SKILLS];
-  uint16_t refractimer[__QS_NUM_GUARD_SKILLS];
-  uint16_t extrastrength[__QS_NUM_GUARD_SKILLS];
+  uint16_t strikeprob10[__QS_NUM_GUARD_SKILLS];
+  uint16_t restrikeprob10[__QS_NUM_GUARD_SKILLS];
+  uint16_t blockprob10[__QS_NUM_GUARD_SKILLS];
+  uint16_t impblockprob10[__QS_NUM_GUARD_SKILLS];
+  uint16_t advprob10[__QS_NUM_GUARD_SKILLS];
+  uint16_t refractimer10[__QS_NUM_GUARD_SKILLS];
+  uint16_t extrastrength10[__QS_NUM_GUARD_SKILLS];
+
+  uint16_t strikeprob14[__QS_NUM_GUARD_SKILLS];
+  uint16_t restrikeprob14[__QS_NUM_GUARD_SKILLS];
+  uint16_t blockprob14[__QS_NUM_GUARD_SKILLS];
+  uint16_t impblockprob14[__QS_NUM_GUARD_SKILLS];
+  uint16_t advprob14[__QS_NUM_GUARD_SKILLS];
+  uint16_t refractimer14[__QS_NUM_GUARD_SKILLS];
+  uint16_t extrastrength14[__QS_NUM_GUARD_SKILLS];
 
   // shadow's starting positions
   uint8_t init_shad_6[8];

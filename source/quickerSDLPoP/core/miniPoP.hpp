@@ -42,7 +42,14 @@ public:
 __attribute__((aligned(1024)))
 sdlPopState_t gameState;
 
+enum gameVersion_t 
+{
+  v10,
+  v14
+};
+
 // Extracted values
+gameVersion_t version;
 int8_t control_x;
 int8_t control_y;
 int8_t control_shift;
@@ -280,8 +287,14 @@ uint8_t sound_interruptible[58] = {
   0, // sound_56_ending_music
   0};
 
- __INLINE__ void  initialize(const std::string& sdlpopDir)
+ __INLINE__ void  initialize(const std::string& sdlpopDir, const std::string& levelsPath, const std::string& versionString)
  {
+     // Selecting game version
+     bool versionRecognized = false;
+     if (versionString == "1.0") { version = gameVersion_t::v10; versionRecognized = true; }
+     if (versionString == "1.4") { version = gameVersion_t::v14; versionRecognized = true; }
+     if (versionRecognized == false)  JAFFAR_THROW_LOGIC("[ERROR] Version string not recognized: '%s'\n", versionString.c_str());
+
      found_exe_dir = false;
       if (std::filesystem::exists(sdlpopDir.c_str()))
       {
@@ -291,7 +304,7 @@ uint8_t sound_interruptible[58] = {
       if (found_exe_dir == false)  JAFFAR_THROW_LOGIC("[ERROR] Could not find the root folder (%s) for SDLPoP\n", sdlpopDir.c_str());
 
       // Setting levels.dat path
-      sprintf(levels_file, "%s", sdlpopDir.c_str());
+      sprintf(levels_file, "%s", levelsPath.c_str());
 
       // Game initialization
       prandom(1);
@@ -1360,7 +1373,8 @@ __INLINE__ void  do_init_shad(const uint8_t *source, int seq_index)
 // seg002:0044
 __INLINE__ void  get_guard_hp()
 {
-  guardhp_delta = gameState.guardhp_curr = gameState.guardhp_max = custom->extrastrength[gameState.guard_skill] + custom->tbl_guard_hp[gameState.current_level];
+  auto guardExtraStrength = version == gameVersion_t::v10 ? custom->extrastrength10[gameState.guard_skill] : custom->extrastrength14[gameState.guard_skill];
+  guardhp_delta = gameState.guardhp_curr = gameState.guardhp_max = guardExtraStrength + custom->tbl_guard_hp[gameState.current_level];
 }
 
 // seg002:0064
@@ -2271,7 +2285,8 @@ __INLINE__ void  guard_advance()
 {
   if (gameState.guard_skill == 0 || gameState.kid_sword_strike == 0)
   {
-    if (custom->advprob[gameState.guard_skill] > prandom(255))
+    auto advProb = version == gameVersion_t::v10 ? custom->advprob10[gameState.guard_skill] : custom->advprob14[gameState.guard_skill];
+    if (advProb> prandom(255))
     {
       move_1_forward();
     }
@@ -2287,14 +2302,16 @@ __INLINE__ void  guard_block()
   {
     if (gameState.justblocked != 0)
     {
-      if (custom->impblockprob[gameState.guard_skill] > prandom(255))
+      auto impblockprob = version == gameVersion_t::v10 ? custom->impblockprob10[gameState.guard_skill] : custom->impblockprob14[gameState.guard_skill];
+      if (impblockprob > prandom(255))
       {
         move_3_up();
       }
     }
     else
     {
-      if (custom->blockprob[gameState.guard_skill] > prandom(255))
+      auto blockprob = version == gameVersion_t::v10 ? custom->blockprob10[gameState.guard_skill] : custom->blockprob14[gameState.guard_skill];
+      if (blockprob > prandom(255))
       {
         move_3_up();
       }
@@ -2313,14 +2330,16 @@ __INLINE__ void  guard_strike()
   char_frame = gameState.Char.frame;
   if (char_frame == frame_161_parry || char_frame == frame_150_parry)
   {
-    if (custom->restrikeprob[gameState.guard_skill] > prandom(255))
+    auto restrikeprob = version == gameVersion_t::v10 ? custom->restrikeprob10[gameState.guard_skill] : custom->restrikeprob14[gameState.guard_skill];
+    if (restrikeprob > prandom(255))
     {
       move_6_shift();
     }
   }
   else
   {
-    if (custom->strikeprob[gameState.guard_skill] > prandom(255))
+    auto strikeprob = version == gameVersion_t::v10 ? custom->strikeprob10[gameState.guard_skill] : custom->strikeprob14[gameState.guard_skill];
+    if (strikeprob > prandom(255))
     {
       move_6_shift();
     }
@@ -2389,7 +2408,9 @@ __INLINE__ void  check_sword_hurt()
     loadshad();
     hurt_by_sword();
     saveshad();
-    gameState.guard_refrac = custom->refractimer[gameState.guard_skill];
+
+    auto refractimer = version == gameVersion_t::v10 ? custom->refractimer10[gameState.guard_skill] : custom->refractimer14[gameState.guard_skill];
+    gameState.guard_refrac = refractimer;
   }
   else
   {
