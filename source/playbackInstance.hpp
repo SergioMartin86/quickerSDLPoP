@@ -66,7 +66,7 @@ class PlaybackInstance
     _emu->deserializeState(deserializer);
 
     const auto stateInput = getStateInput(stepId);
-    Controller controller;
+    SDLPoP::Controller controller;
     bool isInputValid = controller.parseInputString(stateInput);
     if (isInputValid == false) JAFFAR_THROW_LOGIC("Move provided cannot be parsed: '%s'\n", stateInput.c_str());
     auto input = controller.getParsedInput();

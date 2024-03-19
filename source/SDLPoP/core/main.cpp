@@ -355,7 +355,7 @@ std::vector<__SDLPoP_Item> GenerateItemsMap()
 		need_level1_music = custom->intro_music_time_initial;
 	}
 
-	void __SDLPoP_updateRenderer(uint32_t currentStep, const Controller::input_t input) 
+	void __SDLPoP_updateRenderer(uint32_t currentStep, const SDLPoP::Controller::input_t input) 
 	{
 		 auto tmp = curr_guard_color;
 		 if (current_level != 3) curr_guard_color = 1;
@@ -406,7 +406,7 @@ std::vector<__SDLPoP_Item> GenerateItemsMap()
 			curr_guard_color = tmp;
 	}
 
-	  void __SDLPoP_advanceState(const Controller::input_t input)
+	  void __SDLPoP_advanceState(const SDLPoP::Controller::input_t input)
   {
     key_states[SDL_SCANCODE_UP] = input.up;
     key_states[SDL_SCANCODE_DOWN] = input.down;

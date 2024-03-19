@@ -7,6 +7,9 @@
 #include <string>
 #include <sstream>
 
+namespace SDLPoP 
+{
+
 class Controller
 {
 public:
@@ -55,4 +58,6 @@ public:
   
   input_t _input;
 
-};
+}; // class Controller
+
+} // namespace SDLPoP
