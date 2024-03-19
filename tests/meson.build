@@ -9,6 +9,7 @@ testSet = [
   'lvl01.anyPercent.test',
   'lvl01.pacifist.test',
   'lvl01.100percent.test',
+  'lvl01.istaria.test',
   'lvl02.anyPercent.test',
   'lvl04.anyPercent.test',
   'lvl05.anyPercent.test',

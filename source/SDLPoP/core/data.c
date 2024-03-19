@@ -23,4 +23,3 @@ The authors of this program may be contacted at https://forum.princed.org
 #define BODY
 #undef DATA_H
 #include "data.h"
-

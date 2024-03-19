@@ -702,6 +702,9 @@ extern byte is_validate_mode;
 extern dword curr_tick INIT(= 0);
 #endif // USE_REPLAY
 
+// Extracted values
+extern int version;
+
 extern byte start_fullscreen INIT(= 0);
 extern word pop_window_width INIT(= 640);
 extern word pop_window_height INIT(= 400);
@@ -824,23 +827,23 @@ extern custom_options_type custom_defaults INIT(= {
 		.tbl_entry_pose = {0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0},
 		.tbl_seamless_exit = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 23, -1, -1, -1},
 
-//                                                  // guard skills 1.0
-//                                                  .strikeprob =    { 61, 100, 61, 61, 61, 40, 100, 220, 0, 48, 32, 48},
-//                                                  .restrikeprob =  { 0, 0, 0, 5, 5, 175, 16, 8, 0, 255, 255, 150},
-//                                                  .blockprob =     { 0, 150, 150, 200, 200, 255, 200, 250, 0, 255, 255, 255},
-//                                                  .impblockprob =  { 0, 61, 61, 100, 100, 145, 100, 250, 0, 145, 255, 175},
-//                                                  .advprob =       { 255, 200, 200, 200, 255, 255, 200, 0, 0, 255, 100, 100},
-//                                                  .refractimer =   { 16, 16, 16, 16, 8, 8, 8, 8, 0, 8, 0, 0},
-//                                                  .extrastrength = { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
+			// guard skills 1.0
+			.strikeprob10 =    { 61, 100, 61, 61, 61, 40, 100, 220, 0, 48, 32, 48},
+			.restrikeprob10 =  { 0, 0, 0, 5, 5, 175, 16, 8, 0, 255, 255, 150},
+			.blockprob10 =     { 0, 150, 150, 200, 200, 255, 200, 250, 0, 255, 255, 255},
+			.impblockprob10 =  { 0, 61, 61, 100, 100, 145, 100, 250, 0, 145, 255, 175},
+			.advprob10 =       { 255, 200, 200, 200, 255, 255, 200, 0, 0, 255, 100, 100},
+			.refractimer10 =   { 16, 16, 16, 16, 8, 8, 8, 8, 0, 8, 0, 0},
+			.extrastrength10 = { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
 
-                                                  // guard skills 1.4
-                                                  .strikeprob =    { 75, 100, 75, 75, 75, 50, 100, 220, 0, 60, 40,  60},
-                                                  .restrikeprob =  { 0, 0, 0, 5, 5, 175, 20, 10, 0, 255, 255, 150},
-                                                  .blockprob =     { 0, 150, 150, 200, 200, 255, 200, 250, 0, 255, 255, 255},
-                                                  .impblockprob =  { 0, 75, 75, 100, 100, 145, 100, 250, 0, 145, 255, 175},
-                                                  .advprob =       { 255, 200, 200, 200, 255, 255, 200, 0, 0, 255, 100, 100},
-                                                  .refractimer =   { 20, 20, 20, 20, 10, 10, 10, 10, 0, 10, 0, 0},
-                                                  .extrastrength = { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
+				// guard skills 1.4
+				.strikeprob14 =    { 75, 100, 75, 75, 75, 50, 100, 220, 0, 60, 40,  60},
+				.restrikeprob14 =  { 0, 0, 0, 5, 5, 175, 20, 10, 0, 255, 255, 150},
+				.blockprob14 =     { 0, 150, 150, 200, 200, 255, 200, 250, 0, 255, 255, 255},
+				.impblockprob14 =  { 0, 75, 75, 100, 100, 145, 100, 250, 0, 145, 255, 175},
+				.advprob14 =       { 255, 200, 200, 200, 255, 255, 200, 0, 0, 255, 100, 100},
+				.refractimer14 =   { 20, 20, 20, 20, 10, 10, 10, 10, 0, 10, 0, 0},
+				.extrastrength14 = { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
 
 		// shadow's starting positions
 		.init_shad_6 = {0x0F, 0x51, 0x76, 0, 0, 1, 0, 0},

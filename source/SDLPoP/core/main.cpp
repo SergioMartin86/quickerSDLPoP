@@ -177,8 +177,10 @@ std::vector<__SDLPoP_Item> GenerateItemsMap()
       need_level1_music = custom->intro_music_time_restart;
   }
 
-	void __SDLPoP_initialize(const char* sdlPopRootPath, const char* levelsFilePath) 
+	void __SDLPoP_initialize(const char* sdlPopRootPath, const char* levelsFilePath, int gameVersion) 
 	{
+    version = gameVersion;
+
 						// Initializing items map
 			__SDLPoP_items = GenerateItemsMap();
 

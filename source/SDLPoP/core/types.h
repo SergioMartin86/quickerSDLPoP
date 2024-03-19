@@ -1304,13 +1304,22 @@ typedef struct custom_options_type {
 	sbyte tbl_seamless_exit[16];
 
 	// guard skills
-	word strikeprob   [NUM_GUARD_SKILLS];
-	word restrikeprob [NUM_GUARD_SKILLS];
-	word blockprob    [NUM_GUARD_SKILLS];
-	word impblockprob [NUM_GUARD_SKILLS];
-	word advprob      [NUM_GUARD_SKILLS];
-	word refractimer  [NUM_GUARD_SKILLS];
-	word extrastrength[NUM_GUARD_SKILLS];
+	word strikeprob10   [NUM_GUARD_SKILLS];
+	word restrikeprob10 [NUM_GUARD_SKILLS];
+	word blockprob10    [NUM_GUARD_SKILLS];
+	word impblockprob10 [NUM_GUARD_SKILLS];
+	word advprob10      [NUM_GUARD_SKILLS];
+	word refractimer10  [NUM_GUARD_SKILLS];
+	word extrastrength10[NUM_GUARD_SKILLS];
+
+		// guard skills
+	word strikeprob14   [NUM_GUARD_SKILLS];
+	word restrikeprob14 [NUM_GUARD_SKILLS];
+	word blockprob14    [NUM_GUARD_SKILLS];
+	word impblockprob14 [NUM_GUARD_SKILLS];
+	word advprob14      [NUM_GUARD_SKILLS];
+	word refractimer14  [NUM_GUARD_SKILLS];
+	word extrastrength14[NUM_GUARD_SKILLS];
 
 	// shadow's starting positions
 	byte init_shad_6[8];

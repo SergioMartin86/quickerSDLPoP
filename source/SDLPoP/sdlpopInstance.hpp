@@ -6,7 +6,7 @@
 #include "../sdlpopInstanceBase.hpp"
 #include <filesystem>
 
-extern void __SDLPoP_initialize(const char* sdlPopRootPath, const char* levelsFilePath);
+extern void __SDLPoP_initialize(const char* sdlPopRootPath, const char* levelsFilePath, int gameVersion);
 extern void __SDLPoP_startLevel(const uint16_t level);
 extern void __SDLPoP_updateRenderer(uint32_t currentStep);
 extern void __SDLPoP_advanceState(const Controller::input_t input);
@@ -28,7 +28,18 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
 
    void enableRendering() override { __SDLPoP_enableRendering(); };
    void disableRendering() override { __SDLPoP_disableRendering(); };
-   void initialize() override { __SDLPoP_initialize(_sdlPopRootPath.c_str(), _levelsFilePath.c_str()); }
+   void initialize() override 
+   {
+     int gameVersion;
+
+         // Selecting game version
+     bool versionRecognized = false;
+     if (_gameVersion == "1.0") { gameVersion = 10; versionRecognized = true; }
+     if (_gameVersion == "1.4") { gameVersion = 14; versionRecognized = true; }
+     if (versionRecognized == false)  JAFFAR_THROW_LOGIC("[ERROR] Version string not recognized: '%s'\n", _gameVersion.c_str());
+
+     __SDLPoP_initialize(_sdlPopRootPath.c_str(), _levelsFilePath.c_str(), gameVersion);
+   }
    void printInfo() const override { __SDLPoP_printInfo();  }
    void advanceStateImpl(const Controller::input_t input) override { __SDLPoP_advanceState(input); }
    void updateRenderer() override { __SDLPoP_updateRenderer(0); }

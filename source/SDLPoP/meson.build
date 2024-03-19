@@ -8,7 +8,7 @@ SDLPoPSrc = [
   'core/opl3.c',
   'core/options.c',
   'core/replay.c',
-		'core/main.cpp',
+	'core/main.cpp',
   'core/seg000.c',
   'core/seg001.c',
   'core/seg002.c',
