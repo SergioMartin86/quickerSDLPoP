@@ -8,7 +8,7 @@
 
 extern void __SDLPoP_initialize(const char* sdlPopRootPath, const char* levelsFilePath, int gameVersion);
 extern void __SDLPoP_startLevel(const uint16_t level);
-extern void __SDLPoP_updateRenderer(uint32_t currentStep);
+extern void __SDLPoP_updateRenderer(uint32_t currentStep, const Controller::input_t input);
 extern void __SDLPoP_advanceState(const Controller::input_t input);
 extern void __SDLPoP_enableRendering();
 extern void __SDLPoP_disableRendering();
@@ -42,7 +42,7 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
    }
    void printInfo() const override { __SDLPoP_printInfo();  }
    void advanceStateImpl(const Controller::input_t input) override { __SDLPoP_advanceState(input); }
-   void updateRenderer() override { __SDLPoP_updateRenderer(0); }
+   void updateRenderer(const size_t stepId, const Controller::input_t input) override { __SDLPoP_updateRenderer(stepId, input); }
    void setRNGValue(const uint32_t rngValue) override { __SDLPoP_setRNGValue(rngValue); }
    void initializeCopyProtection() override { __SDLPoP_initializeCopyProtection(); }
    void serializeState(jaffarCommon::serializer::Base& serializer) const override { __SDLPoP_serializeState(serializer); }

@@ -45,7 +45,7 @@ class SDLPoPInstanceBase
   virtual void setRNGValue(const uint32_t rngValue) = 0;
   virtual void setLooseTileSound(const uint16_t looseTileSound) = 0;
   virtual void initializeCopyProtection() = 0;
-  virtual void updateRenderer() = 0;
+  virtual void updateRenderer(const size_t stepId, const Controller::input_t input) = 0;
 
   protected:
 

@@ -9,7 +9,7 @@
 
 extern void __SDLPoP_initialize(const char* sdlPopRootPath, const char* levelsFilePath, int gameVersion);
 extern void __SDLPoP_startLevel(const uint16_t level);
-extern void __SDLPoP_updateRenderer(uint32_t currentStep);
+extern void __SDLPoP_updateRenderer(uint32_t currentStep, const Controller::input_t input);
 extern void __SDLPoP_advanceState(const Controller::input_t input);
 extern void __SDLPoP_enableRendering();
 extern void __SDLPoP_disableRendering();
@@ -115,7 +115,6 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
       jaffarCommon::logger::log("[]    + Kid Has Sword:        %d\n", _emu.gameState.have_sword);
       jaffarCommon::logger::log("[]    + Last Tile Loost Sound: %u\n", _emu.gameState.last_loose_sound);
       jaffarCommon::logger::log("[]    + RNG: 0x%X\n", _emu.gameState.random_seed);
-      jaffarCommon::logger::log("[]    + Current Step: %u\n", _emu.gameState.currentStep);
     }
 
       enum ItemType
@@ -210,11 +209,10 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
    AddItem(&dest, _emu.gameState.replay_curr_tick,     HASHABLE);
    AddItem(&dest, _emu.gameState.is_guard_notice,      HASHABLE);
    AddItem(&dest, _emu.gameState.can_guard_see_kid,    HASHABLE);
-   AddItem(&dest, _emu.gameState.currentStep,    NON_HASHABLE);
    return dest;
  }
 
-   void updateRenderer() override
+   void updateRenderer(const size_t stepId, const Controller::input_t input) override
   {
     auto stateSize = getFullStateSize();
     uint8_t buffer[stateSize];
@@ -222,7 +220,7 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
     serializeState(s);
     jaffarCommon::deserializer::Contiguous d(buffer, stateSize);
     __SDLPoP_deserializeState(d);
-    __SDLPoP_updateRenderer(_emu.gameState.currentStep);
+    __SDLPoP_updateRenderer(stepId, input);
   }
 
   jaffarCommon::hash::hash_t getStateHash() const override

@@ -65,7 +65,14 @@ class PlaybackInstance
     jaffarCommon::deserializer::Contiguous deserializer(stateData);
     _emu->deserializeState(deserializer);
 
-    _emu->updateRenderer();
+    const auto stateInput = getStateInput(stepId);
+    Controller controller;
+    bool isInputValid = controller.parseInputString(stateInput);
+    if (isInputValid == false) JAFFAR_THROW_LOGIC("Move provided cannot be parsed: '%s'\n", stateInput.c_str());
+    auto input = controller.getParsedInput();
+
+    _emu->updateRenderer(stepId, input);
+
   }
 
   size_t getSequenceLength() const

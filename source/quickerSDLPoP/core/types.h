@@ -1374,7 +1374,6 @@ struct sdlPopState_t
   int8_t prev_coll_room[10];
   uint8_t prev_coll_flags[10];
   short jumped_through_mirror;
-  uint32_t currentStep;
 };
 #pragma pack(pop)
 

@@ -38,6 +38,17 @@ extern char exe_dir[POP_MAX_PATH];
 extern byte* level_var_palettes;
 extern bool enableSDL2Rendering;
 
+SDL_Surface* _downSurface;
+SDL_Surface* _upSurface;
+SDL_Surface* _leftSurface;
+SDL_Surface* _rightSurface;
+SDL_Surface* _shiftSurface;
+SDL_Surface* _down2Surface;
+SDL_Surface* _up2Surface;
+SDL_Surface* _left2Surface;
+SDL_Surface* _right2Surface;
+SDL_Surface* _shift2Surface;
+
 	enum __SDLPoP_ItemType
 	{
 			HASHABLE,
@@ -198,6 +209,39 @@ std::vector<__SDLPoP_Item> GenerateItemsMap()
 				exit(-1);
 		}
 
+    std::string overlayPath = sdlPopRootPath + std::string("/overlay");
+    std::string imagePath;
+
+    imagePath = overlayPath + std::string("/down.png");
+    _downSurface = IMG_Load(imagePath.c_str());
+
+    imagePath = overlayPath + std::string("/up.png");
+    _upSurface = IMG_Load(imagePath.c_str());
+
+    imagePath = overlayPath + std::string("/left.png");
+    _leftSurface = IMG_Load(imagePath.c_str());
+
+    imagePath = overlayPath + std::string("/right.png");
+    _rightSurface = IMG_Load(imagePath.c_str());
+
+    imagePath = overlayPath + std::string("/shift.png");
+    _shiftSurface = IMG_Load(imagePath.c_str());
+
+    imagePath = overlayPath + std::string("/down2.png");
+    _down2Surface = IMG_Load(imagePath.c_str());
+
+    imagePath = overlayPath + std::string("/up2.png");
+    _up2Surface = IMG_Load(imagePath.c_str());
+
+    imagePath = overlayPath + std::string("/left2.png");
+    _left2Surface = IMG_Load(imagePath.c_str());
+
+    imagePath = overlayPath + std::string("/right2.png");
+    _right2Surface = IMG_Load(imagePath.c_str());
+
+    imagePath = overlayPath + std::string("/shift2.png");
+    _shift2Surface = IMG_Load(imagePath.c_str());
+
 		// Setting levels.dat path
 		sprintf(levels_file, "%s", levelsFilePath);
 
@@ -303,7 +347,7 @@ std::vector<__SDLPoP_Item> GenerateItemsMap()
 		need_level1_music = custom->intro_music_time_initial;
 	}
 
-	void __SDLPoP_updateRenderer(uint32_t currentStep) 
+	void __SDLPoP_updateRenderer(uint32_t currentStep, const Controller::input_t input) 
 	{
 		 auto tmp = curr_guard_color;
 		 if (current_level != 3) curr_guard_color = 1;
@@ -320,6 +364,25 @@ std::vector<__SDLPoP_Item> GenerateItemsMap()
 			display_text_bottom(IGTText);
 
 			draw_game_frame();
+
+      SDL_Surface* downSurface = _downSurface;
+      SDL_Surface* upSurface = _upSurface;
+      SDL_Surface* leftSurface = _leftSurface;
+      SDL_Surface* rightSurface = _rightSurface;
+      SDL_Surface* shiftSurface = _shiftSurface;
+
+      if (input.down == true)  downSurface = _down2Surface;
+      if (input.up == true) upSurface = _up2Surface;
+      if (input.left == true) leftSurface = _left2Surface;
+      if (input.right == true)  rightSurface = _right2Surface;
+      if (input.shift == true) shiftSurface = _shift2Surface;
+
+      draw_image_transp_vga(downSurface, 280, 170);
+      draw_image_transp_vga(upSurface, 280, 150);
+      draw_image_transp_vga(leftSurface, 260, 170);
+      draw_image_transp_vga(rightSurface, 300, 170);
+      draw_image_transp_vga(shiftSurface, 260, 150);
+
 			update_screen();
 
 			if (Kid.sword == sword_2_drawn) set_timer_length(timer_1, 5);
@@ -377,16 +440,22 @@ std::vector<__SDLPoP_Item> GenerateItemsMap()
 		void __SDLPoP_enableRendering() { enableSDL2Rendering = true; };
   void __SDLPoP_disableRendering() { enableSDL2Rendering = false; };
 
+  #ifdef NCURSES
+    #define log printw
+  #else
+    #define log printf
+  #endif
+
 		void __SDLPoP_printInfo()
 		{
-      jaffarCommon::logger::log("[]    + Current/Next Level:   %2d / %2d\n", current_level, next_level);
-      jaffarCommon::logger::log("[]    + [Kid]                 HP: %d/%d, Alive: %d\n", int(hitp_curr), int(hitp_max), int(Kid.alive));
-      jaffarCommon::logger::log("[]    + [Kid]                 Room: %d, Pos.x: %3d, Pos.y: %3d, Frame: %3d, Action: %2d, Dir: %d\n", int(Kid.room), int(Kid.x), int(Kid.y), int(Kid.frame), int(Kid.action), int(Kid.direction));
-      jaffarCommon::logger::log("[]    + [Guard]               Room: %d, Pos.x: %3d, Pos.y: %3d, Frame: %3d, Action: %2d, Color: %3u, Dir: %d, HP: %d/%d, Alive: %d\n", int(Guard.room), int(Guard.x), int(Guard.y), int(Guard.frame), int(Guard.action), int(curr_guard_color), int(Guard.direction), int(guardhp_curr), int(guardhp_max), int(Guard.alive));
-      jaffarCommon::logger::log("[]    + Exit Room Timer:      %d\n", exit_room_timer);
-      jaffarCommon::logger::log("[]    + Kid Has Sword:        %d\n", have_sword);
-      jaffarCommon::logger::log("[]    + Last Tile Loost Sound: %u\n", last_loose_sound);
-      jaffarCommon::logger::log("[]    + RNG: 0x%X\n", random_seed);
+      log("[]    + Current/Next Level:   %2d / %2d\n", current_level, next_level);
+      log("[]    + [Kid]                 HP: %d/%d, Alive: %d\n", int(hitp_curr), int(hitp_max), int(Kid.alive));
+      log("[]    + [Kid]                 Room: %d, Pos.x: %3d, Pos.y: %3d, Frame: %3d, Action: %2d, Dir: %d\n", int(Kid.room), int(Kid.x), int(Kid.y), int(Kid.frame), int(Kid.action), int(Kid.direction));
+      log("[]    + [Guard]               Room: %d, Pos.x: %3d, Pos.y: %3d, Frame: %3d, Action: %2d, Color: %3u, Dir: %d, HP: %d/%d, Alive: %d\n", int(Guard.room), int(Guard.x), int(Guard.y), int(Guard.frame), int(Guard.action), int(curr_guard_color), int(Guard.direction), int(guardhp_curr), int(guardhp_max), int(Guard.alive));
+      log("[]    + Exit Room Timer:      %d\n", exit_room_timer);
+      log("[]    + Kid Has Sword:        %d\n", have_sword);
+      log("[]    + Last Tile Loost Sound: %u\n", last_loose_sound);
+      log("[]    + RNG: 0x%X\n", random_seed);
 		}
 
 	 void __SDLPoP_setRNGValue(const uint32_t rngValue) { random_seed = rngValue;}

@@ -133,11 +133,11 @@ int main(int argc, char *argv[])
   // Interactive section
   while (continueRunning)
   {
-    // Updating display
-    if (disableRender == false) p.renderFrame(currentStep);
-
     // Getting input
     const auto &input = p.getStateInput(currentStep);
+
+    // Updating display
+    if (disableRender == false) p.renderFrame(currentStep);
 
     // Getting state hash
     const auto hash = p.getStateHash(currentStep);
