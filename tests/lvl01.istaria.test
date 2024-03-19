@@ -2,7 +2,7 @@
   "SDLPoP Configuration":
   {
     "SDLPoP Root Path": "../SDLPoPData",
-    "Levels File Path": "../SDLPoPData/levels/istaria.dat",
+    "Levels File Path": "",
     "Game Version": "1.0"
   },
   "Override RNG Enabled": false,
