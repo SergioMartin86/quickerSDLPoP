@@ -71,7 +71,7 @@ uint16_t resurrect_time;
 uint16_t dont_reset_time;
 uint8_t sound_flags = 0;
 uint16_t draw_mode;
-short start_level = -1;
+int16_t start_level = -1;
 uint8_t *guard_palettes;
 chtab_type *chtab_addrs[10];
 uint16_t copyprot_plac;
@@ -96,19 +96,19 @@ uint16_t room_BR;
 uint16_t room_BL;
 uint16_t room_AR;
 uint16_t room_AL;
-short table_counts[5];
-short drects_count;
-short peels_count;
+int16_t table_counts[5];
+int16_t drects_count;
+int16_t peels_count;
 back_table_type foretable[200];
 back_table_type backtable[200];
 midtable_type midtable[50];
 peel_type *peels_table[50];
 rect_type drects[30];
 int8_t obj_direction;
-short obj_clip_left;
-short obj_clip_top;
-short obj_clip_right;
-short obj_clip_bottom;
+int16_t obj_clip_left;
+int16_t obj_clip_top;
+int16_t obj_clip_right;
+int16_t obj_clip_bottom;
 wipetable_type wipetable[300];
 uint16_t need_drects;
 uint16_t leveldoor_right;
@@ -121,18 +121,18 @@ uint16_t is_paused;
 uint16_t is_restart_level;
 uint8_t sound_mode = 0;
 uint8_t is_sound_on = 0x0F;
-short guardhp_delta;
+int16_t guardhp_delta;
 uint16_t next_room;
-short hitp_delta;
+int16_t hitp_delta;
 uint16_t need_quotes;
-short roomleave_result;
+int16_t roomleave_result;
 sound_buffer_type *sound_pointers[58];
 chtab_type *chtab_title40;
 chtab_type *chtab_title50;
-short hof_count;
+int16_t hof_count;
 uint16_t demo_mode = 0;
-short next_sound;
-short knock;
+int16_t next_sound;
+int16_t knock;
 uint8_t wipe_frames[30];
 int8_t wipe_heights[30];
 uint8_t redraw_frames_anim[30];
@@ -143,24 +143,24 @@ uint8_t redraw_frames_fore[30];
 uint8_t tile_object_redraw[30];
 uint8_t redraw_frames_above[10];
 uint16_t need_full_redraw;
-short n_curr_objs;
+int16_t n_curr_objs;
 objtable_type objtable[50];
-short curr_objs[50];
+int16_t curr_objs[50];
 uint8_t obj_xh;
 uint8_t obj_xl;
 uint8_t obj_y;
 uint8_t obj_chtab;
 uint8_t obj_id;
 uint8_t obj_tilepos;
-short obj_x;
+int16_t obj_x;
 frame_type cur_frame;
 uint16_t seamless;
 trob_type trob;
-short redraw_height;
+int16_t redraw_height;
 uint8_t curr_tilepos;
-short curr_room;
+int16_t curr_room;
 mob_type curmob;
-short tile_col;
+int16_t tile_col;
 
 bool _upPressed;
 bool _downPressed;
@@ -168,22 +168,22 @@ bool _rightPressed;
 bool _leftPressed;
 bool _shiftPressed;
 
-short char_col_right;
-short char_col_left;
-short char_top_row;
-short prev_char_top_row;
-short prev_char_col_right;
-short prev_char_col_left;
-short char_bottom_row;
+int16_t char_col_right;
+int16_t char_col_left;
+int16_t char_top_row;
+int16_t prev_char_top_row;
+int16_t prev_char_col_right;
+int16_t prev_char_col_left;
+int16_t char_bottom_row;
 uint8_t curr_tile2;
-short tile_row;
+int16_t tile_row;
 uint16_t char_width_half;
 uint16_t char_height;
-short char_x_left;
-short char_x_left_coll;
-short char_x_right_coll;
-short char_x_right;
-short char_top_y;
+int16_t char_x_left;
+int16_t char_x_left_coll;
+int16_t char_x_right_coll;
+int16_t char_x_right;
+int16_t char_top_y;
 uint8_t fall_frame;
 uint8_t through_tile;
 int8_t infrontx; // name from Apple II source
@@ -202,17 +202,17 @@ int8_t bump_col_left_of_wall;
 int8_t bump_col_right_of_wall;
 int8_t right_checked_col;
 int8_t left_checked_col;
-short coll_tile_left_xpos;
+int16_t coll_tile_left_xpos;
 uint16_t curr_tile_temp;
 char exe_dir[__QS_POP_MAX_PATH] = ".";
 bool found_exe_dir = false;
 uint16_t which_quote;
 dat_type *dat_chain_ptr = NULL;
 char last_text_input;
-short drawn_row;
-short draw_bottom_y;
-short draw_main_y;
-short drawn_col;
+int16_t drawn_row;
+int16_t draw_bottom_y;
+int16_t draw_main_y;
+int16_t drawn_col;
 uint8_t tile_left;
 uint8_t modifier_left;
 char levels_file[__QS_POP_MAX_PATH];
@@ -222,10 +222,10 @@ uint8_t obj2_y;
 int8_t obj2_direction;
 uint8_t obj2_id;
 uint8_t obj2_chtab;
-short obj2_clip_top;
-short obj2_clip_bottom;
-short obj2_clip_left;
-short obj2_clip_right;
+int16_t obj2_clip_top;
+int16_t obj2_clip_bottom;
+int16_t obj2_clip_left;
+int16_t obj2_clip_right;
 uint16_t copyprot_room[14] = {3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4};
 uint8_t sound_interruptible[58] = {
   0, // sound_0_fell_to_death
@@ -363,7 +363,8 @@ uint8_t sound_interruptible[58] = {
     _rightPressed = rightPressed;
     _shiftPressed = shiftPressed;
     is_restart_level = restartPressed ? 1 : 0;
-    
+    gameState.kidPreviousFrame = gameState.Kid.frame;
+
     if (is_restart_level == 0 || (is_restart_level == 1 && gameState.current_level == 3))
     {
       guardhp_delta = 0;
@@ -950,7 +951,7 @@ __INLINE__ void  play_frame()
 }
 
 // seg007:1041
-__INLINE__ short get_curr_tile(short tilepos)
+__INLINE__ int16_t get_curr_tile(int16_t tilepos)
 {
   curr_modifier = curr_room_modif[tilepos];
   return curr_tile = curr_room_tiles[tilepos] & 0x1F;
@@ -994,7 +995,7 @@ __INLINE__ void  anim_tile_modif()
 __INLINE__ void  load_lev_spr(int level)
 {
   dat_type *dathandle;
-  short guardtype;
+  int16_t guardtype;
   char filename[20];
   dathandle = NULL;
   gameState.current_level = gameState.next_level = level;
@@ -1176,7 +1177,7 @@ __INLINE__ void  check_fall_flo()
 // seg000:11EC
 __INLINE__ void  add_life()
 {
-  short hpmax = gameState.hitp_max;
+  int16_t hpmax = gameState.hitp_max;
   ++hpmax;
   // CusPop: set maximum number of hitpoints (max_hitp_allowed, default = 10)
   //	if (hpmax > 10) hpmax = 10; // original
@@ -1226,7 +1227,7 @@ __INLINE__ void  load_chtab_from_file(int chtab_id, int resource, const char  *f
 // seg009:12EF
 __INLINE__ void  load_one_optgraf(chtab_type *chtab_ptr, dat_pal_type*pal_ptr, int base_id, int min_index, int max_index)
 {
-  short index;
+  int16_t index;
   for (index = min_index; index <= max_index; ++index)
   {
     image_type *image = load_image(base_id + index + 1, pal_ptr);
@@ -1241,7 +1242,7 @@ __INLINE__ void  load_more_opt_graf(const char *filename)
   // stub
   dat_type *dathandle;
   dat_shpl_type area;
-  short graf_index;
+  int16_t graf_index;
   dathandle = NULL;
   for (graf_index = 0; graf_index < 8; ++graf_index)
   {
@@ -1305,10 +1306,10 @@ __INLINE__ void  gen_palace_wall_colors()
 {
   uint32_t old_randseed;
   uint16_t prev_color;
-  short row;
-  short subrow;
+  int16_t row;
+  int16_t subrow;
   uint16_t color_base;
-  short column;
+  int16_t column;
   uint16_t color;
 
   old_randseed = gameState.random_seed;
@@ -1574,10 +1575,10 @@ __INLINE__ void  leave_guard()
 }
 
 // seg002:0486
-__INLINE__ int goto_other_room(short direction)
+__INLINE__ int goto_other_room(int16_t direction)
 {
   // printf("goto_other_room: direction = %d, gameState.Char.room = %d\n", direction, gameState.Char.room);
-  short opposite_dir;
+  int16_t opposite_dir;
   uint8_t other_room = ((uint8_t *)&gameState.level.roomlinks[gameState.Char.room - 1])[direction];
   gameState.Char.room = other_room;
   if (direction == 0)
@@ -1620,12 +1621,12 @@ __INLINE__ void  follow_guard()
 }
 
 // seg002:0504
-__INLINE__ short leave_room()
+__INLINE__ int16_t leave_room()
 {
-  short frame;
+  int16_t frame;
   uint16_t action;
-  short chary;
-  short leave_dir;
+  int16_t chary;
+  int16_t leave_dir;
   chary = gameState.Char.y;
   action = gameState.Char.action;
   frame = gameState.Char.frame;
@@ -2048,7 +2049,7 @@ __INLINE__ void  autocontrol_guard()
 // seg002:0876
 __INLINE__ void  autocontrol_guard_inactive()
 {
-  short distance;
+  int16_t distance;
   if (gameState.Kid.alive >= 0)
     return;
   distance = char_opp_dist();
@@ -2086,9 +2087,9 @@ __INLINE__ void  autocontrol_guard_inactive()
 // seg002:08DC
 __INLINE__ void  autocontrol_guard_active()
 {
-  short opp_frame;
-  short char_frame;
-  short distance;
+  int16_t opp_frame;
+  int16_t char_frame;
+  int16_t distance;
   char_frame = gameState.Char.frame;
   if (char_frame != frame_166_stand_inactive && char_frame >= 150 && gameState.can_guard_see_kid != 1)
   {
@@ -2236,7 +2237,7 @@ __INLINE__ void  guard_follows_kid_down()
 }
 
 // seg002:0A93
-__INLINE__ void  autocontrol_guard_kid_in_sight(short distance)
+__INLINE__ void  autocontrol_guard_kid_in_sight(int16_t distance)
 {
   if (Opp.sword == sword_2_drawn)
   {
@@ -2256,7 +2257,7 @@ __INLINE__ void  autocontrol_guard_kid_in_sight(short distance)
 }
 
 // seg002:0AC1
-__INLINE__ void  autocontrol_guard_kid_armed(short distance)
+__INLINE__ void  autocontrol_guard_kid_armed(int16_t distance)
 {
   if (distance < 10 || distance >= 29)
   {
@@ -2348,7 +2349,7 @@ __INLINE__ void  guard_strike()
 // seg002:0BCD
 __INLINE__ void  hurt_by_sword()
 {
-  short distance;
+  int16_t distance;
   if (gameState.Char.alive >= 0)
     return;
   if (gameState.Char.sword != sword_2_drawn)
@@ -2425,7 +2426,7 @@ __INLINE__ void  check_sword_hurt()
 // seg002:0D1A
 __INLINE__ void  check_sword_hurting()
 {
-  short kid_frame;
+  int16_t kid_frame;
   kid_frame = gameState.Kid.frame;
   // frames 217..228: go up on stairs
   if (kid_frame != 0 && (kid_frame < frame_219_exit_stairs_3 || kid_frame >= 229))
@@ -2442,7 +2443,7 @@ __INLINE__ void  check_sword_hurting()
 // seg002:0D56
 __INLINE__ void  check_hurting()
 {
-  short opp_frame, char_frame, distance, min_hurt_range;
+  int16_t opp_frame, char_frame, distance, min_hurt_range;
   if (gameState.Char.sword != sword_2_drawn)
     return;
   if (gameState.Char.curr_row != Opp.curr_row)
@@ -2537,8 +2538,8 @@ __INLINE__ void  check_skel()
 // seg002:0F3F
 __INLINE__ void  do_auto_moves(const auto_move_type *moves_ptr)
 {
-  short demoindex;
-  short curr_move;
+  int16_t demoindex;
+  int16_t curr_move;
   if (gameState.demo_time >= 0xFE)
     return;
   ++gameState.demo_time;
@@ -2636,8 +2637,8 @@ __INLINE__ void  autocontrol_shadow_level6()
 // seg002:1082
 __INLINE__ void  autocontrol_shadow_level12()
 {
-  short opp_frame;
-  short xdiff;
+  int16_t opp_frame;
+  int16_t xdiff;
   if (gameState.Char.room == 15 && gameState.shadow_initialized == 0)
   {
     if (Opp.x >= 150)
@@ -2875,7 +2876,7 @@ __INLINE__ void  set_start_pos()
 // seg003:02E6
 __INLINE__ void  find_start_level_door()
 {
-  short tilepos;
+  int16_t tilepos;
   get_room_address(gameState.Kid.room);
   for (tilepos = 0; tilepos < 30; ++tilepos)
   {
@@ -3006,8 +3007,8 @@ __INLINE__ void  jump_through_mirror()
 // seg003:085B
 __INLINE__ void  check_mirror_image()
 {
-  short distance;
-  short xpos;
+  int16_t distance;
+  int16_t xpos;
   xpos = x_bump[gameState.Char.curr_col + 5] + 10;
   distance = distance_to_edge_weight();
   if (gameState.Char.direction >= dir_0_right)
@@ -3023,7 +3024,7 @@ __INLINE__ void  check_mirror_image()
 __INLINE__ void  bump_into_opponent()
 {
   // This is called from play_kid_frame, so char=gameState.Kid, Opp=Guard
-  short distance;
+  int16_t distance;
   if (gameState.can_guard_see_kid >= 2 &&
       gameState.Char.sword == sword_0_sheathed && // gameState.Kid must not be in fighting pose
       Opp.sword != sword_0_sheathed &&            // but Guard must
@@ -3045,8 +3046,8 @@ __INLINE__ void  bump_into_opponent()
 // seg003:0913
 __INLINE__ void  pos_guards()
 {
-  short guard_tile;
-  short room1;
+  int16_t guard_tile;
+  int16_t room1;
   for (room1 = 0; room1 < 24; ++room1)
   {
     guard_tile = gameState.level.guards_tile[room1];
@@ -3073,10 +3074,10 @@ Possible results in gameState.can_guard_see_kid:
 1: Guard can see gameState.Kid, but won't come
 2: Guard can see gameState.Kid, and will come
 */
-  short kid_frame;
-  short left_pos;
-  short temp;
-  short right_pos;
+  int16_t kid_frame;
+  int16_t left_pos;
+  int16_t temp;
+  int16_t right_pos;
   kid_frame = gameState.Kid.frame;
   if (gameState.Guard.charid == charid_24_mouse)
   {
@@ -3218,7 +3219,7 @@ __INLINE__ int get_tilepos(int tile_col, int tile_row)
 }
 
 // seg006:01F5
-__INLINE__ short dx_weight()
+__INLINE__ int16_t dx_weight()
 {
   int8_t var_2;
   var_2 = cur_frame.dx - (cur_frame.flags & FRAME_WEIGHT_X);
@@ -3228,7 +3229,7 @@ __INLINE__ short dx_weight()
 // seg006:0124
 __INLINE__ int get_tilepos_nominus(int tile_col, int tile_row)
 {
-  short var_2;
+  int16_t var_2;
   var_2 = get_tilepos(tile_col, tile_row);
   if (var_2 < 0)
     return 30;
@@ -3266,8 +3267,8 @@ __INLINE__ void  get_frame_internal(const frame_type frame_table[], int frame, c
 // seg006:015A
 __INLINE__ void  load_frame()
 {
-  short frame;
-  short add_frame;
+  int16_t frame;
+  int16_t add_frame;
   frame = gameState.Char.frame;
   add_frame = 0;
   switch (gameState.Char.charid)
@@ -3598,8 +3599,8 @@ __INLINE__ void  fall_speed()
 // seg006:05CD
 __INLINE__ void  check_action()
 {
-  short frame;
-  short action;
+  int16_t frame;
+  int16_t action;
   action = gameState.Char.action;
   frame = gameState.Char.frame;
   // frame 109: crouching
@@ -3651,8 +3652,8 @@ __INLINE__ int tile_is_floor(int tiletype)
 // seg006:0658
 __INLINE__ void  check_spiked()
 {
-  short harmful;
-  short frame;
+  int16_t harmful;
+  int16_t frame;
   frame = gameState.Char.frame;
   if (get_tile(gameState.Char.room, gameState.Char.curr_col, gameState.Char.curr_row) == tiles_2_spike)
   {
@@ -3709,7 +3710,7 @@ __INLINE__ int get_tile_at_char()
 }
 
 // Get an image, with index and NULL checks.
-__INLINE__ image_type *get_image(short chtab_id, int id)
+__INLINE__ image_type *get_image(int16_t chtab_id, int id)
 {
   if ((ssize_t)chtab_id < 0 || (ssize_t)chtab_id > (ssize_t)__QS__COUNT(chtab_addrs))
   {
@@ -3803,7 +3804,7 @@ __INLINE__ void  check_on_floor()
 // seg006:08B9
 __INLINE__ void  start_fall()
 {
-  short frame;
+  int16_t frame;
   uint16_t seq_id;
   frame = gameState.Char.frame;
   gameState.Char.sword = sword_0_sheathed;
@@ -3941,7 +3942,7 @@ __INLINE__ int can_grab_front_above()
 // seg006:0ACD
 __INLINE__ void  in_wall()
 {
-  short delta_x;
+  int16_t delta_x;
   delta_x = distance_to_edge_weight();
   if (delta_x >= 8 || get_tile_infrontof_char() == tiles_20_wall)
   {
@@ -3965,7 +3966,7 @@ __INLINE__ int get_tile_infrontof_char()
 // seg006:0B30
 __INLINE__ int get_tile_infrontof2_char()
 {
-  short var_2;
+  int16_t var_2;
   var_2 = dir_front[gameState.Char.direction + 1];
   return get_tile(gameState.Char.room, infrontx = (var_2 << 1) + gameState.Char.curr_col, gameState.Char.curr_row);
 }
@@ -3985,7 +3986,7 @@ __INLINE__ int distance_to_edge_weight()
 // seg006:0B94
 __INLINE__ int distance_to_edge(int xpos)
 {
-  short distance;
+  int16_t distance;
   get_tile_div_mod_m7(xpos);
   distance = obj_xl;
   if (gameState.Char.direction == dir_0_right)
@@ -4305,8 +4306,8 @@ __INLINE__ void  do_pickup(int obj_type)
 // seg006:10E6
 __INLINE__ void  check_press()
 {
-  short frame;
-  short action;
+  int16_t frame;
+  int16_t action;
   frame = gameState.Char.frame;
   action = gameState.Char.action;
   // frames 87..99: hanging
@@ -4357,11 +4358,11 @@ __INLINE__ void  check_press()
 // seg006:1199
 __INLINE__ void  check_spike_below()
 {
-  short not_finished;
-  short room;
-  short row;
-  short col;
-  short right_col;
+  int16_t not_finished;
+  int16_t room;
+  int16_t row;
+  int16_t col;
+  int16_t right_col;
   right_col = get_tile_div_mod_m7(char_x_right);
   if (right_col < 0)
     return;
@@ -4392,13 +4393,13 @@ __INLINE__ void  check_spike_below()
 // seg006:1231
 __INLINE__ void  clip_char()
 {
-  short frame;
-  short room;
-  short action;
-  short col;
-  short var_A;
-  short row;
-  short var_E;
+  int16_t frame;
+  int16_t room;
+  int16_t action;
+  int16_t col;
+  int16_t var_A;
+  int16_t row;
+  int16_t var_E;
   frame = gameState.Char.frame;
   action = gameState.Char.action;
   room = gameState.Char.room;
@@ -4477,8 +4478,8 @@ __INLINE__ void  stuck_lower()
 // seg006:13F3
 __INLINE__ void  set_objtile_at_char()
 {
-  short char_frame;
-  short char_action;
+  int16_t char_frame;
+  int16_t char_action;
   char_frame = gameState.Char.frame;
   char_action = gameState.Char.action;
   if (char_action == actions_1_run_jump)
@@ -4629,7 +4630,7 @@ __INLINE__ void  load_obj()
 // seg006:16CE
 __INLINE__ void  draw_hurt_splash()
 {
-  short frame;
+  int16_t frame;
   frame = gameState.Char.frame;
   if (frame != frame_178_chomped)
   { // chomped
@@ -4704,7 +4705,7 @@ __INLINE__ int char_opp_dist()
 {
   // >0 if Opp is in front of char
   // <0 if Opp is behind char
-  short distance;
+  int16_t distance;
   if (gameState.Char.room != Opp.room)
   {
     return 999;
@@ -4730,7 +4731,7 @@ __INLINE__ void  inc_curr_row()
 // seg004:0004
 __INLINE__ void  check_collisions()
 {
-  short column;
+  int16_t column;
   bump_col_left_of_wall = bump_col_right_of_wall = -1;
   if (gameState.Char.action == actions_7_turn)
     return;
@@ -4770,7 +4771,7 @@ __INLINE__ void  move_coll_to_prev()
 {
   int8_t *row_coll_room_ptr;
   uint8_t *row_coll_flags_ptr;
-  short column;
+  int16_t column;
   if (gameState.collision_row == gameState.prev_collision_row ||
       gameState.collision_row + 3 == gameState.prev_collision_row ||
       gameState.collision_row - 3 == gameState.prev_collision_row)
@@ -4801,13 +4802,13 @@ __INLINE__ void  move_coll_to_prev()
 }
 
 // seg004:0185
-__INLINE__ void  get_row_collision_data(short row, int8_t *row_coll_room_ptr, uint8_t *row_coll_flags_ptr)
+__INLINE__ void  get_row_collision_data(int16_t row, int8_t *row_coll_room_ptr, uint8_t *row_coll_flags_ptr)
 {
-  short right_wall_xpos;
+  int16_t right_wall_xpos;
   uint8_t curr_flags;
-  short room;
-  short column;
-  short left_wall_xpos;
+  int16_t room;
+  int16_t column;
+  int16_t left_wall_xpos;
   room = gameState.Char.room;
   coll_tile_left_xpos = x_bump[left_checked_col + 5] + 7;
   for (column = left_checked_col; column <= right_checked_col; ++column)
@@ -4827,7 +4828,7 @@ __INLINE__ void  get_row_collision_data(short row, int8_t *row_coll_room_ptr, ui
 // seg004:0226
 __INLINE__ int get_left_wall_xpos(int room, int column, int row)
 {
-  short type;
+  int16_t type;
   type = wall_type(get_tile(room, column, row));
   if (type)
   {
@@ -4842,7 +4843,7 @@ __INLINE__ int get_left_wall_xpos(int room, int column, int row)
 // seg004:025F
 __INLINE__ int get_right_wall_xpos(int room, int column, int row)
 {
-  short type;
+  int16_t type;
   type = wall_type(get_tile(room, column, row));
   if (type)
   {
@@ -4897,7 +4898,7 @@ __INLINE__ void  check_bumped_look_right()
 // seg004:0343
 __INLINE__ int is_obstacle_at_col(int tile_col)
 {
-  short tile_row;
+  int16_t tile_row;
   tile_row = gameState.Char.curr_row;
   if (tile_row < 0)
   {
@@ -5006,7 +5007,7 @@ __INLINE__ void  bumped(int8_t delta_x, int8_t push_direction)
 // seg004:0A10
 __INLINE__ int dist_from_wall_forward(uint8_t tiletype)
 {
-  short type;
+  int16_t type;
   if (tiletype == tiles_4_gate && !can_bump_into_gate())
   {
     return -1;
@@ -5034,7 +5035,7 @@ __INLINE__ int dist_from_wall_forward(uint8_t tiletype)
 // seg004:04E4
 __INLINE__ void  bumped_fall()
 {
-  short action;
+  int16_t action;
   action = gameState.Char.action;
   gameState.Char.x = char_dx_forward(-4);
   if (action == actions_4_in_freefall)
@@ -5052,8 +5053,8 @@ __INLINE__ void  bumped_fall()
 // seg004:0520
 __INLINE__ void  bumped_floor(int8_t push_direction)
 {
-  short frame;
-  short seq_index;
+  int16_t frame;
+  int16_t seq_index;
   if (gameState.Char.sword != sword_2_drawn && (uint16_t)(y_land[gameState.Char.curr_row + 1] - gameState.Char.y) >= (uint16_t)15)
   {
     bumped_fall();
@@ -5137,7 +5138,7 @@ Possible results in edge_type:
 1: edge
 2: floor (nothing  char)
 */
-  short distance;
+  int16_t distance;
   uint8_t tiletype;
   determine_col();
   load_frame_to_obj();
@@ -5223,8 +5224,8 @@ Possible results in edge_type:
 // seg004:076B
 __INLINE__ void  check_chomped_kid()
 {
-  short tile_col;
-  short tile_row;
+  int16_t tile_col;
+  int16_t tile_row;
   tile_row = gameState.Char.curr_row;
   for (tile_col = 0; tile_col < 10; ++tile_col)
   {
@@ -5256,7 +5257,7 @@ __INLINE__ void  chomped()
 // seg004:0A7B
 __INLINE__ int dist_from_wall_behind(uint8_t tiletype)
 {
-  short type;
+  int16_t type;
   type = wall_type(tiletype);
   if (type == 0)
   {
@@ -5282,8 +5283,8 @@ __INLINE__ int dist_from_wall_behind(uint8_t tiletype)
 __INLINE__ void  check_gate_push()
 {
   // Closing gate pushes gameState.Kid
-  short frame;
-  short orig_col;
+  int16_t frame;
+  int16_t orig_col;
   frame = gameState.Char.frame;
   if (gameState.Char.action == actions_7_turn ||
       frame == frame_15_stand ||                      // stand
@@ -5326,7 +5327,7 @@ __INLINE__ void  check_guard_bumped()
       set_char_collision();
       if (is_obstacle())
       {
-        short delta_x;
+        int16_t delta_x;
         delta_x = dist_from_wall_behind(curr_tile2);
         if (delta_x < 0 && delta_x > -13)
         {
@@ -5453,7 +5454,7 @@ __INLINE__ void  animate_tile()
 }
 
 // seg007:0166
-__INLINE__ short is_trob_in_drawn_room()
+__INLINE__ int16_t is_trob_in_drawn_room()
 {
   if (trob.room != gameState.drawn_room)
   {
@@ -5467,9 +5468,9 @@ __INLINE__ short is_trob_in_drawn_room()
 }
 
 // seg007:0258
-__INLINE__ short get_trob_pos_in_drawn_room()
+__INLINE__ int16_t get_trob_pos_in_drawn_room()
 {
-  short tilepos;
+  int16_t tilepos;
   tilepos = trob.tilepos;
   if (trob.room == room_A)
   {
@@ -5494,7 +5495,7 @@ __INLINE__ short get_trob_pos_in_drawn_room()
 }
 
 // seg007:029D
-__INLINE__ short get_trob_right_pos_in_drawn_room()
+__INLINE__ int16_t get_trob_right_pos_in_drawn_room()
 {
   uint16_t tilepos;
   tilepos = trob.tilepos;
@@ -5544,7 +5545,7 @@ __INLINE__ short get_trob_right_pos_in_drawn_room()
 }
 
 // seg007:032C
-__INLINE__ short get_trob_right_above_pos_in_drawn_room()
+__INLINE__ int16_t get_trob_right_above_pos_in_drawn_room()
 {
   uint16_t tilepos;
   tilepos = trob.tilepos;
@@ -5608,9 +5609,9 @@ __INLINE__ short get_trob_right_above_pos_in_drawn_room()
 }
 
 // seg007:06CD
-__INLINE__ short get_torch_frame(short curr)
+__INLINE__ int16_t get_torch_frame(int16_t curr)
 {
-  short next;
+  int16_t next;
   next = prandom(255);
   if (next != curr)
   {
@@ -5645,9 +5646,9 @@ __INLINE__ void  animate_torch()
 }
 
 // seg007:06AD
-__INLINE__ short bubble_next_frame(short curr)
+__INLINE__ int16_t bubble_next_frame(int16_t curr)
 {
-  short next;
+  int16_t next;
   next = curr + 1;
   if (next >= 8)
     next = 1;
@@ -5763,7 +5764,7 @@ Possible values of anim_type:
         ++anim_type;
         trob.type = anim_type;
       }
-      short new_mod = curr_modifier - gate_close_speeds[anim_type];
+      int16_t new_mod = curr_modifier - gate_close_speeds[anim_type];
       curr_modifier = new_mod;
       // if ((int8_t)curr_modifier < 0) {
       if (new_mod < 0)
@@ -5896,14 +5897,14 @@ Possible values of trob_type:
 }
 
 // seg007:081E
-__INLINE__ void  start_anim_torch(short room, short tilepos)
+__INLINE__ void  start_anim_torch(int16_t room, int16_t tilepos)
 {
   curr_room_modif[tilepos] = prandom(8);
   add_trob(room, tilepos, 1);
 }
 
 // seg007:0847
-__INLINE__ void  start_anim_potion(short room, short tilepos)
+__INLINE__ void  start_anim_potion(int16_t room, int16_t tilepos)
 {
   curr_room_modif[tilepos] &= 0xF8;
   curr_room_modif[tilepos] |= prandom(6) + 1;
@@ -5911,16 +5912,16 @@ __INLINE__ void  start_anim_potion(short room, short tilepos)
 }
 
 // seg007:087C
-__INLINE__ void  start_anim_sword(short room, short tilepos)
+__INLINE__ void  start_anim_sword(int16_t room, int16_t tilepos)
 {
   curr_room_modif[tilepos] = prandom(0xFF) & 0x1F;
   add_trob(room, tilepos, 1);
 }
 
 // seg007:08A7
-__INLINE__ void  start_anim_chomper(short room, short tilepos, uint8_t modifier)
+__INLINE__ void  start_anim_chomper(int16_t room, int16_t tilepos, uint8_t modifier)
 {
-  short old_modifier;
+  int16_t old_modifier;
   old_modifier = curr_room_modif[tilepos];
   if (old_modifier == 0 || old_modifier >= 6)
   {
@@ -5930,7 +5931,7 @@ __INLINE__ void  start_anim_chomper(short room, short tilepos, uint8_t modifier)
 }
 
 // seg007:08E3
-__INLINE__ void  start_anim_spike(short room, short tilepos)
+__INLINE__ void  start_anim_spike(int16_t room, int16_t tilepos)
 {
   int8_t old_modifier;
   old_modifier = curr_room_modif[tilepos];
@@ -5952,7 +5953,7 @@ __INLINE__ void  start_anim_spike(short room, short tilepos)
 }
 
 // seg007:092C
-__INLINE__ short trigger_gate(short room, short tilepos, short button_type)
+__INLINE__ int16_t trigger_gate(int16_t room, int16_t tilepos, int16_t button_type)
 {
   uint8_t modifier;
   modifier = curr_room_modif[tilepos];
@@ -5992,9 +5993,9 @@ __INLINE__ short trigger_gate(short room, short tilepos, short button_type)
 }
 
 // seg007:0999
-__INLINE__ short trigger_1(short target_type, short room, short tilepos, short button_type)
+__INLINE__ int16_t trigger_1(int16_t target_type, int16_t room, int16_t tilepos, int16_t button_type)
 {
-  short result;
+  int16_t result;
   result = -1;
   if (target_type == tiles_4_gate)
   {
@@ -6019,26 +6020,26 @@ __INLINE__ short trigger_1(short target_type, short room, short tilepos, short b
 }
 
 // seg007:0BF2
-__INLINE__ short get_doorlink_tile(short index)
+__INLINE__ int16_t get_doorlink_tile(int16_t index)
 {
   return doorlink1_ad[index] & 0x1F;
 }
 
 // seg007:0C09
-__INLINE__ short get_doorlink_next(short index)
+__INLINE__ int16_t get_doorlink_next(int16_t index)
 {
   return !(doorlink1_ad[index] & 0x80);
 }
 
 // seg007:0C26
-__INLINE__ short get_doorlink_room(short index)
+__INLINE__ int16_t get_doorlink_room(int16_t index)
 {
   return ((doorlink1_ad[index] & 0x60) >> 5) +
          ((doorlink2_ad[index] & 0xE0) >> 3);
 }
 
 // seg007:09E5
-__INLINE__ void  do_trigger_list(short index, short button_type)
+__INLINE__ void  do_trigger_list(int16_t index, int16_t button_type)
 {
   uint16_t room;
   uint16_t tilepos;
@@ -6062,9 +6063,9 @@ __INLINE__ void  do_trigger_list(short index, short button_type)
 }
 
 // seg007:0ACA
-__INLINE__ short find_trob()
+__INLINE__ int16_t find_trob()
 {
-  short index;
+  int16_t index;
   for (index = 0; index < gameState.trobs_count; ++index)
   {
     if (gameState.trobs[index].tilepos == trob.tilepos &&
@@ -6077,7 +6078,7 @@ __INLINE__ short find_trob()
 // seg007:0A5A
 __INLINE__ void  add_trob(uint8_t room, uint8_t tilepos, int8_t type)
 {
-  short found;
+  int16_t found;
   trob.room = room;
   trob.tilepos = tilepos;
   trob.type = type;
@@ -6097,13 +6098,13 @@ __INLINE__ void  add_trob(uint8_t room, uint8_t tilepos, int8_t type)
 }
 
 // seg007:0BB6
-__INLINE__ short get_doorlink_timer(short index)
+__INLINE__ int16_t get_doorlink_timer(int16_t index)
 {
   return doorlink2_ad[index] & 0x1F;
 }
 
 // seg007:0BCD
-__INLINE__ short set_doorlink_timer(short index, uint8_t value)
+__INLINE__ int16_t set_doorlink_timer(int16_t index, uint8_t value)
 {
   doorlink2_ad[index] &= 0xE0;
   doorlink2_ad[index] |= value & 0x1F;
@@ -6174,7 +6175,7 @@ __INLINE__ void  animate_button()
 }
 
 // seg007:0D72
-__INLINE__ void  start_level_door(short room, short tilepos)
+__INLINE__ void  start_level_door(int16_t room, int16_t tilepos)
 {
   curr_room_modif[tilepos] = 43; // start fully open
   add_trob(room, tilepos, 3);
@@ -6192,7 +6193,7 @@ __INLINE__ void  animate_loose()
   uint16_t room;
   uint16_t row;
   uint16_t tilepos;
-  short anim_type;
+  int16_t anim_type;
   anim_type = trob.type;
   if (anim_type >= 0)
   {
@@ -6290,10 +6291,10 @@ __INLINE__ int next_chomper_timing(uint8_t timing)
 // seg007:0F13
 __INLINE__ void  start_chompers()
 {
-  short timing;
-  short modifier;
-  short tilepos;
-  short column;
+  int16_t timing;
+  int16_t modifier;
+  int16_t tilepos;
+  int16_t column;
   timing = 15;
   if ((uint8_t)gameState.Char.curr_row < 3)
   {
@@ -6329,7 +6330,7 @@ __INLINE__ void  loose_make_shake()
 // seg007:0FE0
 __INLINE__ void  do_knock(int room, int tile_row)
 {
-  short tile_col;
+  int16_t tile_col;
   for (tile_col = 0; tile_col < 10; ++tile_col)
   {
     if (get_tile(room, tile_col, tile_row) == tiles_11_loose)
@@ -6348,9 +6349,9 @@ __INLINE__ void  add_mob()
 // seg007:1063
 __INLINE__ void  do_mobs()
 {
-  short n_mobs;
-  short index;
-  short new_index;
+  int16_t n_mobs;
+  int16_t index;
+  int16_t new_index;
   n_mobs = gameState.mobs_count;
   for (curmob_index = 0; n_mobs > curmob_index; ++curmob_index)
   {
@@ -6427,8 +6428,8 @@ __INLINE__ void  move_loose()
 // seg007:11E8
 __INLINE__ void  loose_land()
 {
-  short button_type;
-  short tiletype;
+  int16_t button_type;
+  int16_t tiletype;
   button_type = 0;
   tiletype = get_tile(curmob.room, curmob.xh >> 2, curmob.row);
   switch (tiletype)
@@ -6540,8 +6541,8 @@ __INLINE__ void  check_loose_fall_on_kid()
 // seg007:15D3
 __INLINE__ void  fell_on_your_head()
 {
-  short frame;
-  short action;
+  int16_t frame;
+  int16_t action;
   frame = gameState.Char.frame;
   action = gameState.Char.action;
   // loose floors hurt you in frames 5..14 (running) only on level 13
@@ -6573,7 +6574,7 @@ __INLINE__ void  fell_on_your_head()
 }
 
 // seg005:000A
-__INLINE__ void  seqtbl_offset_char(short seq_index)
+__INLINE__ void  seqtbl_offset_char(int16_t seq_index)
 {
   gameState.Char.curr_seq = seqtbl_offsets[seq_index];
 }
@@ -6721,8 +6722,8 @@ __INLINE__ void  spiked()
 // seg005:0213
 __INLINE__ void  control()
 {
-  short char_frame;
-  short char_action;
+  int16_t char_frame;
+  int16_t char_action;
   char_frame = gameState.Char.frame;
   if (gameState.Char.alive >= 0)
   {
@@ -6813,7 +6814,7 @@ __INLINE__ void  control_crouched()
 // seg005:0358
 __INLINE__ void  control_standing()
 {
-  short var_2;
+  int16_t var_2;
   if (control_shift2 < 0 && control_shift < 0 && check_get_item())
   {
     return;
@@ -7028,7 +7029,7 @@ __INLINE__ void  back_pressed()
 // seg005:060F
 __INLINE__ void  forward_pressed()
 {
-  short distance;
+  int16_t distance;
   distance = get_edge_distance();
 
   if (edge_type == 1 && curr_tile2 != tiles_18_chomper && distance < 8)
@@ -7072,7 +7073,7 @@ __INLINE__ void  control_running()
 // seg005:06A8
 __INLINE__ void  safe_step()
 {
-  short distance;
+  int16_t distance;
   control_shift2 = 1;  // disable automatic repeat
   control_forward = 1; // disable automatic repeat
   distance = get_edge_distance();
@@ -7117,7 +7118,7 @@ __INLINE__ int check_get_item()
 // seg005:073E
 __INLINE__ void  get_item()
 {
-  short distance;
+  int16_t distance;
   if (gameState.Char.frame != frame_109_crouch)
   { // crouching
     distance = get_edge_distance();
@@ -7142,7 +7143,7 @@ __INLINE__ void  get_item()
     seqtbl_offset_char(seq_78_drink); // drink
     if (gameState.current_level == 15)
     {
-      short index;
+      int16_t index;
       for (index = 0; index < 14; ++index)
       {
         // remove letter on potions level
@@ -7210,7 +7211,7 @@ __INLINE__ void  check_jump_up()
 // seg005:087B
 __INLINE__ void  jump_up_or_grab()
 {
-  short distance;
+  int16_t distance;
   distance = distance_to_edge_weight();
   if (distance < 6)
   {
@@ -7241,7 +7242,7 @@ __INLINE__ void  grab_up_no_floor_behind()
 // seg005:08E6
 __INLINE__ void  jump_up()
 {
-  short distance;
+  int16_t distance;
   control_up = release_arrows();
   distance = get_edge_distance();
   if (distance < 4 && edge_type == 1)
@@ -7304,7 +7305,7 @@ __INLINE__ void  control_hanging()
 // seg005:09DF
 __INLINE__ void  can_climb_up()
 {
-  short seq_id;
+  int16_t seq_id;
   seq_id = seq_10_climb_up; // climb up
   control_up = control_shift2 = release_arrows();
   get_tile_above_char();
@@ -7343,11 +7344,11 @@ __INLINE__ void  hang_fall()
 // seg005:0AA8
 __INLINE__ void  grab_up_with_floor_behind()
 {
-  short distance;
+  int16_t distance;
   distance = distance_to_edge_weight();
 
   // The global variable edge_type (which we need!) gets set as a side effect of get_edge_distance()
-  short edge_distance = get_edge_distance();
+  int16_t edge_distance = get_edge_distance();
   // printf("Distance to edge weight: %d\tedge type: %d\tedge distance: %d\n", distance, edge_type, edge_distance);
 
   if (__QS_JUMP_STRAIGHT_CONDITION)
@@ -7365,10 +7366,10 @@ __INLINE__ void  grab_up_with_floor_behind()
 // seg005:0AF7
 __INLINE__ void  run_jump()
 {
-  short var_2;
-  short xpos;
-  short col;
-  short var_8;
+  int16_t var_2;
+  int16_t xpos;
+  int16_t col;
+  int16_t var_8;
   if (gameState.Char.frame >= frame_7_run)
   {
     // Align gameState.Kid to edge of floor.
@@ -7399,7 +7400,7 @@ __INLINE__ void  run_jump()
 // sseg005:0BB5
 __INLINE__ void  back_with_sword()
 {
-  short frame;
+  int16_t frame;
   frame = gameState.Char.frame;
   if (frame == frame_158_stand_with_sword || frame == frame_170_stand_with_sword || frame == frame_171_stand_with_sword)
   {
@@ -7411,7 +7412,7 @@ __INLINE__ void  back_with_sword()
 // seg005:0BE3
 __INLINE__ void  forward_with_sword()
 {
-  short frame;
+  int16_t frame;
   frame = gameState.Char.frame;
   if (frame == frame_158_stand_with_sword || frame == frame_170_stand_with_sword || frame == frame_171_stand_with_sword)
   {
@@ -7448,7 +7449,7 @@ __INLINE__ void  draw_sword()
 // seg005:0C67
 __INLINE__ void  control_with_sword()
 {
-  short distance;
+  int16_t distance;
   if (gameState.Char.action < actions_2_hang_climb)
   {
     if (get_tile_at_char() == tiles_11_loose || gameState.can_guard_see_kid >= 2)
@@ -7498,9 +7499,9 @@ __INLINE__ void  control_with_sword()
 // seg005:0CDB
 __INLINE__ void  swordfight()
 {
-  short frame;
-  short seq_id;
-  short charid;
+  int16_t frame;
+  int16_t seq_id;
+  int16_t charid;
   frame = gameState.Char.frame;
   charid = gameState.Char.charid;
   // frame 161: parry
@@ -7560,8 +7561,8 @@ __INLINE__ void  swordfight()
 // seg005:0DB0
 __INLINE__ void  sword_strike()
 {
-  short frame;
-  short seq_id;
+  int16_t frame;
+  int16_t seq_id;
   frame = gameState.Char.frame;
   if (frame == frame_157_walk_with_sword ||  // walk with sword
       frame == frame_158_stand_with_sword || // stand with sword
@@ -7594,11 +7595,11 @@ __INLINE__ void  sword_strike()
 // seg005:0E0F
 __INLINE__ void  parry()
 {
-  short opp_frame;
-  short char_frame;
-  short var_6;
-  short seq_id;
-  short char_charid;
+  int16_t opp_frame;
+  int16_t char_frame;
+  int16_t var_6;
+  int16_t seq_id;
+  int16_t char_charid;
   char_frame = gameState.Char.frame;
   opp_frame = Opp.frame;
   char_charid = gameState.Char.charid;
