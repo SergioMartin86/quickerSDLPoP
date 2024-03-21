@@ -235,7 +235,9 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
     hash.Finalize(reinterpret_cast<uint8_t *>(&result));
     return result;
   }
-
+  
+  auto getGameState() const { return &_emu.gameState; }
+  
   protected:
 
   __INLINE__ void advanceStateImpl(const SDLPoP::Controller::input_t input) override

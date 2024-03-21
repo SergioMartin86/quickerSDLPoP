@@ -37,7 +37,7 @@ namespace quicker
 
 typedef struct rect_type
 {
-  short top, left, bottom, right;
+  int16_t top, left, bottom, right;
 } rect_type;
 
 typedef struct piece
@@ -61,13 +61,13 @@ typedef struct tile_and_mod
   uint8_t modifier;
 } tile_and_mod;
 
-typedef int   (*add_table_type)(short chtab_id, int id, int8_t xh, int8_t xl, int ybottom, int blit, uint8_t peel);
+typedef int   (*add_table_type)(int16_t chtab_id, int id, int8_t xh, int8_t xl, int ybottom, int blit, uint8_t peel);
 
 typedef struct back_table_type
 {
   int8_t xh;
   int8_t xl;
-  short y;
+  int16_t y;
   uint8_t chtab_id;
   uint8_t id;
   int blit;
@@ -77,7 +77,7 @@ typedef struct midtable_type
 {
   int8_t xh;
   int8_t xl;
-  short y;
+  int16_t y;
   uint8_t chtab_id;
   uint8_t id;
   uint8_t peel;
@@ -87,10 +87,10 @@ typedef struct midtable_type
 
 typedef struct wipetable_type
 {
-  short left;
-  short bottom;
+  int16_t left;
+  int16_t bottom;
   int8_t height;
-  short width;
+  int16_t width;
   int8_t color;
   int8_t layer;
 } wipetable_type;
@@ -324,7 +324,7 @@ enum sword_status
 
 typedef struct auto_move_type
 {
-  short time, move;
+  int16_t time, move;
 } auto_move_type;
 
 /* obj_type:
@@ -340,7 +340,7 @@ typedef struct objtable_type
 {
   int8_t xh;
   int8_t xl;
-  short y;
+  int16_t y;
   uint8_t chtab_id;
   uint8_t id;
   int8_t direction;
@@ -535,7 +535,7 @@ typedef struct midi_type
 typedef struct converted_audio_type
 {
   int length;
-  short samples[];
+  int16_t samples[];
 } converted_audio_type;
 
 typedef struct sound_buffer_type
@@ -638,13 +638,13 @@ typedef struct dialog_settings_type
 {
   void (*method_1)(struct dialog_type *dialog);
   void (*method_2_frame)(struct dialog_type *dialog);
-  short top_border;
-  short left_border;
-  short bottom_border;
-  short right_border;
-  short shadow_bottom;
-  short shadow_right;
-  short outer_border;
+  int16_t top_border;
+  int16_t left_border;
+  int16_t bottom_border;
+  int16_t right_border;
+  int16_t shadow_bottom;
+  int16_t shadow_right;
+  int16_t outer_border;
 } dialog_settings_type;
 
 typedef struct dialog_type
@@ -1254,7 +1254,7 @@ typedef struct custom_options_type
   uint8_t loose_floor_delay;
   uint8_t tbl_level_type[16];
   uint16_t tbl_level_color[16];
-  short tbl_guard_type[16];
+  int16_t tbl_guard_type[16];
   uint8_t tbl_guard_hp[16];
   uint8_t tbl_cutscenes_by_index[16];
   uint8_t tbl_entry_pose[16];
@@ -1307,9 +1307,9 @@ struct sdlPopState_t
   uint16_t drawn_room;
   uint16_t current_level;
   uint16_t next_level;
-  short mobs_count;
+  int16_t mobs_count;
   mob_type mobs[14];
-  short trobs_count;
+  int16_t trobs_count;
   trob_type trobs[30];
   uint16_t leveldoor_open;
   char_type Kid;
@@ -1318,10 +1318,10 @@ struct sdlPopState_t
   uint16_t hitp_beg_lev;
   uint16_t grab_timer;
   uint16_t holding_sword;
-  short united_with_shadow;
+  int16_t united_with_shadow;
   uint16_t have_sword;
   uint16_t kid_sword_strike;
-  short pickup_obj_type;
+  int16_t pickup_obj_type;
   uint16_t offguard; // name from Apple II source
   char_type Guard;
   char_type Char;
@@ -1329,9 +1329,9 @@ struct sdlPopState_t
   uint16_t guardhp_curr;
   uint16_t guardhp_max;
   uint16_t demo_index;
-  short demo_time;
+  int16_t demo_time;
   uint16_t curr_guard_color;
-  short guard_notice_timer;
+  int16_t guard_notice_timer;
   uint16_t guard_skill;
   uint16_t shadow_initialized;
   uint16_t guard_refrac;
@@ -1351,7 +1351,7 @@ struct sdlPopState_t
   uint16_t is_feather_fall;
   uint16_t last_loose_sound;
   uint32_t random_seed;
-  short rem_min;
+  int16_t rem_min;
   uint16_t rem_tick;
   int8_t control_x;
   int8_t control_y;
@@ -1369,11 +1369,11 @@ struct sdlPopState_t
   uint16_t exit_room_timer;
   float replay_curr_tick;
   uint16_t is_guard_notice;
-  short can_guard_see_kid;
+  int16_t can_guard_see_kid;
   int8_t collision_row;
   int8_t prev_coll_room[10];
   uint8_t prev_coll_flags[10];
-  short jumped_through_mirror;
+  int16_t jumped_through_mirror;
 };
 #pragma pack(pop)
 
