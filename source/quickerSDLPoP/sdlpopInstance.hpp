@@ -236,7 +236,7 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
     return result;
   }
 
-  auto getGameState() const { return &_emu.gameState; }
+  auto getGameState() { return &_emu.gameState; }
   
   protected:
 
