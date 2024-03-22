@@ -211,8 +211,8 @@ typedef struct link_type
 
 typedef struct level_type
 {
-  uint8_t fg[720];
-  uint8_t bg[720];
+  uint8_t fg[24][30];
+  uint8_t bg[24][30];
   uint8_t doorlinks1[256];
   uint8_t doorlinks2[256];
   link_type roomlinks[24];
@@ -1375,6 +1375,7 @@ struct sdlPopState_t
   uint8_t prev_coll_flags[10];
   int16_t jumped_through_mirror;
   uint8_t kidPreviousFrame;
+  uint16_t globalStepCount;
 };
 #pragma pack(pop)
 

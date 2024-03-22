@@ -397,6 +397,7 @@ uint8_t sound_interruptible[58] = {
       check_mirror();
     }
 
+    gameState.globalStepCount++;
   }
 
 __INLINE__ void  startLevel(const uint16_t level)
@@ -676,7 +677,7 @@ __INLINE__ chtab_type *load_sprites_from_file(int resource, int palette_bits, in
 
 __INLINE__ void  load_from_opendats_metadata(int resource_id, const char *extension, FILE **out_fp, data_location *result, uint8_t *checksum, int *size, dat_type **out_pointer)
 {
-  char image_filename[__QS_POP_MAX_PATH];
+  char image_filename[__QS_POP_MAX_PATH + 2048];
   FILE *fp = NULL;
   dat_type *pointer;
   *result = data_none;
@@ -7743,8 +7744,8 @@ __INLINE__ void  get_room_address(int room)
 {
   if (room)
   {
-    curr_room_tiles = &gameState.level.fg[(room - 1) * 30];
-    curr_room_modif = &gameState.level.bg[(room - 1) * 30];
+    curr_room_tiles = gameState.level.fg[room - 1];
+    curr_room_modif = gameState.level.bg[room - 1];
   }
 }
 

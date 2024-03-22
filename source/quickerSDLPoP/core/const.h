@@ -1977,7 +1977,7 @@ static const char *const tbl_envir_gr[] = {"", "C", "C", "E", "E", "V"};
 static const char *const tbl_envir_ki[] = {"DUNGEON", "PALACE"};
 static const rect_type rect_titles = {106, 24, 195, 296};
 
-static const short y_something[] = {-1, 62, 125, 188, 25};
+static const int16_t y_something[] = {-1, 62, 125, 188, 25};
 static const uint8_t loose_sound[] = {0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0};
 static const uint16_t y_loose_land[] = {2, 65, 128, 191, 254};
 static const uint8_t leveldoor_close_speeds[] = {0, 5, 17, 99, 0};
@@ -2648,10 +2648,10 @@ static const uint8_t chtab_flip_clip[10] = {1, 0, 1, 1, 1, 1, 0, 0, 0, 0};
 static const uint8_t chtab_shift[10] = {0, 1, 0, 0, 0, 0, 1, 1, 1, 0};
 static const rect_type rect_top = {0, 0, 192, 320};
 static const rect_type rect_bottom_text = {193, 70, 202, 250};
-static const short y_land[] = {-8, 55, 118, 181, 244};
+static const int16_t y_land[] = {-8, 55, 118, 181, 244};
 static const uint16_t copyprot_tile[] = {1, 5, 7, 9, 11, 21, 1, 3, 7, 11, 17, 21, 25, 27};
 static const uint8_t x_bump[] = {244, 2, 16, 30, 44, 58, 72, 86, 100, 114, 128, 142, 156, 170, 184, 198, 212, 226, 240, 254}; // 244 = -12
-static const short y_clip[] = {-60, 3, 66, 129, 192};
+static const int16_t y_clip[] = {-60, 3, 66, 129, 192};
 static const int8_t dir_front[] = {-1, 1};
 static const int8_t dir_behind[] = {1, -1};
 
