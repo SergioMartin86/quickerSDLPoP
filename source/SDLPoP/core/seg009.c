@@ -2573,10 +2573,7 @@ void __pascal far set_gr_mode(byte grmode) {
 
 if (enableSDL2Rendering == true)
 {
-	window_ = SDL_CreateWindow(WINDOW_TITLE,
-	                           SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-	                           pop_window_width, pop_window_height, flags);
-
+	SDL_SetWindowSize(window_, pop_window_width, pop_window_height);
 
 	// Make absolutely sure that VSync will be off, to prevent timer issues.
 	SDL_SetHint(SDL_HINT_RENDER_VSYNC, "0");

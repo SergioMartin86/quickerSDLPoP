@@ -6,6 +6,7 @@
 #include <jaffarCommon/json.hpp>
 #include <jaffarCommon/hash.hpp>
 #include <jaffarCommon/exceptions.hpp>
+#include <SDL.h>
 #include "controller.hpp"
 
 class SDLPoPInstanceBase
@@ -31,7 +32,6 @@ class SDLPoPInstanceBase
     advanceStateImpl(_controller.getParsedInput());
   }
 
-
   virtual size_t getFullStateSize() const = 0;
   virtual size_t getDifferentialStateSize() const = 0;
 
@@ -49,7 +49,7 @@ class SDLPoPInstanceBase
 
   protected:
 
-  virtual void enableRendering() = 0;
+  virtual void enableRendering(SDL_Window* window) = 0;
   virtual void disableRendering() = 0;
   virtual jaffarCommon::hash::hash_t getStateHash() const = 0;
   virtual void printInfo() const = 0;

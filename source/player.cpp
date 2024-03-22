@@ -8,6 +8,23 @@
 #include "sdlpopInstance.hpp"
 #include "playbackInstance.hpp"
 
+SDL_Window *launchOutputWindow()
+{
+  // Opening rendering window
+  SDL_SetMainReady();
+
+  // We can only call SDL_InitSubSystem once
+  if (!SDL_WasInit(SDL_INIT_VIDEO))
+    if (SDL_InitSubSystem(SDL_INIT_VIDEO) != 0) JAFFAR_THROW_LOGIC("Failed to initialize video: %s", SDL_GetError());
+
+  auto window = SDL_CreateWindow("JaffarPlus", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 100, 100, SDL_WINDOW_RESIZABLE);
+  if (window == nullptr) JAFFAR_THROW_LOGIC("Coult not open SDL window");
+
+  return window;
+}
+
+void closeOutputWindow(SDL_Window *window) { SDL_DestroyWindow(window); }
+
 int main(int argc, char *argv[])
 {
   // Parsing command line arguments
@@ -115,7 +132,18 @@ int main(int argc, char *argv[])
   if (initializeCopyProtection) e.initializeCopyProtection();
 
   // Creating playback instance
-  auto p = PlaybackInstance(&e, sequence);
+  auto p = PlaybackInstance(&e);
+
+  // Initializing playback instance
+  p.initialize(sequence);
+
+  // If rendering is enabled, initialize it now
+  SDL_Window* window = nullptr;
+  if (disableRender == false) 
+  {
+    window = launchOutputWindow();
+    p.enableRendering(window);
+  } 
 
   // Getting state size
   auto stateSize = e.getFullStateSize();
@@ -206,6 +234,9 @@ int main(int argc, char *argv[])
     // Start playback from current point
     if (command == 'q') continueRunning = false;
   }
+
+  // If render is enabled then, close window now
+  if (disableRender == false) closeOutputWindow(window);
 
   // Ending ncurses window
   jaffarCommon::logger::finalizeTerminal();

@@ -35,11 +35,21 @@ class PlaybackInstance
   }
 
   // Initializes the playback module instance
-  PlaybackInstance(SDLPoPInstance *emu, const std::vector<std::string> &sequence, const std::string &overlayPath = "") : _emu(emu)
+  PlaybackInstance(SDLPoPInstance *emu,  const std::string &overlayPath = "") : _emu(emu)
+  {
+
+  }
+  
+  // Enabling rendering
+  void enableRendering(SDL_Window* window)
   {
     // Enabling emulation rendering
-    _emu->enableRendering();
+    _emu->enableRendering(window);
+  }
 
+  // Initiailizing playback instance 
+  void initialize(const std::vector<std::string> &sequence)
+  {
     // Building sequence information
     for (const auto &input : sequence)
     {
@@ -52,7 +62,6 @@ class PlaybackInstance
 
     // Adding last step with no input
     addStep("<End Of Sequence>");
-
   }
 
   // Function to render frame
@@ -67,9 +76,10 @@ class PlaybackInstance
 
     const auto stateInput = getStateInput(stepId);
     SDLPoP::Controller controller;
+    SDLPoP::Controller::input_t input;
+
     bool isInputValid = controller.parseInputString(stateInput);
-    if (isInputValid == false) JAFFAR_THROW_LOGIC("Move provided cannot be parsed: '%s'\n", stateInput.c_str());
-    auto input = controller.getParsedInput();
+    if (isInputValid == true) input = controller.getParsedInput();
 
     _emu->updateRenderer(stepId, input);
 

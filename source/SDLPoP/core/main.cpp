@@ -448,7 +448,7 @@ std::vector<__SDLPoP_Item> GenerateItemsMap()
     }
   }
 
-		void __SDLPoP_enableRendering() { enableSDL2Rendering = true; };
+	void __SDLPoP_enableRendering(SDL_Window* window) { window_ = window; enableSDL2Rendering = true; };
   void __SDLPoP_disableRendering() { enableSDL2Rendering = false; };
 
   #ifdef NCURSES

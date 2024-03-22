@@ -11,7 +11,7 @@ extern void __SDLPoP_initialize(const char* sdlPopRootPath, const char* levelsFi
 extern void __SDLPoP_startLevel(const uint16_t level);
 extern void __SDLPoP_updateRenderer(uint32_t currentStep, const SDLPoP::Controller::input_t input);
 extern void __SDLPoP_advanceState(const SDLPoP::Controller::input_t input);
-extern void __SDLPoP_enableRendering();
+extern void __SDLPoP_enableRendering(SDL_Window* window);
 extern void __SDLPoP_disableRendering();
 extern void __SDLPoP_printInfo();
 extern void __SDLPoP_setRNGValue(const uint32_t rngValue);
@@ -26,7 +26,7 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
 {
   public:
 
-   void enableRendering() override
+   void enableRendering(SDL_Window* window) override
    {
     int gameVersion;
 
@@ -36,7 +36,7 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
      if (_gameVersion == "1.4") { gameVersion = 14; versionRecognized = true; }
      if (versionRecognized == false)  JAFFAR_THROW_LOGIC("[ERROR] Version string not recognized: '%s'\n", _gameVersion.c_str());
 
-     __SDLPoP_enableRendering(); 
+     __SDLPoP_enableRendering(window); 
      __SDLPoP_initialize(_sdlPopRootPath.c_str(), _levelsFilePath.c_str(), gameVersion); 
    };
 

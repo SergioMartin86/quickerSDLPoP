@@ -10,7 +10,7 @@ extern void __SDLPoP_initialize(const char* sdlPopRootPath, const char* levelsFi
 extern void __SDLPoP_startLevel(const uint16_t level);
 extern void __SDLPoP_updateRenderer(uint32_t currentStep, const SDLPoP::Controller::input_t input);
 extern void __SDLPoP_advanceState(const SDLPoP::Controller::input_t input);
-extern void __SDLPoP_enableRendering();
+extern void __SDLPoP_enableRendering(SDL_Window* window);
 extern void __SDLPoP_disableRendering();
 extern void __SDLPoP_printInfo();
 extern void __SDLPoP_setRNGValue(const uint32_t rngValue);
@@ -26,7 +26,7 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
   public:
   SDLPoPInstance(const nlohmann::json& config) : SDLPoPInstanceBase(config)  { }
 
-   void enableRendering() override { __SDLPoP_enableRendering(); };
+   void enableRendering(SDL_Window* window) override { __SDLPoP_enableRendering(window); };
    void disableRendering() override { __SDLPoP_disableRendering(); };
    void initialize() override 
    {
