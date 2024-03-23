@@ -50,7 +50,7 @@ int ini_load(const char *filename,
 	FILE *f;
 	int cnt;
 
-	f = fcache_open(filename, "r");
+	f = fopen(filename, "r");
 	if (!f) {
 		return -1;
 	}
@@ -69,12 +69,12 @@ int ini_load(const char *filename,
 		if (fscanf(f, " ;%*[^\n]") != 0 ||
 		    fscanf(f, " \n") != 0) {
 			fprintf(stderr, "short read from %s!?\n", filename);
-			fcache_close(f);
+			fclose(f);
 			return -1;
 		}
 	}
 
-	fcache_close(f);
+	fclose(f);
 	return 0;
 }
 
@@ -506,14 +506,14 @@ int identify_dos_exe_version(int filesize) {
 void load_dos_exe_modifications(const char* folder_name) {
 	char filename[POP_MAX_PATH];
 	snprintf(filename, sizeof(filename), "%s/%s", folder_name, "PRINCE.EXE");
-	FILE* fp = fcache_open(filename, "rb");
+	FILE* fp = fopen(filename, "rb");
 	size_t execSize = 0;
 
 	int dos_version = -1;
 	if (fp != NULL) {
-  fcache_seek(fp, 0, SEEK_END);
-  execSize = fcache_tell(fp);
-  fcache_seek(fp, 0, SEEK_SET);
+  fseek(fp, 0, SEEK_END);
+  execSize = ftell(fp);
+  fseek(fp, 0, SEEK_SET);
 		dos_version = identify_dos_exe_version(execSize);
 	} else {
 		// PRINCE.EXE not found, try to search for other .EXE files in the same folder.
@@ -522,16 +522,16 @@ void load_dos_exe_modifications(const char* folder_name) {
 			do {
 				char* current_filename = get_current_filename_from_directory_listing(directory_listing);
 				snprintf(filename, sizeof(filename), "%s/%s", folder_name, current_filename);
-				fp = fcache_open(filename, "rb");
+				fp = fopen(filename, "rb");
 				if (fp != NULL) {
-				 fcache_seek(fp, 0, SEEK_END);
-				 execSize = fcache_tell(fp);
-				 fcache_seek(fp, 0, SEEK_SET);
+				 fseek(fp, 0, SEEK_END);
+				 execSize = ftell(fp);
+				 fseek(fp, 0, SEEK_SET);
 					dos_version = identify_dos_exe_version(execSize);
 					if (dos_version >= 0) {
 						break; // We found a DOS executable with the right size!
 					}
-					fcache_close(fp);
+					fclose(fp);
 					fp = NULL;
 				}
 				// Keep looking until we find an .EXE with the right size, or until there are no .EXE files left.
@@ -543,9 +543,9 @@ void load_dos_exe_modifications(const char* folder_name) {
 	if (dos_version >= 0) {
 		turn_custom_options_on_off(1);
 		byte* exe_memory = malloc(execSize);
-		if (fcache_read(exe_memory, execSize, 1, fp) != 1) {
+		if (fread(exe_memory, execSize, 1, fp) != 1) {
 			fprintf(stderr, "Could not read %s!?\n", filename);
-			fcache_close(fp);
+			fclose(fp);
 			return;
 		}
 
@@ -709,7 +709,7 @@ void load_dos_exe_modifications(const char* folder_name) {
 		free(exe_memory);
 	}
 
-	if (fp != NULL) fcache_close(fp);
+	if (fp != NULL) fclose(fp);
 }
 
 

@@ -339,7 +339,7 @@ uint8_t sound_interruptible[58] = {
       close_dat(dathandle);
 
       // start_game
-
+      gameState.current_level = 1;
       start_level = 1;
 
       ///////////////////////////////////////////////////////////////
@@ -997,7 +997,7 @@ __INLINE__ void  load_lev_spr(int level)
 {
   dat_type *dathandle;
   int16_t guardtype;
-  char filename[20];
+  char filename[512];
   dathandle = NULL;
   gameState.current_level = gameState.next_level = level;
   snprintf(filename, sizeof(filename), "%s%s.DAT", tbl_envir_gr[gmMcgaVga], tbl_envir_ki[custom->tbl_level_type[gameState.current_level]]);

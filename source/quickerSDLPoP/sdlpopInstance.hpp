@@ -6,7 +6,6 @@
 #include <jaffarCommon/logger.hpp>
 #include <jaffarCommon/serializers/contiguous.hpp>
 #include <jaffarCommon/deserializers/contiguous.hpp>
-#include <mutex>
 
 extern void __SDLPoP_initialize(const char* sdlPopRootPath, const char* levelsFilePath, int gameVersion);
 extern void __SDLPoP_startLevel(const uint16_t level);
@@ -23,8 +22,6 @@ extern size_t __SDLPoP_getFullStateSize();
 extern jaffarCommon::hash::hash_t __SDLPoP_getStateHash();
 extern void __SDLPoP_setLooseTileSound(const uint16_t looseTileSound);
 
-std::once_flag _initializationFlag;
-
 class SDLPoPInstance final : public SDLPoPInstanceBase
 {
   public:
@@ -33,16 +30,14 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
    {
     int gameVersion;
 
-         // Selecting game version
+    // Selecting game version
      bool versionRecognized = false;
      if (_gameVersion == "1.0") { gameVersion = 10; versionRecognized = true; }
      if (_gameVersion == "1.4") { gameVersion = 14; versionRecognized = true; }
      if (versionRecognized == false)  JAFFAR_THROW_LOGIC("[ERROR] Version string not recognized: '%s'\n", _gameVersion.c_str());
 
-    std::call_once(_initializationFlag, [&](){
      __SDLPoP_enableRendering(window); 
      __SDLPoP_initialize(_sdlPopRootPath.c_str(), _levelsFilePath.c_str(), gameVersion); 
-    });
      
    };
 
