@@ -224,12 +224,13 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
    void updateRenderer(const size_t stepId, const SDLPoP::Controller::input_t input) override
   {
     auto stateSize = getFullStateSize();
-    uint8_t buffer[stateSize];
+    uint8_t* buffer = (uint8_t*) malloc(stateSize);
     jaffarCommon::serializer::Contiguous s(buffer, stateSize);
     serializeState(s);
     jaffarCommon::deserializer::Contiguous d(buffer, stateSize);
     __SDLPoP_deserializeState(d);
     __SDLPoP_updateRenderer(stepId, input);
+    free(buffer);
   }
 
   jaffarCommon::hash::hash_t getStateHash() const override
