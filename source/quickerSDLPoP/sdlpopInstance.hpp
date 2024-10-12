@@ -9,8 +9,8 @@
 
 extern void __SDLPoP_initialize(const char* sdlPopRootPath, const char* levelsFilePath, int gameVersion);
 extern void __SDLPoP_startLevel(const uint16_t level);
-extern void __SDLPoP_updateRenderer(uint32_t currentStep, const SDLPoP::Controller::input_t input);
-extern void __SDLPoP_advanceState(const SDLPoP::Controller::input_t input);
+extern void __SDLPoP_updateRenderer(uint32_t currentStep, const jaffar::input_t &input);
+extern void __SDLPoP_advanceState(const jaffar::input_t &input);
 extern void __SDLPoP_enableRendering(SDL_Window* window);
 extern void __SDLPoP_disableRendering();
 extern void __SDLPoP_printInfo();
@@ -221,7 +221,7 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
    return dest;
  }
 
-   void updateRenderer(const size_t stepId, const SDLPoP::Controller::input_t input) override
+   void updateRenderer(const size_t stepId, const jaffar::input_t &input) override
   {
     auto stateSize = getFullStateSize();
     uint8_t* buffer = (uint8_t*) malloc(stateSize);
@@ -250,7 +250,7 @@ class SDLPoPInstance final : public SDLPoPInstanceBase
   
   protected:
 
-  __INLINE__ void advanceStateImpl(const SDLPoP::Controller::input_t input) override
+  __INLINE__ void advanceStateImpl(const jaffar::input_t &input) override
   {
     _emu->advanceState(input.up, input.down, input.left, input.right, input.shift, input.restart);
   }

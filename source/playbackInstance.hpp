@@ -50,14 +50,18 @@ class PlaybackInstance
   // Initiailizing playback instance 
   void initialize(const std::vector<std::string> &sequence)
   {
+    // Getting input decoder
+    auto inputParser = _emu->getInputParser();
+
     // Building sequence information
     for (const auto &input : sequence)
     {
       // Adding new step
       addStep(input);
+      auto inputData = inputParser->parseInputString(input);
 
       // Advance state based on the input received
-      _emu->advanceState(input);
+      _emu->advanceState(inputData);
     }
 
     // Adding last step with no input
@@ -67,6 +71,9 @@ class PlaybackInstance
   // Function to render frame
   void renderFrame(const size_t stepId)
   {
+    // Getting input decoder
+    auto inputParser = _emu->getInputParser();
+
     // Checking the required step id does not exceed contents of the sequence
     if (stepId > _stepSequence.size()) JAFFAR_THROW_LOGIC("[Error] Attempting to render a step larger than the step sequence");
 
@@ -75,13 +82,7 @@ class PlaybackInstance
     _emu->deserializeState(deserializer);
 
     const auto stateInput = getStateInput(stepId);
-    SDLPoP::Controller controller;
-    SDLPoP::Controller::input_t input;
-
-    bool isInputValid = controller.parseInputString(stateInput);
-    if (isInputValid == true) input = controller.getParsedInput();
-
-    _emu->updateRenderer(stepId, input);
+    _emu->updateRenderer(stepId, inputParser->parseInputString(stateInput));
 
   }
 

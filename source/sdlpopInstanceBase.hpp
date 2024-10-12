@@ -7,33 +7,34 @@
 #include <jaffarCommon/hash.hpp>
 #include <jaffarCommon/exceptions.hpp>
 #include <SDL.h>
-#include "controller.hpp"
+#include "inputParser.hpp"
 
 class SDLPoPInstanceBase
 {
   public:
 
-  SDLPoPInstanceBase(const nlohmann::json& config)
+  SDLPoPInstanceBase(const nlohmann::json &config)
   {
     _sdlPopRootPath = jaffarCommon::json::getString(config, "SDLPoP Root Path");
     _levelsFilePath = jaffarCommon::json::getString(config, "Levels File Path");
     _gameVersion = jaffarCommon::json::getString(config, "Game Version");
+
+    _inputParser = std::make_unique<jaffar::InputParser>(config);
   }
 
   virtual ~SDLPoPInstanceBase() = default;
 
   virtual void initialize() = 0;
 
-  inline void advanceState(const std::string &input)
+  virtual inline void advanceState(const jaffar::input_t &input)
   {
-    bool isInputValid = _controller.parseInputString(input);
-    if (isInputValid == false) JAFFAR_THROW_LOGIC("Move provided cannot be parsed: '%s'\n", input.c_str());
-
-    advanceStateImpl(_controller.getParsedInput());
+    advanceStateImpl(input);
   }
-
+  
   virtual size_t getFullStateSize() const = 0;
   virtual size_t getDifferentialStateSize() const = 0;
+
+  inline jaffar::InputParser *getInputParser() const { return _inputParser.get(); }
 
   // Virtual functions
 
@@ -45,7 +46,7 @@ class SDLPoPInstanceBase
   virtual void setRNGValue(const uint32_t rngValue) = 0;
   virtual void setLooseTileSound(const uint16_t looseTileSound) = 0;
   virtual void initializeCopyProtection() = 0;
-  virtual void updateRenderer(const size_t stepId, const SDLPoP::Controller::input_t input) = 0;
+  virtual void updateRenderer(const size_t stepId, const jaffar::input_t &input) = 0;
 
   protected:
 
@@ -53,7 +54,7 @@ class SDLPoPInstanceBase
   virtual void disableRendering() = 0;
   virtual jaffarCommon::hash::hash_t getStateHash() const = 0;
   virtual void printInfo() const = 0;
-  virtual void advanceStateImpl(const SDLPoP::Controller::input_t input) = 0;
+  virtual void advanceStateImpl(const jaffar::input_t &input) = 0;
 
 
   // Storage for the light state size
@@ -68,6 +69,6 @@ class SDLPoPInstanceBase
 
   private:
 
-  // Controller class for input parsing
-  SDLPoP::Controller _controller;
+  // Input parser instance
+  std::unique_ptr<jaffar::InputParser> _inputParser;
 };
